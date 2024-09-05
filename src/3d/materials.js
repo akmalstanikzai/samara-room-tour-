@@ -137,7 +137,7 @@ export class Materials {
       const color = mesh.material.color;
 
       this.studioMaterials = {
-        WoodCh_S: {
+        WoodCh_S_studio: {
           map: 'Studio_Chair1_BaseColor',
           lightMap: 'Studio_Chair1_Lightmap',
           aoMap: 'Studio_Chair1_Lightmap',
