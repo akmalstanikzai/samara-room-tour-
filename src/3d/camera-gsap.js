@@ -196,8 +196,8 @@ class CameraGsap {
           object.visible = false;
         }
       });
-      this.engine.labels.divs.forEach((div) => {
-        div.style.visible = false;
+      this.engine.labels.labels.forEach((label) => {
+        label.visible = false;
       });
     } else if (name === 'floor plan') {
       this.engine.cursor.pin.visible = false;
@@ -223,8 +223,8 @@ class CameraGsap {
           object.visible = false;
         }
       });
-      this.engine.labels.divs.forEach((div) => {
-        div.style.visible = true;
+      this.engine.labels.labels.forEach((label) => {
+        label.visible = true;
       });
     } else {
       this.engine.plan.cutTop(false);
@@ -263,8 +263,8 @@ class CameraGsap {
           object.visible = true;
         }
       });
-      this.engine.labels.divs.forEach((div) => {
-        div.style.visible = false;
+      this.engine.labels.labels.forEach((label) => {
+        label.visible = false;
       });
     }
 

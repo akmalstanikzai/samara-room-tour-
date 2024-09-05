@@ -69,7 +69,6 @@ export class Labels {
   addLabels() {
     this.removeLabels();
     this.labels = [];
-    this.divs = [];
 
     Object.keys(params.cameras[appState.complectation.value.layout]).forEach(
       (camKey) => {
@@ -88,7 +87,6 @@ export class Labels {
         textLabel.position.copy(pos);
         this.engine.scene.add(textLabel);
         this.labels.push(textLabel);
-        this.divs.push(div);
       }
     );
   }
