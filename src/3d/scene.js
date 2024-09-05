@@ -146,8 +146,6 @@ export class CreateScene {
       // this.cubemap = new CubeMap(this);
       // this.reflector = new Mirrors(this);
 
-      await delayMs(100);
-
       // this.showOverlayWithTextAnimation('Samara room tour');
 
       // this.tests.testContextLoss(5);
@@ -155,9 +153,6 @@ export class CreateScene {
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
       this.CameraGsap.setCam('bed');
-      await delayMs(2000);
-
-      this.panoMesh.material.opacity = 0.1;
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
