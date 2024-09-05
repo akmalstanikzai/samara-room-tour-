@@ -126,7 +126,7 @@ const params = {
   },
 
   light: {
-    intensity: 5,
+    intensity: Math.PI,
   },
 
   envMap: {

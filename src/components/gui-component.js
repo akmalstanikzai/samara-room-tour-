@@ -1121,7 +1121,10 @@ export class GuiComponent extends LitElement {
       .step(0.01)
       .onChange((value) => {
         this.engine.scene.traverse((mesh) => {
-          if (mesh.material && mesh.material.aoMap) {
+          if (
+            mesh.material &&
+            this.engine.models.materials.studioMaterials[mesh.material.name]
+          ) {
             mesh.material.aoMapIntensity = value;
           }
         });
@@ -1136,7 +1139,10 @@ export class GuiComponent extends LitElement {
       .step(0.01)
       .onChange((value) => {
         this.engine.scene.traverse((mesh) => {
-          if (mesh.material && mesh.material.lightMap) {
+          if (
+            mesh.material &&
+            this.engine.models.materials.studioMaterials[mesh.material.name]
+          ) {
             mesh.material.lightMapIntensity = value;
           }
         });

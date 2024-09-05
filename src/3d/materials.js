@@ -135,12 +135,8 @@ export class Materials {
     if (mesh.material) {
       const name = mesh.material.name;
       const color = mesh.material.color;
-      mesh.material = new MeshLambertMaterial({
-        name: name,
-        color: color,
-      });
 
-      const studioMaterials = {
+      this.studioMaterials = {
         WoodCh_S: {
           map: 'Studio_Chair1_BaseColor',
           lightMap: 'Studio_Chair1_Lightmap',
@@ -187,8 +183,13 @@ export class Materials {
         },
       };
 
-      if (studioMaterials[mesh.material.name]) {
-        const materialConfig = studioMaterials[mesh.material.name];
+      if (this.studioMaterials[name]) {
+        mesh.material = new MeshLambertMaterial({
+          name: name,
+          color: color,
+        });
+
+        const materialConfig = this.studioMaterials[name];
 
         Object.entries(materialConfig).forEach(([key, value]) => {
           if (key === 'color') {
@@ -203,6 +204,10 @@ export class Materials {
 
         mesh.material.lightMapIntensity = params.maps.lightMap.intensity;
         mesh.material.aoMapIntensity = params.maps.aoMap.intensity;
+      } else {
+        // Apply envMap only to materials not in studioMaterials
+        mesh.material.envMap = this.textures.getHdrTexture('hdr-2');
+        mesh.material.envMapIntensity = params.envMap.intensity;
       }
 
       if (
@@ -379,9 +384,6 @@ export class Materials {
         mesh.material = this.roofMaterial.clone();
         mesh.material.name = 'Roof Material_XL 8';
       }
-
-      // mesh.material.envMap = this.textures.getHdrTexture('hdr-2');
-      // mesh.material.envMapIntensity = params.envMap.intensity;
 
       // Fix materials dublicates and stores them in a Map for later use.
       if (!this.allMaterials.has(mesh.material.name)) {
