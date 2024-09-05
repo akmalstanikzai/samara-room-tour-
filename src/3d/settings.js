@@ -538,30 +538,12 @@ const params = {
       path: 'Albedo_Faucet_512.jpg',
       name: 'Albedo_Faucet_512',
     },
-    {
-      path: 'Albedo_Oven_512.jpg',
-      name: 'Albedo_Oven_512',
-    },
-    {
-      path: 'Albedo_Shelves_512.jpg',
-      name: 'Albedo_Shelves_512',
-    },
-    {
-      path: 'Albedo_Wood_512.jpg',
-      name: 'Albedo_Wood_512',
-    },
 
     {
       path: 'Albedo_Lamp_512.jpg',
       name: 'Albedo_Lamp_512',
     },
 
-    {
-      path: 'Albedo_Sofa_512.jpg',
-      name: 'Albedo_Sofa_512',
-    },
-
-    { path: 'Albedo_Bed_512.jpg', name: 'Albedo_Bed_512' },
     {
       path: 'Air_purification.jpg',
       name: 'Air_purification',
@@ -808,74 +790,8 @@ const params = {
       modelScaleAspectValue: 150,
       assetsArray: [
         {
-          name: 'onebed',
-          totalAssetsCount: 41,
-          path: 'Samara_1Bedroom.glb',
-          textures: [
-            { path: 'Wall_i_1B.png', name: 'Wall_i_1B' },
-            { path: 'Wood_1B.png', name: 'Wood_1B' },
-            { path: 'Floor_1B.png', name: 'Floor_1B' },
-
-            { path: '1_1B.png', name: '1_1B' },
-            { path: '2_1B.png', name: '2_1B' },
-            { path: '3_1B.png', name: '3_1B' },
-            { path: '4_1B.png', name: '4_1B' },
-
-            {
-              path: 'Wall_e_1B_W.png',
-              name: 'exterior_ao_wood_onebed',
-            },
-            {
-              path: 'Wall_e_1B.png',
-              name: 'exterior_ao_onebed',
-            },
-
-            {
-              path: 'Wall_e_1B_W_2.png',
-              name: 'exterior_ao_wood_onebed_nosolar',
-            },
-
-            {
-              path: 'Wall_e_1B_2.png',
-              name: 'exterior_ao_onebed_nosolar',
-            },
-
-            {
-              path: 'Wall_e_1B_W_1.png',
-              name: 'exterior_ao_wood_onebed_solar_no_cables',
-            },
-
-            {
-              path: 'Wall_e_1B_1.png',
-              name: 'exterior_ao_onebed_solar_no_cables',
-            },
-
-            {
-              path: 'AO_RoofSolarFull.png',
-              name: 'roof_solar_full_ao_onebed',
-            },
-            {
-              path: 'AO_RoofSolarFull - no cables.png',
-              name: 'roof_solar_full_ao_onebed_no_cables',
-            },
-
-            {
-              path: 'AO_RoofSolarOne.png',
-              name: 'roof_solar_half_ao_onebed',
-            },
-            {
-              path: 'AO_RoofSolarOne - no cables.png',
-              name: 'roof_solar_half_ao_onebed_no_cables',
-            },
-            {
-              path: 'AO_1BedRoof_SolarClean_1K.png',
-              name: 'roof_solar_none_ao_onebed',
-            },
-          ],
-        },
-        {
           name: 'studio',
-          totalAssetsCount: 60,
+          totalAssetsCount: 65,
           path: 'Studio.glb',
           textures: [
             { path: 'Studio_Wall_BaseColor.png', name: 'Wall_i_S' },
@@ -1029,105 +945,6 @@ const params = {
             },
             { path: 'Studio_Bed_Basecolor.png', name: 'Studio_Bed_Basecolor' },
             { path: 'Studio_Bed_Lightmap.png', name: 'Studio_Bed_Lightmap' },
-          ],
-        },
-        {
-          name: 'twobed',
-          totalAssetsCount: 41,
-          path: 'Samara_2Bedroom.glb',
-          textures: [
-            { path: 'Wall_i_2B.png', name: 'Wall_i_2B' },
-            { path: '1_2B.png', name: '1_2B' },
-            { path: '2_2B.png', name: '2_2B' },
-            { path: '3_2B.png', name: '3_2B' },
-            { path: '4_2B.png', name: '4_2B' },
-            {
-              path: 'Wall_e_2B_W_1.png',
-              name: 'exterior_ao_wood_twobed_solar_no_cables',
-            },
-            {
-              path: 'Wall_e_2B_1.png',
-              name: 'exterior_ao_twobed_solar_no_cables',
-            },
-
-            {
-              path: 'Wall_e_2B_W.png',
-              name: 'exterior_ao_wood_twobed',
-            },
-            {
-              path: 'Wall_e_2B.png',
-              name: 'exterior_ao_twobed',
-            },
-
-            {
-              path: 'Wall_e_2B_W_2.png',
-              name: 'exterior_ao_wood_twobed_nosolar',
-            },
-
-            {
-              path: 'Wall_e_2B_2.png',
-              name: 'exterior_ao_twobed_nosolar',
-            },
-            {
-              path: 'Roof_2B_Clean_1Kt.png',
-              name: 'roof_solar_none_ao_twobed',
-            },
-            {
-              path: 'Roof_2B_Full_1Kt.png',
-              name: 'roof_solar_full_ao_twobed',
-            },
-            {
-              path: 'Roof_2B_Full_1Kt - no cables.png',
-              name: 'roof_solar_full_ao_twobed_no_cables',
-            },
-            {
-              path: 'Roof_2B_One_1Kt.png',
-              name: 'roof_solar_half_ao_twobed',
-            },
-            {
-              path: 'Roof_2B_One_1Kt - no cables.png',
-              name: 'roof_solar_half_ao_twobed_no_cables',
-            },
-
-            {
-              path: 'Floor_2B.png',
-              name: 'Floor_2B',
-            },
-            {
-              path: 'Wood_2B.png',
-              name: 'Wood_2B',
-            },
-          ],
-        },
-        {
-          name: 'XL 8',
-          totalAssetsCount: 45,
-          path: 'Samara_XL8.glb',
-          textures: [
-            { path: '1_2BA.png', name: '1_2BA' },
-            { path: '2_2BA.png', name: '2_2BA' },
-            { path: '3_2BA.png', name: '3_2BA' },
-            { path: '4_2BA.png', name: '4_2BA' },
-            { path: '5_2BA.png', name: '5_2BA' },
-            { path: '6_2BA.png', name: '6_2BA' },
-            { path: '7_2BA.png', name: '7_2BA' },
-            { path: '8_2BA.png', name: '8_2BA' },
-
-            { path: 'AO_XL8_M_1.png', name: 'AO_2BA_M_1' },
-            { path: 'AO_XL8_M.png', name: 'AO_2BA_M' },
-            { path: 'AO_XL8_W_1.png', name: 'AO_2BA_W_1' },
-            { path: 'AO_XL8_W.png', name: 'AO_2BA_W' },
-            { path: 'Roof_XL8_Clear.png', name: 'Roof_2BA_Clear' },
-            { path: 'Roof_XL8_Full.png', name: 'Roof_2BA_Full' },
-            { path: 'Roof_XL8_One.png', name: 'Roof_2BA_One' },
-            { path: 'Shelves_XL8.png', name: 'Shelves_XL8' },
-            { path: 'Base_2BA.png', name: 'Base_2BA' },
-            { path: 'Chair_XL8.png', name: 'Chair_2BA' },
-            { path: 'Floor_XL8.png', name: 'Floor_2BA' },
-            { path: 'Sofa_2BA_1K.png', name: 'Sofa_2BA' },
-            { path: 'Wall_XL8.png', name: 'Wall_2BA_1K' },
-            { path: 'Wood_XL8.png', name: 'Wood_2BA' },
-            { path: 'Technique_XL8.png', name: 'Technique_2BA' },
           ],
         },
       ],

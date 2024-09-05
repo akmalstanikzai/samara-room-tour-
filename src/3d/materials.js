@@ -53,40 +53,12 @@ export class Materials {
       this.applyTextures(object, this.textures.getTexture('Albedo_Bath_512'));
     }
 
-    if (['Faucet_S', 'Faucet_1B', 'Faucet_2B'].includes(object.name)) {
+    if (['Faucet_S'].includes(object.name)) {
       this.applyTextures(object, this.textures.getTexture('Albedo_Faucet_512'));
-    }
-
-    if (['Oven_S', 'Oven', 'Oven_2B'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Oven_512'));
-    }
-
-    if (object.name === 'Shelves_2BA') {
-      this.applyTextures(object, this.textures.getTexture('Shelves_XL8'));
-    }
-
-    if (['Bed_2B', 'Bed_1B', 'Bed_S', 'Bed_2BA'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Bed_512'));
     }
 
     if (['Lampe', 'Lampe_2B'].includes(object.name)) {
       this.applyTextures(object, this.textures.getTexture('Albedo_Lamp_512'));
-    }
-
-    if (['Sofa', 'Sofa_2B'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Sofa_512'));
-    }
-
-    if (['Sofa_2BA'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Sofa_2BA'));
-    }
-
-    if (['Chair_2BA'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Chair_2BA'));
-    }
-
-    if (['Base_2BA_1'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Base_2BA'));
     }
 
     if (['WoodFurniture_2BA'].includes(object.name)) {
