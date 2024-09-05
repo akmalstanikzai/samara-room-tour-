@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  samara3d:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: samara3d
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    ports:
+      - '3339:3339'

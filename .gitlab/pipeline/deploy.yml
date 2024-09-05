@@ -1,0 +1,72 @@
+.deploy:
+  stage: deploy
+  image: $HELM_IMAGE
+  script:
+    - helm upgrade
+      --install
+      --values $HELM_VALUES_FILE
+      --set registry.image="$IMAGE_TAG"
+      --set registry.secret=$REGISTRY_SECRET
+      --set release_mode=$RELEASE_MODE
+      --set git.branch=$BRANCH_NAME
+      --set git.path=$CI_PROJECT_PATH_SLUG
+      --set git.commit=$CI_COMMIT_SHA
+      --set ingress.domain=$(echo $CI_ENVIRONMENT_URL | cut -d / -f3)
+      -n $KUBE_NAMESPACE
+      --atomic
+      $RELEASE_NAME
+      ./.helm
+
+deploy preview:
+  extends: .deploy
+  only:
+    - branches
+  except:
+    refs:
+      - tags
+      - master
+  variables:
+    RELEASE_MODE: development
+    BRANCH_NAME: $CI_COMMIT_REF_SLUG
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG-$CI_PROJECT_PATH_SLUG.$BASE_DOMAIN
+    on_stop: Stop
+    auto_stop_in: 1 day
+  needs:
+    - publish preview
+
+deploy stage:
+  extends: .deploy
+  only:
+    - master
+  except:
+    refs:
+      - tags
+  variables:
+    RELEASE_MODE: development
+    BRANCH_NAME: $CI_COMMIT_REF_SLUG
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG-$CI_PROJECT_PATH_SLUG.$BASE_DOMAIN
+    on_stop: Stop
+  needs:
+    - publish preview
+
+Stop:
+  stage: deploy
+  image: $HELM_IMAGE
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - tags
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - helm un -n $KUBE_NAMESPACE $RELEASE_NAME
+  when: manual

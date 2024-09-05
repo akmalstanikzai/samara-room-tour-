@@ -1,0 +1,28 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "amd": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-var": "warn",
+    "no-unused-vars": "off",
+    "no-prototype-builtins": "off",
+    "no-inline-comments": "off",
+    "prefer-const": "warn",
+    "no-console": "off",
+    "prefer-arrow-callback": "warn",
+    "react/prop-types": "off",
+    "no-inner-declarations": "warn",
+    "no-case-declarations": "off"
+  }
+}

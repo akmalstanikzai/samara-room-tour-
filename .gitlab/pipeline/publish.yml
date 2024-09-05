@@ -1,0 +1,58 @@
+.publish:
+  stage: publish
+  extends:
+    - .docker:login
+  cache:
+    key:
+      prefix: npm
+      files:
+        - yarn.lock
+    paths:
+      - node_modules/
+    policy: pull
+  dependencies: []
+
+.docker:
+  extends: .publish
+  image: $DOCKER_IMAGE
+  variables:
+    DOCKER_BUILDKIT: "1"
+  script:
+    - docker build
+      --build-arg NGINX_IMAGE=$NGINX_IMAGE
+      --build-arg DIST_DIR=$DIST_DIR
+      -t $IMAGE_TAG -f .docker/Dockerfile .
+    - docker push $IMAGE_TAG
+
+.preview:
+  extends: .docker
+  only:
+    refs:
+      - branches
+  variables:
+    APP_ENV: development
+  except:
+    refs:
+      - tags
+  dependencies:
+    - npm preview
+  needs:
+    - npm preview
+
+.release:
+  extends: .docker
+  only:
+    refs:
+      - tags
+  except:
+    - branches
+  dependencies:
+    - npm release
+  needs:
+    - npm release
+
+publish preview:
+  extends: .preview
+
+publish release:
+  extends: .release

@@ -1,0 +1,36 @@
+.docker:login:
+  before_script:
+    - '[ -n "$DOCKER_AUTH_CONFIG" ] && mkdir -p "$HOME/.docker"'
+    - '[ -n "$DOCKER_AUTH_CONFIG" ] && echo "$DOCKER_AUTH_CONFIG" > "$HOME/.docker/config.json"'
+
+
+.vendor:
+  stage: checkout
+  image: $NODE_IMAGE
+  interruptible: true
+  script:
+    - yarn
+  cache:
+    key:
+      prefix: npm
+      files:
+        - yarn.lock
+    paths:
+      - node_modules/
+
+vendor preview:
+  extends: .vendor
+  when: manual
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - tags
+
+vendor production:
+  extends: .vendor
+  when: always
+  only:
+    refs:
+      - tags

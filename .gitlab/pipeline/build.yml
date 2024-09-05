@@ -1,0 +1,41 @@
+.build:
+  stage: build
+  image: $NODE_IMAGE
+  cache:
+    key:
+      prefix: npm
+      files:
+        - yarn.lock
+    paths:
+      - node_modules/
+    policy: pull
+  variables:
+    GENERATE_SOURCEMAP: "false"
+    FAST_REFRESH: "false"
+    ESLINT_NO_DEV_ERRORS: "true"
+  script:
+    - npm run build
+    - npm run doc
+  artifacts:
+    paths:
+      - $DIST_DIR
+      - documentation
+
+npm preview:
+  extends: .build
+  only:
+    refs:
+      - branches
+  except:
+    refs:
+      - tags
+  needs:
+    - vendor preview
+
+npm release:
+  extends: .build
+  only:
+    refs:
+      - tags
+  needs:
+    - vendor production

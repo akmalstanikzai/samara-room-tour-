@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+  </head>
+  <base href="/" />
+
+  <style>
+    /* Color for background */
+
+    * {
+      --samara-bgcolor: #e0ded4;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .label {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 2em;
+      color: white;
+      padding: 0.5em;
+      cursor: pointer;
+      backdrop-filter: blur(1em);
+      -webkit-backdrop-filter: blur(1em);
+      font-family: sans-serif;
+      pointer-events: auto;
+    }
+  </style>
+
+  <body>
+    <!--devMode 'on' or 'off'-->
+
+    <samara-scene
+      initialState='{"devMode":"on", "layout":"studio", "color":"Bone white base", "roof":"Dark Bronze Roof", "front":"double doors", "left":"window", "right":"double doors", "solar":"solar-half", "cables":"cables-full", "trim":"wood"}'
+    ></samara-scene>
+
+    <script>
+      window.onload = async () => {
+        const settings = {};
+        window.engine = new window.exported.CreateScene(settings);
+        const engine = window.engine;
+        // engine.status().subscribe((res) => {
+        //   console.log(res);
+        // });
+        await engine.init();
+
+        // Examples
+        // engine.options.setOption({ color: 'Evergreen base' });
+        // engine.options.setOption({ roof: 'Dark Bronze Roof' });
+        // engine.options.setOption({ layout: 'studio' });
+        // engine.options.setOption({ left: 'double doors' });
+        // engine.options.setOption({ front: 'double doors' });
+        // engine.options.setOption({ solar: 'solar-full' });
+        // engine.CameraGsap.setPosition('roof');
+        // engine.CameraGsap.setLookAt(5, 1, 10, 0, 0, 0, 1);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+service:
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 80
+application:
+  track: stable
+  env: production
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 200m
+    memory: 128Mi
+
+deployment:
+  replicas:
+    prod: 2
+    dev: 1
