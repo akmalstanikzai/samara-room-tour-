@@ -140,10 +140,10 @@ const params = {
 
   maps: {
     lightMap: {
-      intensity: 13,
+      intensity: 1,
     },
     aoMap: {
-      intensity: 0.85,
+      intensity: 1,
     },
   },
 
@@ -941,7 +941,7 @@ const params = {
               name: 'Studio_Shelves_Lightmap',
             },
             {
-              path: 'Studio_Shelves_BaseColor.png',
+              path: 'Studio_Shelves_Basecolor.png',
               name: 'Studio_Shelves_BaseColor',
             },
             {
