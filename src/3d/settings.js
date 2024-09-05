@@ -140,10 +140,10 @@ const params = {
 
   maps: {
     lightMap: {
-      intensity: 1,
+      intensity: 13,
     },
     aoMap: {
-      intensity: 1,
+      intensity: 0.85,
     },
   },
 
