@@ -68,8 +68,11 @@ export class CursorPin {
       return;
     }
 
-    const x = e.clientX;
-    const y = e.clientY;
+    const containerRect = params.container.getBoundingClientRect();
+    const containerX = containerRect.left;
+    const containerY = containerRect.top;
+    const x = e.clientX - containerX;
+    const y = e.clientY - containerY;
 
     this.mouse.x = (x / window.innerWidth) * 2 - 1;
     this.mouse.y = -(y / window.innerHeight) * 2 + 1;
