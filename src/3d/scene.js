@@ -138,13 +138,15 @@ export class CreateScene {
 
       this.panorama = new Panorama(this);
       this.panorama.setup();
-      this.labels = new Labels(this);
       this.cursor = new CursorPin(this);
+
+      this.labels = new Labels(this);
+      this.labels.addLabels();
 
       // this.cubemap = new CubeMap(this);
       // this.reflector = new Mirrors(this);
 
-      await delayMs(1);
+      await delayMs(100);
 
       // this.showOverlayWithTextAnimation('Samara room tour');
 

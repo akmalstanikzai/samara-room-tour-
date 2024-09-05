@@ -35,10 +35,10 @@ export class Labels {
       if (res.changedValue === 'layout') {
         this.engine.cursor.pin.visible = false;
         this.removeLabels();
-        this.engine.plan.cutTop(false);
         this.engine.controls.enabled = true;
       }
     });
+    this.initCursor();
   }
 
   initCursor() {
@@ -69,6 +69,8 @@ export class Labels {
   addLabels() {
     this.removeLabels();
     this.labels = [];
+    this.divs = [];
+
     Object.keys(params.cameras[appState.complectation.value.layout]).forEach(
       (camKey) => {
         const div = document.createElement('div');
@@ -79,9 +81,6 @@ export class Labels {
 
         div.onclick = () => {
           this.engine.CameraGsap.setCam(camKey);
-          this.initCursor();
-          this.removeLabels();
-          this.engine.plan.cutTop(false);
         };
 
         const pos =
@@ -89,6 +88,7 @@ export class Labels {
         textLabel.position.copy(pos);
         this.engine.scene.add(textLabel);
         this.labels.push(textLabel);
+        this.divs.push(div);
       }
     );
   }

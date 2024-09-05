@@ -173,6 +173,10 @@ class CameraGsap {
 
   setCam(name) {
     if (name === 'outside') {
+      this.engine.cursor.pin.visible = false;
+
+      this.engine.plan.cutTop(false);
+
       params.postProcessing.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
       this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
@@ -192,16 +196,25 @@ class CameraGsap {
           object.visible = false;
         }
       });
+      this.engine.labels.divs.forEach((div) => {
+        div.style.visible = false;
+      });
     } else if (name === 'floor plan') {
+      this.engine.cursor.pin.visible = false;
+
+      this.engine.plan.cutTop(true);
+
+      appState.cam.next('floor plan');
+
       params.postProcessing.enabled = false;
       this.engine.controls.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
       this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
 
       this.engine.controls.setTarget(0, 0, 0);
+      this.engine.plan.cutTop(true);
 
       const pos = params.cameras['floor plan'].position;
-      appState.cam.next('floor plan');
 
       this.engine.controls.setPosition(pos.x, pos.y, pos.z);
       this.engine.panorama.toggleVisibility('3d');
@@ -210,7 +223,13 @@ class CameraGsap {
           object.visible = false;
         }
       });
+      this.engine.labels.divs.forEach((div) => {
+        div.style.visible = true;
+      });
     } else {
+      this.engine.plan.cutTop(false);
+      this.engine.cursor.pin.visible = true;
+
       params.postProcessing.enabled = true;
       this.engine.controls.enabled = true;
 
@@ -243,6 +262,9 @@ class CameraGsap {
         if (object.name.includes('Sprite')) {
           object.visible = true;
         }
+      });
+      this.engine.labels.divs.forEach((div) => {
+        div.style.visible = false;
       });
     }
 

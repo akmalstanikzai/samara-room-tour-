@@ -79,14 +79,9 @@ export class MenuComponent extends LitElement {
   toggleView() {
     this.isFloorPlan = !this.isFloorPlan;
     if (this.isFloorPlan) {
-      this.engine.plan.cutTop(true);
-      this.engine.labels.addLabels();
       this.engine.CameraGsap.setCam('floor plan');
     } else {
       this.engine.CameraGsap.setCam('outside');
-      this.engine.plan.cutTop(false);
-      this.engine.labels.removeLabels();
-      this.engine.cursor.pin.visible = false;
     }
     this.engine.update();
   }
