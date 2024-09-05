@@ -196,6 +196,7 @@ class CameraGsap {
       params.postProcessing.enabled = false;
       this.engine.controls.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
+      this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
 
       this.engine.controls.setTarget(0, 0, 0);
 
