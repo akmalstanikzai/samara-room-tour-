@@ -71,11 +71,11 @@ export class CursorPin {
     const containerRect = params.container.getBoundingClientRect();
     const containerX = containerRect.left;
     const containerY = containerRect.top;
-    const x = e.clientX - containerX;
-    const y = e.clientY - containerY;
+    const mouseX = e.clientX - containerX;
+    const mouseY = e.clientY - containerY;
 
-    this.mouse.x = (x / window.innerWidth) * 2 - 1;
-    this.mouse.y = -(y / window.innerHeight) * 2 + 1;
+    this.mouse.x = (mouseX / params.container.clientWidth) * 2 - 1;
+    this.mouse.y = -(mouseY / params.container.clientHeight) * 2 + 1;
 
     this.raycaster.setFromCamera(this.mouse, this.engine.camera);
     const visibleObjects = this.engine.meshes.filter(
@@ -148,12 +148,14 @@ export class CursorPin {
   }
 
   onClick(e) {
-    const x = e.clientX;
-    const y = e.clientY;
+    const containerRect = params.container.getBoundingClientRect();
+    const containerX = containerRect.left;
+    const containerY = containerRect.top;
+    const mouseX = e.clientX - containerX;
+    const mouseY = e.clientY - containerY;
 
-    this.mouse.x = (x / window.innerWidth) * 2 - 1;
-    this.mouse.y = -(y / window.innerHeight) * 2 + 1;
-
+    this.mouse.x = (mouseX / params.container.clientWidth) * 2 - 1;
+    this.mouse.y = -(mouseY / params.container.clientHeight) * 2 + 1;
     this.raycaster.setFromCamera(this.mouse, this.engine.camera);
 
     this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
