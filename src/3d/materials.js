@@ -140,88 +140,69 @@ export class Materials {
         color: color,
       });
 
-      if (mesh.material.name.includes('WoodCh_S')) {
-        mesh.material.map = this.textures.getTexture('Studio_Chair1_BaseColor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Chair1_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture(
-          'Studio_Chair1_Lightmap'
-        );
-        mesh.material.aoMap.channel = 1;
-        // mesh.material.lightMapIntensity = 10;
-      }
-      if (mesh.material.name === 'Chair_studio') {
-        mesh.material.map = this.textures.getTexture('Studio_Chair_BaseColor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Chair_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Chair_Lightmap');
-        mesh.material.lightMap.channel = 1;
-        mesh.material.aoMap.channel = 1;
-      }
+      const studioMaterials = {
+        WoodCh_S: {
+          map: 'Studio_Chair1_BaseColor',
+          lightMap: 'Studio_Chair1_Lightmap',
+          aoMap: 'Studio_Chair1_Lightmap',
+        },
+        Chair_studio: {
+          map: 'Studio_Chair_BaseColor',
+          lightMap: 'Studio_Chair_Lightmap',
+          aoMap: 'Studio_Chair_Lightmap',
+        },
+        Floor_S_studio: {
+          map: 'Studio_Floor_BaseColor',
+          lightMap: 'Studio_Floor_Lightmap',
+          aoMap: 'Studio_Floor_Lightmap',
+        },
+        Wood_S_studio: {
+          map: 'Studio_Wood_BaseColor',
+          lightMap: 'Studio_Wood_Lightmap',
+          aoMap: 'Studio_Wood_Lightmap',
+        },
+        Wall_studio: {
+          map: null,
+          lightMap: 'Studio_Wall_Lightmap',
+          aoMap: 'Studio_Wall_Lightmap',
+        },
+        Shelves_studio: {
+          color: new Color(0xffffff),
+          lightMap: 'Studio_Shelves_Lightmap',
+          aoMap: 'Studio_Shelves_Lightmap',
+        },
+        Oven_1B_studio: {
+          map: 'Studio_Oven_BaseColor',
+          lightMap: 'Studio_Oven_Lightmap',
+          aoMap: 'Studio_Oven_Lightmap',
+        },
+        Chrome_studio: {
+          map: 'Studio_Chrome_Basecolor',
+          lightMap: 'Studio_Chrome_Lightmap',
+        },
+        Fabric_S_studio: {
+          map: 'Studio_Bed_Basecolor',
+          lightMap: 'Studio_Bed_Lightmap',
+          aoMap: 'Studio_Bed_Lightmap',
+        },
+      };
 
-      if (mesh.material.name === 'Floor_S_studio') {
-        mesh.material.map = this.textures.getTexture('Studio_Floor_BaseColor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Floor_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Floor_Lightmap');
-        mesh.material.aoMap.channel = 1;
-        mesh.material.lightMap.channel = 1;
-      }
+      if (studioMaterials[mesh.material.name]) {
+        const materialConfig = studioMaterials[mesh.material.name];
 
-      if (mesh.material.name === 'Wood_S_studio') {
-        mesh.material.map = this.textures.getTexture('Studio_Wood_BaseColor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Wood_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Wood_Lightmap');
-        mesh.material.lightMap.channel = 1;
-        mesh.material.aoMap.channel = 1;
-      }
+        Object.entries(materialConfig).forEach(([key, value]) => {
+          if (key === 'color') {
+            mesh.material[key] = value;
+          } else if (value !== null) {
+            mesh.material[key] = this.textures.getTexture(value);
+            if (key === 'lightMap' || key === 'aoMap') {
+              mesh.material[key].channel = 1;
+            }
+          }
+        });
 
-      if (mesh.material.name === 'Wall_studio') {
-        mesh.material.map = null;
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Wall_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Wall_Lightmap');
-        mesh.material.lightMap.channel = 1;
-        mesh.material.aoMap.channel = 1;
-      }
-
-      if (mesh.material.name === 'Shelves_studio') {
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Shelves_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture(
-          'Studio_Shelves_Lightmap'
-        );
-        mesh.material.lightMap.channel = 1;
-        // mesh.material.lightMapIntensity = 10;
-      }
-
-      if (mesh.material.name === 'Oven_1B_studio') {
-        mesh.material.map = this.textures.getTexture('Studio_Oven_BaseColor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Oven_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Oven_Lightmap');
-        mesh.material.lightMap.channel = 1;
-        mesh.material.aoMap.channel = 1;
-        // mesh.material.lightMapIntensity = 10;
-      }
-
-      if (mesh.material.name === 'Fabric_S_studio') {
-        mesh.material.map = this.textures.getTexture('Studio_Bed_Basecolor');
-        mesh.material.lightMap = this.textures.getTexture(
-          'Studio_Bed_Lightmap'
-        );
-        mesh.material.aoMap = this.textures.getTexture('Studio_Bed_Lightmap');
-        mesh.material.lightMap.channel = 1;
-        mesh.material.aoMap.channel = 1;
-        // mesh.material.lightMapIntensity = 10;
+        mesh.material.lightMapIntensity = params.maps.lightMap.intensity;
+        mesh.material.aoMapIntensity = params.maps.aoMap.intensity;
       }
 
       if (

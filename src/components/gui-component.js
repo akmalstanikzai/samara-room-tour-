@@ -1112,6 +1112,36 @@ export class GuiComponent extends LitElement {
       .listen();
 
     _panoMeshFolder.close();
+
+    this.gui
+      .addFolder('Interior aomaps')
+      .add(params.maps.aoMap, 'intensity')
+      .min(0.01)
+      .max(2)
+      .step(0.01)
+      .onChange((value) => {
+        this.engine.scene.traverse((mesh) => {
+          if (mesh.material && mesh.material.aoMap) {
+            mesh.material.aoMapIntensity = value;
+          }
+        });
+        this.engine.update();
+      });
+
+    this.gui
+      .addFolder('Interior lightmaps')
+      .add(params.maps.lightMap, 'intensity')
+      .min(0.01)
+      .max(20)
+      .step(0.01)
+      .onChange((value) => {
+        this.engine.scene.traverse((mesh) => {
+          if (mesh.material && mesh.material.lightMap) {
+            mesh.material.lightMapIntensity = value;
+          }
+        });
+        this.engine.update();
+      });
   }
 }
 

@@ -126,7 +126,7 @@ const params = {
   },
 
   light: {
-    intensity: Math.PI,
+    intensity: 5,
   },
 
   envMap: {
@@ -136,6 +136,15 @@ const params = {
   materials: {
     metal: { metalness: 0.2, roughness: 0.3 },
     wood: { metalness: 0.2, roughness: 0.7 },
+  },
+
+  maps: {
+    lightMap: {
+      intensity: 1,
+    },
+    aoMap: {
+      intensity: 1,
+    },
   },
 
   aoMap: {
@@ -938,6 +947,14 @@ const params = {
             {
               path: 'Studio_Oven_Basecolor.png',
               name: 'Studio_Oven_BaseColor',
+            },
+            {
+              path: 'Studio_Chrome_Basecolor.png',
+              name: 'Studio_Chrome_Basecolor',
+            },
+            {
+              path: 'Studio_Chrome_Lightmap.png',
+              name: 'Studio_Chrome_Lightmap',
             },
             {
               path: 'Studio_Oven_Lightmap.png',
