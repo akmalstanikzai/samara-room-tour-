@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --host 0.0.0.0",
     "lintfix": "eslint --fix src/.",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json",
+    "commit": "git add . && git commit -m \"Changes: $(git diff --cached --numstat | awk '{files += 1; insertions += $1; deletions += $2} END {print files \"f \" insertions \"+\" deletions \"-\"}')\""
   },
   "keywords": [],
   "author": "",

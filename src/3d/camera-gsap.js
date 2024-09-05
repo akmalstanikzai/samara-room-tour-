@@ -197,8 +197,6 @@ class CameraGsap {
       this.engine.controls.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
 
-      this.engine.controls.setFocalOffset(x, y, z);
-
       this.engine.controls.setTarget(0, 0, 0);
 
       const pos = params.cameras['floor plan'].position;

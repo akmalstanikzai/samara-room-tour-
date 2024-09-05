@@ -490,7 +490,7 @@ const params = {
   textures: [
     { path: 'Circle_512.png', name: 'pin' },
     {
-      path: 'field.jpg',
+      path: 'field.png',
       name: 'field',
     },
     {
