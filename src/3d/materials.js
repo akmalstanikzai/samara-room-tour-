@@ -199,6 +199,7 @@ export class Materials {
             mesh.material[key] = this.textures.getTexture(value);
             if (key === 'lightMap' || key === 'aoMap') {
               mesh.material[key].channel = 1;
+              mesh.material[key].colorSpace = LinearSRGBColorSpace;
             }
           }
         });
