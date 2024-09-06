@@ -921,7 +921,6 @@ const params = {
             {
               path: 'Studio_Floor_Lightmap.png',
               name: 'Studio_Floor_Lightmap',
-              nonSrgb: true,
             },
             {
               path: 'Studio_Wood_Basecolor.png',

@@ -6,6 +6,7 @@ import {
   Object3D,
   Mesh,
   DoubleSide,
+  LinearSRGBColorSpace,
 } from 'three';
 import { params } from './settings';
 import { Textures } from './textures';
@@ -186,7 +187,7 @@ export class Materials {
       if (this.studioMaterials[name]) {
         mesh.material = new MeshLambertMaterial({
           name: name,
-          color: color,
+          color: new Color(0xffffff),
         });
 
         const materialConfig = this.studioMaterials[name];
@@ -201,7 +202,6 @@ export class Materials {
             }
           }
         });
-
         mesh.material.lightMapIntensity = params.maps.lightMap.intensity;
         mesh.material.aoMapIntensity = params.maps.aoMap.intensity;
       } else {
