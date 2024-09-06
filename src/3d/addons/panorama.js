@@ -22,6 +22,7 @@ export class Panorama {
           z: params.cameras.studio.bed.position.z,
         },
         visible: ['Sprite_pano1', 'Sprite_pano2'],
+        visibleLabels: ['label_bed', 'label_kitchen'],
       },
       {
         name: 'Sprite_pano2',
@@ -33,6 +34,7 @@ export class Panorama {
           z: params.cameras.studio.kitchen.position.z,
         },
         visible: ['Sprite_pano1', 'Sprite_pano2', 'Sprite_pano3'],
+        visibleLabels: ['label_bed', 'label_kitchen', 'label_hallway'],
       },
 
       {
@@ -45,6 +47,7 @@ export class Panorama {
           z: params.cameras.studio.hallway.position.z,
         },
         visible: ['Sprite_pano3', 'Sprite_pano2'],
+        visibleLabels: ['label_kitchen', 'label_hallway'],
       },
     ];
 

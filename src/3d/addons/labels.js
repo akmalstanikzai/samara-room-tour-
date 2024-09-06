@@ -77,9 +77,13 @@ export class Labels {
         div.textContent = capitalize(camKey);
 
         const textLabel = new CSS2DObject(div);
+        textLabel.name = `label_${camKey}`;
 
         div.onclick = () => {
-          this.engine.CameraGsap.setCam(camKey);
+          this.engine.CameraGsap.setCam(
+            camKey,
+            appState.cam.value !== 'floor plan'
+          );
         };
 
         const pos =

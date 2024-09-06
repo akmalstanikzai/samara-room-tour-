@@ -2,6 +2,7 @@ import { Vector3 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { params } from './settings';
 import { appState } from '../services/app-state';
+import { delayMs } from '../utils/delay';
 
 /** Class for smooth camera transitions with gsap. */
 
@@ -171,7 +172,7 @@ class CameraGsap {
     this.engine.controls.setLookAt(position.x, position.y, position.z, 0, 0, 0);
   }
 
-  setCam(name) {
+  setCam(name, move) {
     if (name === 'outside') {
       this.engine.cursor.pin.visible = false;
 
@@ -236,42 +237,62 @@ class CameraGsap {
       this.engine.cameraControls.setFirstPersonParams();
       this.engine.controls.zoomTo(params.controls.firstPerson.defaultZoom);
 
-      const cam = params.cameras[appState.complectation.value.layout][name];
-      appState.cam.next(name);
-
-      this.engine.controls.setLookAt(
-        cam.position.x,
-        cam.position.y,
-        cam.position.z,
-        cam.target.x,
-        cam.target.y,
-        cam.target.z
-      );
-
-      const pano = this.engine.scene.getObjectByName('pano');
-
-      const textureMap = this.engine.panorama.items.find(
-        (pano) => pano.cameraMap === name
-      ).textureMap;
-      const texture = this.engine.textures.getTexture(textureMap);
-      texture.flipY = true;
-      pano.material.map = texture;
-      this.engine.panorama.toggleVisibility('pano');
-
       this.engine.scene.traverse((object) => {
         if (object.name.includes('Sprite')) {
           object.visible = true;
         }
       });
+
       this.engine.labels.labels.forEach((label) => {
         label.visible = false;
       });
+      this.engine.panorama.items.forEach((item) => {
+        item.visibleLabels.forEach((el) => {
+          if (item.cameraMap === name) {
+            const helper = this.engine.scene.getObjectByName(el);
+            helper.visible = true;
+          }
+        });
+      });
+
+      if (move) {
+        this.move(name);
+      } else {
+        const cam = params.cameras[appState.complectation.value.layout][name];
+        appState.cam.next(name);
+
+        this.engine.controls.setLookAt(
+          cam.position.x,
+          cam.position.y,
+          cam.position.z,
+          cam.target.x,
+          cam.target.y,
+          cam.target.z
+        );
+
+        const pano = this.engine.scene.getObjectByName('pano');
+
+        const textureMap = this.engine.panorama.items.find(
+          (pano) => pano.cameraMap === name
+        ).textureMap;
+        const texture = this.engine.textures.getTexture(textureMap);
+        texture.flipY = true;
+        pano.material.map = texture;
+        this.engine.panorama.toggleVisibility('pano');
+      }
     }
 
     this.engine.update();
   }
 
-  async move(x, z, distanceFromCameraToObject) {
+  async move(name) {
+    const textureMap = this.engine.panorama.items.find(
+      (pano) => pano.cameraMap === name
+    ).textureMap;
+    const { x, z } = params.cameras.studio[name].position;
+
+    this.engine.panorama.toggleVisibility('3d');
+
     const positionA = this.engine.controls.getPosition();
 
     const positionB = { x: x, y: positionA.y, z: z };
@@ -315,6 +336,14 @@ class CameraGsap {
         appState.renderingStatus.next(true);
       },
     });
+
+    await delayMs(params.animation.transitionDelay.duration * 1000);
+    const pano = this.engine.scene.getObjectByName('pano');
+    pano.material.map = this.engine.textures.getTexture(textureMap);
+    pano.material.map.flipY = true;
+    this.engine.panorama.toggleVisibility('pano');
+    appState.cam.next(name);
+
     return await this.moveGsap;
   }
 }

@@ -166,74 +166,9 @@ export class CursorPin {
           const cameraMap = this.engine.panorama.items.find(
             (pano) => pano.name === object.object.name
           ).cameraMap;
-          const textureMap = this.engine.panorama.items.find(
-            (pano) => pano.name === object.object.name
-          ).textureMap;
-          const position = params.cameras.studio[cameraMap].position;
-
-          const move = async () => {
-            this.engine.panorama.toggleVisibility('3d');
-
-            this.engine.CameraGsap.move(position.x, position.z);
-            await delayMs(params.animation.transitionDelay.duration * 1000);
-            const pano = this.engine.scene.getObjectByName('pano');
-            pano.material.map = this.engine.textures.getTexture(textureMap);
-            pano.material.map.flipY = true;
-            this.engine.panorama.toggleVisibility('pano');
-          };
-          appState.cam.next(cameraMap);
-          move();
+          this.engine.CameraGsap.move(cameraMap);
         }
       });
     }
-    // if (this.intersects.length > 0) {
-    //   const point = this.intersects[0].point;
-
-    //   this.mouseHelper.position.copy(point);
-    //   this.intersection.point.copy(point);
-    //   const distance = this.engine.camera.position.distanceTo(
-    //     this.mouseHelper.position
-    //   );
-
-    //   const direction = new THREE.Vector3();
-    //   this.engine.camera.getWorldDirection(direction);
-    //   const raycaster = new THREE.Raycaster(
-    //     this.mouseHelper.position,
-    //     direction.normalize()
-    //   );
-
-    //   // Set a reasonable distance for the raycaster to detect collisions
-    //   const collisionDistance = 0.01; // Adjust this value based on your scene scale
-
-    //   // Collect only the meshes that have a material name including 'Wall'
-    //   const wallMeshes = [];
-    //   this.engine.scene.traverse((object) => {
-    //     if (
-    //       object.isMesh &&
-    //       object.material &&
-    //       object.material.name.includes('Wall')
-    //     ) {
-    //       wallMeshes.push(object);
-    //     }
-    //   });
-
-    //   // Perform the raycast specifically against these wall meshes
-    //   const intersects = raycaster.intersectObjects(wallMeshes, true);
-
-    //   if (intersects.length > 0 && intersects[0].distance < collisionDistance) {
-    //     console.log('Wall too close, cannot move forward!');
-    //     // Here you can handle the logic to prevent the camera from moving forward
-    //     // For example, you might not update the camera's position or apply some other logic
-    //   } else {
-    //     this.engine.CameraGsap.move(
-    //       this.mouseHelper.position.x,
-    //       this.mouseHelper.position.z,
-    //       distance
-    //     );
-    //     // If no collision, update the camera position normally
-    //     // this.camera.position.add(direction.multiplyScalar(this.moveSpeed));
-    //     // console.log('Moved camera to', this.camera.position);
-    //   }
-    // }
   }
 }
