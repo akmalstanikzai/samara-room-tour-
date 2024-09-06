@@ -126,7 +126,7 @@ const params = {
   },
 
   light: {
-    intensity: Math.PI,
+    intensity: 1,
   },
 
   envMap: {
@@ -140,7 +140,7 @@ const params = {
 
   maps: {
     lightMap: {
-      intensity: 1,
+      intensity: 0.01,
     },
     aoMap: {
       intensity: 1,

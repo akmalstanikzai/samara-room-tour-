@@ -206,184 +206,186 @@ export class Materials {
         mesh.material.lightMapIntensity = params.maps.lightMap.intensity;
         mesh.material.aoMapIntensity = params.maps.aoMap.intensity;
       } else {
+        if (
+          [
+            'Glass_Bath_S',
+            'Glass_Bath_1B',
+            'Glass_Bath_2B',
+            'Materials_NB_2BA_1',
+          ].includes(mesh.name)
+        ) {
+          mesh.material = this.glassClearMaterial.clone();
+          mesh.material.name = `Glass Bath_${modelName}`;
+        }
+
+        if (
+          [
+            'Color_Red_studio',
+            'Color_Red_onebed',
+            'Color_Red_twobed',
+            'Color_Red_XL 8',
+          ].includes(mesh.material.name)
+        ) {
+          mesh.material.color = new Color(0xef1a0b).convertLinearToSRGB();
+          mesh.material.roughness = 0.3;
+        }
+
+        if (
+          ['glassDoor_onebed', 'glassDoor_studio', 'glassDoor_twobed'].includes(
+            mesh.material.name
+          )
+        ) {
+          mesh.material = this.glassClearMaterial.clone();
+          mesh.material.name = `Glass Door_${modelName}`;
+          mesh.material.transmission = 0.2;
+        }
+
+        if (
+          [
+            'glassClear_onebed',
+            'glassClear_studio',
+            'glassClear_twobed',
+            'glassClear_XL 8',
+            'glassClear_XL 10',
+            'glassDoor_XL 8',
+            'glassDoor_XL 10',
+          ].includes(mesh.material.name)
+        ) {
+          mesh.material = this.glassClearMaterial.clone();
+          mesh.material.name = `Glass Clear_${modelName}`;
+        }
+
+        if (
+          ['Air_onebed', 'Air_studio', 'Air_twobed', 'Air_XL 8'].includes(
+            mesh.material.name
+          )
+        ) {
+          mesh.material.map = this.textures.getTexture('Air_purification');
+          mesh.material.aoMap = this.textures.getTexture('ao_air_ex');
+          mesh.material.aoMapIntensity = params.aoMap.air.intensity;
+        }
+
+        if (mesh.material.name === 'Color_Exterior_Wood_onebed') {
+          mesh.material = this.exteriorWoodMaterial.clone();
+          mesh.material.name = 'Base Color Wood Material_onebed';
+          mesh.material.aoMap = this.textures.getTexture(
+            'exterior_ao_wood_onebed'
+          );
+        }
+
+        if (mesh.material.name === 'Color_Exterior_Wood_twobed') {
+          mesh.material = this.exteriorWoodMaterial.clone();
+          mesh.material.name = 'Base Color Wood Material_twobed';
+          mesh.material.aoMap = this.textures.getTexture(
+            'exterior_ao_wood_twobed'
+          );
+        }
+
+        if (mesh.material.name === 'Color_Exterior_Wood_XL 8') {
+          mesh.material = this.exteriorWoodMaterial.clone();
+          mesh.material.name = 'Base Color Wood Material_XL 8';
+        }
+
+        if (mesh.material.name === 'Color_Exterior_Wood_studio') {
+          mesh.material = this.exteriorWoodMaterial.clone();
+          mesh.material.name = 'Base Color Wood Material_studio';
+          mesh.material.aoMap = this.textures.getTexture(
+            'exterior_ao_wood_studio'
+          );
+        }
+
+        if (mesh.material.name === 'Color_Exterior_onebed') {
+          mesh.material = this.exteriorMaterial.clone();
+          mesh.material.name = 'Base Color Material_onebed';
+          mesh.material.aoMap = this.textures.getTexture('exterior_ao_onebed');
+        }
+
+        if (mesh.material.name === 'Color_Exterior_twobed') {
+          mesh.material = this.exteriorMaterial.clone();
+          mesh.material.name = 'Base Color Material_twobed';
+          mesh.material.aoMap = this.textures.getTexture('exterior_ao_twobed');
+        }
+
+        if (mesh.material.name === 'Color_Exterior_XL 8') {
+          mesh.material = this.exteriorMaterial.clone();
+          mesh.material.name = 'Base Color Material_XL 8';
+        }
+
+        if (mesh.material.name === 'Color_Exterior_studio') {
+          mesh.material = this.exteriorMaterial.clone();
+          mesh.material.name = 'Base Color Material_studio';
+          mesh.material.aoMap = this.textures.getTexture('exterior_ao_studio');
+        }
+
+        if (
+          [
+            'Solar_Panel_onebed',
+            'Solar_Panel_studio',
+            'Solar_Panel_twobed',
+            'Solar_Panel_XL 8',
+          ].includes(mesh.material.name)
+        ) {
+          mesh.material.map = this.textures.getTexture('Solar_Panel');
+          mesh.material.metalnessMap = this.textures.getTexture(
+            'Solar_Panel_metalness'
+          );
+        }
+
+        if (
+          [
+            'Cedar_onebed',
+            'Cedar_studio',
+            'Cedar_twobed',
+            'Cedar_XL 8',
+          ].includes(mesh.material.name)
+        ) {
+          mesh.material.color = new Color(0xffffff);
+          mesh.material.roughness = 0.7;
+          mesh.material.aoMap = this.textures.getTexture('cedar_ao_new');
+          mesh.material.aoMapIntensity = params.aoMap.desk.intensity;
+          mesh.material.map = this.textures.getTexture(
+            'Oak_Wood_Varnished_Albedo_2Kt'
+          );
+        }
+
+        if (
+          [
+            'Color_ExteriorSupp_onebed',
+            'Color_ExteriorSupp_studio',
+            'Color_ExteriorSupp_twobed',
+            'Color_ExteriorSupp_XL 8',
+          ].includes(mesh.material.name)
+        ) {
+          const name = mesh.material.name;
+          mesh.material = this.exteriorMaterial.clone();
+          mesh.material.name = name;
+
+          mesh.material.aoMap = this.textures.getTexture('patio_supp_ao');
+          mesh.material.aoMapIntensity = params.aoMap.patio.intensity;
+        }
+
+        if (mesh.material.name === 'Color_Roof_onebed') {
+          mesh.material = this.roofMaterial.clone();
+          mesh.material.name = 'Roof Material_onebed';
+        }
+
+        if (mesh.material.name === 'Color_Roof_studio') {
+          mesh.material = this.roofMaterial.clone();
+          mesh.material.name = 'Roof Material_studio';
+        }
+
+        if (mesh.material.name === 'Color_Roof_twobed') {
+          mesh.material = this.roofMaterial.clone();
+          mesh.material.name = 'Roof Material_twobed';
+        }
+
+        if (mesh.material.name === 'Color_Roof_XL 8') {
+          mesh.material = this.roofMaterial.clone();
+          mesh.material.name = 'Roof Material_XL 8';
+        }
         // Apply envMap only to materials not in studioMaterials
         mesh.material.envMap = this.textures.getHdrTexture('hdr-2');
         mesh.material.envMapIntensity = params.envMap.intensity;
-      }
-
-      if (
-        [
-          'Glass_Bath_S',
-          'Glass_Bath_1B',
-          'Glass_Bath_2B',
-          'Materials_NB_2BA_1',
-        ].includes(mesh.name)
-      ) {
-        mesh.material = this.glassClearMaterial.clone();
-        mesh.material.name = `Glass Bath_${modelName}`;
-      }
-
-      if (
-        [
-          'Color_Red_studio',
-          'Color_Red_onebed',
-          'Color_Red_twobed',
-          'Color_Red_XL 8',
-        ].includes(mesh.material.name)
-      ) {
-        mesh.material.color = new Color(0xef1a0b).convertLinearToSRGB();
-        mesh.material.roughness = 0.3;
-      }
-
-      if (
-        ['glassDoor_onebed', 'glassDoor_studio', 'glassDoor_twobed'].includes(
-          mesh.material.name
-        )
-      ) {
-        mesh.material = this.glassClearMaterial.clone();
-        mesh.material.name = `Glass Door_${modelName}`;
-        mesh.material.transmission = 0.2;
-      }
-
-      if (
-        [
-          'glassClear_onebed',
-          'glassClear_studio',
-          'glassClear_twobed',
-          'glassClear_XL 8',
-          'glassClear_XL 10',
-          'glassDoor_XL 8',
-          'glassDoor_XL 10',
-        ].includes(mesh.material.name)
-      ) {
-        mesh.material = this.glassClearMaterial.clone();
-        mesh.material.name = `Glass Clear_${modelName}`;
-      }
-
-      if (
-        ['Air_onebed', 'Air_studio', 'Air_twobed', 'Air_XL 8'].includes(
-          mesh.material.name
-        )
-      ) {
-        mesh.material.map = this.textures.getTexture('Air_purification');
-        mesh.material.aoMap = this.textures.getTexture('ao_air_ex');
-        mesh.material.aoMapIntensity = params.aoMap.air.intensity;
-      }
-
-      if (mesh.material.name === 'Color_Exterior_Wood_onebed') {
-        mesh.material = this.exteriorWoodMaterial.clone();
-        mesh.material.name = 'Base Color Wood Material_onebed';
-        mesh.material.aoMap = this.textures.getTexture(
-          'exterior_ao_wood_onebed'
-        );
-      }
-
-      if (mesh.material.name === 'Color_Exterior_Wood_twobed') {
-        mesh.material = this.exteriorWoodMaterial.clone();
-        mesh.material.name = 'Base Color Wood Material_twobed';
-        mesh.material.aoMap = this.textures.getTexture(
-          'exterior_ao_wood_twobed'
-        );
-      }
-
-      if (mesh.material.name === 'Color_Exterior_Wood_XL 8') {
-        mesh.material = this.exteriorWoodMaterial.clone();
-        mesh.material.name = 'Base Color Wood Material_XL 8';
-      }
-
-      if (mesh.material.name === 'Color_Exterior_Wood_studio') {
-        mesh.material = this.exteriorWoodMaterial.clone();
-        mesh.material.name = 'Base Color Wood Material_studio';
-        mesh.material.aoMap = this.textures.getTexture(
-          'exterior_ao_wood_studio'
-        );
-      }
-
-      if (mesh.material.name === 'Color_Exterior_onebed') {
-        mesh.material = this.exteriorMaterial.clone();
-        mesh.material.name = 'Base Color Material_onebed';
-        mesh.material.aoMap = this.textures.getTexture('exterior_ao_onebed');
-      }
-
-      if (mesh.material.name === 'Color_Exterior_twobed') {
-        mesh.material = this.exteriorMaterial.clone();
-        mesh.material.name = 'Base Color Material_twobed';
-        mesh.material.aoMap = this.textures.getTexture('exterior_ao_twobed');
-      }
-
-      if (mesh.material.name === 'Color_Exterior_XL 8') {
-        mesh.material = this.exteriorMaterial.clone();
-        mesh.material.name = 'Base Color Material_XL 8';
-      }
-
-      if (mesh.material.name === 'Color_Exterior_studio') {
-        mesh.material = this.exteriorMaterial.clone();
-        mesh.material.name = 'Base Color Material_studio';
-        mesh.material.aoMap = this.textures.getTexture('exterior_ao_studio');
-      }
-
-      if (
-        [
-          'Solar_Panel_onebed',
-          'Solar_Panel_studio',
-          'Solar_Panel_twobed',
-          'Solar_Panel_XL 8',
-        ].includes(mesh.material.name)
-      ) {
-        mesh.material.map = this.textures.getTexture('Solar_Panel');
-        mesh.material.metalnessMap = this.textures.getTexture(
-          'Solar_Panel_metalness'
-        );
-      }
-
-      if (
-        ['Cedar_onebed', 'Cedar_studio', 'Cedar_twobed', 'Cedar_XL 8'].includes(
-          mesh.material.name
-        )
-      ) {
-        mesh.material.color = new Color(0xffffff);
-        mesh.material.roughness = 0.7;
-        mesh.material.aoMap = this.textures.getTexture('cedar_ao_new');
-        mesh.material.aoMapIntensity = params.aoMap.desk.intensity;
-        mesh.material.map = this.textures.getTexture(
-          'Oak_Wood_Varnished_Albedo_2Kt'
-        );
-      }
-
-      if (
-        [
-          'Color_ExteriorSupp_onebed',
-          'Color_ExteriorSupp_studio',
-          'Color_ExteriorSupp_twobed',
-          'Color_ExteriorSupp_XL 8',
-        ].includes(mesh.material.name)
-      ) {
-        const name = mesh.material.name;
-        mesh.material = this.exteriorMaterial.clone();
-        mesh.material.name = name;
-
-        mesh.material.aoMap = this.textures.getTexture('patio_supp_ao');
-        mesh.material.aoMapIntensity = params.aoMap.patio.intensity;
-      }
-
-      if (mesh.material.name === 'Color_Roof_onebed') {
-        mesh.material = this.roofMaterial.clone();
-        mesh.material.name = 'Roof Material_onebed';
-      }
-
-      if (mesh.material.name === 'Color_Roof_studio') {
-        mesh.material = this.roofMaterial.clone();
-        mesh.material.name = 'Roof Material_studio';
-      }
-
-      if (mesh.material.name === 'Color_Roof_twobed') {
-        mesh.material = this.roofMaterial.clone();
-        mesh.material.name = 'Roof Material_twobed';
-      }
-
-      if (mesh.material.name === 'Color_Roof_XL 8') {
-        mesh.material = this.roofMaterial.clone();
-        mesh.material.name = 'Roof Material_XL 8';
       }
 
       // Fix materials dublicates and stores them in a Map for later use.
@@ -406,9 +408,12 @@ export class Materials {
           clearcoatRoughness,
           roughness,
           name,
+          envMap,
+          envMapIntensity,
         } = mesh.material;
 
         mesh.material = new MeshTransmissionMaterial(10);
+
         Object.assign(mesh.material, {
           // clearcoat,
           // clearcoatRoughness,
