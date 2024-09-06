@@ -803,7 +803,6 @@ const params = {
           totalAssetsCount: 65,
           path: 'Studio.glb',
           textures: [
-            { path: 'Studio_Wall_BaseColor.png', name: 'Wall_i_S' },
             { path: '1_S.png', name: '1_S' },
             { path: '2_S.png', name: '2_S' },
             { path: '3_S.png', name: '3_S' },
@@ -893,7 +892,7 @@ const params = {
             },
 
             {
-              path: 'Studio_Chair1_BaseColor.png',
+              path: 'Studio_Chair1_Basecolor.png',
               name: 'Studio_Chair1_BaseColor',
             },
 
@@ -903,7 +902,7 @@ const params = {
             },
 
             {
-              path: 'Studio_Chair_BaseColor.png',
+              path: 'Studio_Chair_Basecolor.png',
               name: 'Studio_Chair_BaseColor',
             },
 
@@ -914,7 +913,7 @@ const params = {
 
             {
               path: 'floor.jpg',
-              name: 'Studio_Floor_BaseColor',
+              name: 'Studio_Floor_Basecolor',
               repeat: true,
               repeatSet: 8,
             },
@@ -924,7 +923,7 @@ const params = {
               name: 'Studio_Floor_Lightmap',
             },
             {
-              path: 'Studio_Wood_BaseColor.png',
+              path: 'Studio_Wood_Basecolor.png',
               name: 'Studio_Wood_BaseColor',
             },
 
