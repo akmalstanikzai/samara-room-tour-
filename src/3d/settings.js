@@ -913,7 +913,7 @@ const params = {
 
             {
               path: 'floor.jpg',
-              name: 'Studio_Floor_Basecolor',
+              name: 'Studio_Floor_BaseColor',
               repeat: true,
               repeatSet: 8,
             },
