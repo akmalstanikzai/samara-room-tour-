@@ -200,6 +200,7 @@ class CameraGsap {
       this.engine.labels.labels.forEach((label) => {
         label.visible = false;
       });
+      this.engine.ambientLight.intensity = 1;
     } else if (name === 'floor plan') {
       this.engine.cursor.pin.visible = false;
 
@@ -227,7 +228,9 @@ class CameraGsap {
       this.engine.labels.labels.forEach((label) => {
         label.visible = true;
       });
+      this.engine.ambientLight.intensity = Math.PI;
     } else {
+      this.engine.ambientLight.intensity = Math.PI;
       this.engine.plan.cutTop(false);
       this.engine.cursor.pin.visible = true;
 
