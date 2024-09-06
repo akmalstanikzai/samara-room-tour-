@@ -75,7 +75,7 @@ export class Panorama {
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshLambertMaterial({
       map: this.engine.textures.getTexture('studio_360'),
       depthTest: false,
       transparent: true,
