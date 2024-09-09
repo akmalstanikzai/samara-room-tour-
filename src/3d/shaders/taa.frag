@@ -14,7 +14,7 @@ void main() {
   }
 
   vec4 accumulatedColor = textureLod(accumulatedTexture, vUv, 0.0);
-  // accumulatedColor = pow(accumulatedColor, vec4(1.0 / gamma));
+  accumulatedColor = pow(accumulatedColor, vec4(1.0 / gamma));
 
   gl_FragColor = mix(accumulatedColor, color, 1.0 / (notMovedFrames + 1.0));
 }

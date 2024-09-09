@@ -37,7 +37,7 @@ export class TAAPass extends Pass {
         accumulatedTexture: { value: null },
         notMovedFrames: { value: 0 },
         invTexSize: { value: new Vector2(1, 1) },
-        gamma: { value: 1.0 },
+        gamma: { value: 1.2 },
       },
       toneMapped: false,
       depthWrite: false,
