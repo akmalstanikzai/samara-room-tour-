@@ -4,6 +4,9 @@ import {
   WebGLCubeRenderTarget,
   FloatType,
   RepeatWrapping,
+  LinearMipMapLinearFilter,
+  NearestFilter,
+  LinearFilter,
 } from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { loadingManager } from './loading-manager';
@@ -152,6 +155,11 @@ export class Textures {
     if (obj.rotation) {
       texture.rotation = obj.rotation;
     }
+    // Add minFilter and magFilter
+    // if (obj.filter) {
+    //   texture.minFilter = LinearFilter;
+    //   texture.magFilter = LinearFilter;
+    // }
 
     texture.flipY = false;
   }

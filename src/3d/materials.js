@@ -75,10 +75,10 @@ export class Materials {
     !this.glassClearMaterial &&
       (this.glassClearMaterial = new MeshPhysicalMaterial({
         transmission: 0.6,
-        color: new Color(0x878787).convertLinearToSRGB(),
+        color: new Color(0xffffff).convertLinearToSRGB(),
         depthWrite: false,
-        metalnessMap: this.textures.getTexture('glass_orm'),
-        roughnessMap: this.textures.getTexture('glass_orm'),
+        // metalnessMap: this.textures.getTexture('glass_orm'),
+        // roughnessMap: this.textures.getTexture('glass_orm'),
         name: 'Glass Clear',
         roughness: 0,
         side: DoubleSide,
@@ -252,6 +252,7 @@ export class Materials {
           ].includes(mesh.material.name)
         ) {
           mesh.material = this.glassClearMaterial.clone();
+          console.log(mesh.material.metalness);
           mesh.material.name = `Glass Clear_${modelName}`;
         }
 

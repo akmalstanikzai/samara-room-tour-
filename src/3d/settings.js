@@ -83,7 +83,7 @@ const params = {
       duration: 0.4,
     },
     transitionDelay: {
-      duration: 0.4,
+      duration: 0.6,
     },
   },
   container: null,
@@ -505,15 +505,21 @@ const params = {
     {
       path: 'panorama1.png',
       name: 'studio_360',
+      anisotropy: true,
+      filter: true,
     },
 
     {
       path: 'panorama2.png',
       name: 'studio_360_1',
+      anisotropy: true,
+      filter: true,
     },
     {
       path: 'panorama3.png',
       name: 'studio_360_2',
+      anisotropy: true,
+      filter: true,
     },
     { path: 'grid_solar_panel_tiled_basecolor_dark.jpg', name: 'Solar_Panel' },
     {

@@ -999,8 +999,7 @@ export class GuiComponent extends LitElement {
         this.engine.update();
       });
 
-    _panoMeshFolder.add({ visible: true }, 'visible').onChange((value) => {
-      this.engine.panorama.toggleVisibility();
+    _panoMeshFolder.add(this.engine.panoMesh, 'visible').onChange((value) => {
       this.engine.update();
     });
 
