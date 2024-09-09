@@ -317,6 +317,7 @@ class CameraGsap {
       tarZ: targetA.z,
     };
 
+    let panoramaChanged = false;
     this.moveGsap = gsap.timeline().to(obj, {
       duration: params.animation.move.duration,
       ease: params.animation.move.ease,
@@ -333,21 +334,28 @@ class CameraGsap {
       },
       onComplete: () => {
         appState.renderingStatus.next(false);
+        appState.cam.next(name);
       },
       onUpdate: () => {
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
         appState.renderingStatus.next(true);
+
+        // Change panorama at 75% of the animation progress
+        if (
+          !panoramaChanged &&
+          this.moveGsap.progress() >=
+            params.animation.transitionDelay.percentage
+        ) {
+          panoramaChanged = true;
+          const pano = this.engine.scene.getObjectByName('pano');
+          pano.material.map = this.engine.textures.getTexture(textureMap);
+          pano.material.map.flipY = true;
+          this.engine.panorama.toggleVisibility('pano');
+        }
       },
     });
 
-    await delayMs(params.animation.transitionDelay.duration * 1000);
-    const pano = this.engine.scene.getObjectByName('pano');
-    pano.material.map = this.engine.textures.getTexture(textureMap);
-    pano.material.map.flipY = true;
-    this.engine.panorama.toggleVisibility('pano');
-    appState.cam.next(name);
-
-    return await this.moveGsap;
+    return this.moveGsap;
   }
 }
 

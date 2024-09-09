@@ -1136,9 +1136,9 @@ export class GuiComponent extends LitElement {
       .name('Duration');
 
     _animationFolder
-      .add(params.animation.transitionDelay, 'duration', 0, 2)
+      .add(params.animation.transitionDelay, 'percentage', 0, 1)
       .onChange((value) => {})
-      .name('transitionDelay');
+      .name('transitionDelay percent');
 
     _animationFolder
       .add(params.animation.blur, 'intensity', 0, 10)

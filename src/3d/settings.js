@@ -83,7 +83,7 @@ const params = {
       duration: 0.4,
     },
     transitionDelay: {
-      duration: 0.6,
+      percentage: 0.75,
     },
   },
   container: null,

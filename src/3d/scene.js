@@ -256,7 +256,7 @@ export class CreateScene {
     const keyPressEvent = fromEvent(params.container, 'keyup');
     const touchStartEvent = fromEvent(params.container, 'touchstart');
 
-    const interval = timer(1000);
+    const interval = timer(3000);
     const extendedInterval = timer(5000);
 
     this.sub.add(
