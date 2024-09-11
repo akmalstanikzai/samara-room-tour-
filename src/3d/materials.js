@@ -20,57 +20,6 @@ export class Materials {
     this.transmissiveMaterials = new Set();
   }
 
-  applyTextures(object, map, normalMap) {
-    if (object instanceof Object3D) {
-      object.traverse((mesh) => {
-        if (mesh.material) {
-          map && (mesh.material.map = map);
-          normalMap && (mesh.material.normalMap = normalMap);
-        }
-      });
-    }
-
-    if (object instanceof Mesh) {
-      map && (object.material.map = map);
-      normalMap && (object.material.normalMap = normalMap);
-    }
-  }
-
-  setupFurniture(object) {
-    // if (object.name === 'Chair1_S') {
-    //   this.applyTextures(
-    //     object,
-    //     this.textures.getTexture('studio_chair1_basecolor')
-    //   );
-    // }
-
-    if (['Chair_S', 'Chair_1B', 'Chair_2B'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Chair_512'));
-    }
-
-    if (
-      ['Const_Bath_S', 'Const_Bath_1B', 'Const_Bath_2B'].includes(object.name)
-    ) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Bath_512'));
-    }
-
-    if (['Faucet_S'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Faucet_512'));
-    }
-
-    if (['Lampe', 'Lampe_2B'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Albedo_Lamp_512'));
-    }
-
-    if (['WoodFurniture_2BA'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Wood_2BA'));
-    }
-
-    if (['Technique_2BA_1'].includes(object.name)) {
-      this.applyTextures(object, this.textures.getTexture('Technique_2BA'));
-    }
-  }
-
   setupMaterials(mesh, modelName) {
     !this.glassClearMaterial &&
       (this.glassClearMaterial = new MeshPhysicalMaterial({
@@ -138,6 +87,10 @@ export class Materials {
       const color = mesh.material.color;
 
       this.studioMaterials = {
+        Bath_studio: {
+          lightMap: 'Studio_Bath_Lightmap',
+          aoMap: 'Studio_Bath_Lightmap',
+        },
         WoodCh_S_studio: {
           map: 'Studio_Chair1_BaseColor',
           lightMap: 'Studio_Chair1_Lightmap',
@@ -241,6 +194,10 @@ export class Materials {
           mesh.material.transmission = 0.2;
         }
 
+        if (mesh.material.name === 'Faucet_studio') {
+          mesh.material.map = this.textures.getTexture('Albedo_Faucet_512');
+        }
+
         if (
           [
             'glassClear_onebed',
@@ -253,7 +210,6 @@ export class Materials {
           ].includes(mesh.material.name)
         ) {
           mesh.material = this.glassClearMaterial.clone();
-          console.log(mesh.material.metalness);
           mesh.material.name = `Glass Clear_${modelName}`;
         }
 

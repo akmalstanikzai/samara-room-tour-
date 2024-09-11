@@ -542,21 +542,8 @@ const params = {
     },
 
     {
-      path: 'Albedo_Chair_512.jpg',
-      name: 'Albedo_Chair_512',
-    },
-    {
-      path: 'Albedo_Bath_512.jpg',
-      name: 'Albedo_Bath_512',
-    },
-    {
       path: 'Albedo_Faucet_512.jpg',
       name: 'Albedo_Faucet_512',
-    },
-
-    {
-      path: 'Albedo_Lamp_512.jpg',
-      name: 'Albedo_Lamp_512',
     },
 
     {
@@ -806,7 +793,7 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 65,
+          totalAssetsCount: 60,
           path: 'Studio.glb',
           textures: [
             { path: '1_S.png', name: '1_S' },
@@ -967,6 +954,7 @@ const params = {
             },
             { path: 'Studio_Bed_Basecolor.png', name: 'Studio_Bed_Basecolor' },
             { path: 'Studio_Bed_Lightmap.png', name: 'Studio_Bed_Lightmap' },
+            { path: 'Studio_Bath_Lightmap.png', name: 'Studio_Bath_Lightmap' },
           ],
         },
       ],

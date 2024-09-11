@@ -112,8 +112,6 @@ export class Model extends Group {
                   }
                   this.materials.setupMaterials(child, object.name);
                 }
-
-                this.materials.setupFurniture(child, object.name);
               });
 
               object.box = this.computeBoundingBox(object);
