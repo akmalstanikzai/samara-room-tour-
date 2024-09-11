@@ -75,7 +75,7 @@ const params = {
     fadeIn: {
       ease: Linear,
       easeName: 'Linear',
-      duration: 0.3,
+      duration: 0.2,
     },
     fadeOut: {
       easeName: 'Linear',
@@ -83,7 +83,7 @@ const params = {
       duration: 0.4,
     },
     transitionDelay: {
-      percentage: 0.75,
+      percentage: 0.5,
     },
   },
   container: null,
