@@ -71,7 +71,7 @@ export class Panorama {
       this.engine.scene.add(sprite);
     });
 
-    const geometry = new THREE.SphereGeometry(6, 600, 400);
+    const geometry = new THREE.SphereGeometry(6, 200, 200);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
