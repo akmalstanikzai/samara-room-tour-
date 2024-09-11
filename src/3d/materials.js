@@ -95,36 +95,56 @@ export class Materials {
           map: 'Studio_Chair1_BaseColor',
           lightMap: 'Studio_Chair1_Lightmap',
           aoMap: 'Studio_Chair1_Lightmap',
+          color: new Color(0xc7ecff).convertLinearToSRGB(),
+          aoMapIntensity: 1,
+          lightMapIntensity: 0,
         },
         Chair_studio: {
           map: 'Studio_Chair_BaseColor',
           lightMap: 'Studio_Chair_Lightmap',
           aoMap: 'Studio_Chair_Lightmap',
+          color: new Color(0xaec5d0).convertLinearToSRGB(),
+          aoMapIntensity: 1.2,
+          lightMapIntensity: 0,
         },
         Floor_S_studio: {
           map: 'Studio_Floor_BaseColor',
           lightMap: 'Studio_Floor_Lightmap',
           aoMap: 'Studio_Floor_Lightmap',
+          color: new Color(0x817665).convertLinearToSRGB(),
+          aoMapIntensity: 1,
+          lightMapIntensity: 0.54,
         },
         Wood_S_studio: {
           map: 'Studio_Wood_BaseColor',
           lightMap: 'Studio_Wood_Lightmap',
           aoMap: 'Studio_Wood_Lightmap',
+          color: new Color(0x919191).convertLinearToSRGB(),
+          aoMapIntensity: 0.85,
+          lightMapIntensity: 1,
         },
         Wall_studio: {
           map: null,
           lightMap: 'Studio_Wall_Lightmap',
           aoMap: 'Studio_Wall_Lightmap',
+          color: new Color(0x918c83).convertLinearToSRGB(),
+          aoMapIntensity: 1,
+          lightMapIntensity: 0,
         },
         Shelves_studio: {
-          color: new Color(0xffffff),
+          color: new Color(0xa2a696).convertLinearToSRGB(),
           lightMap: 'Studio_Shelves_Lightmap',
           aoMap: 'Studio_Shelves_Lightmap',
+          aoMapIntensity: 1,
+          lightMapIntensity: 0.2,
         },
         Oven_1B_studio: {
           map: 'Studio_Oven_BaseColor',
           lightMap: 'Studio_Oven_Lightmap',
           aoMap: 'Studio_Oven_Lightmap',
+          color: new Color(0xadaa9f),
+          aoMapIntensity: 1.1,
+          lightMapIntensity: 0.8,
         },
         Chrome_studio: {
           map: 'Studio_Chrome_Basecolor',
@@ -134,6 +154,9 @@ export class Materials {
           map: 'Studio_Bed_Basecolor',
           lightMap: 'Studio_Bed_Lightmap',
           aoMap: 'Studio_Bed_Lightmap',
+          color: new Color(0xd0f8fb).convertLinearToSRGB(),
+          lightMapIntensity: 0,
+          aoMapIntensity: 1.1,
         },
       };
 
@@ -147,7 +170,11 @@ export class Materials {
         const materialConfig = this.studioMaterials[name];
 
         Object.entries(materialConfig).forEach(([key, value]) => {
-          if (key === 'color') {
+          if (
+            key === 'color' ||
+            key === 'aoMapIntensity' ||
+            key === 'lightMapIntensity'
+          ) {
             mesh.material[key] = value;
           } else if (value !== null) {
             mesh.material[key] = this.textures.getTexture(value);
