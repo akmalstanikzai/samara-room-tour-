@@ -898,7 +898,7 @@ const params = {
             },
 
             {
-              path: 'Studio_Chair1_Basecolor.png',
+              path: 'Studio_Chair1_BaseColor.png',
               name: 'Studio_Chair1_BaseColor',
             },
 

@@ -188,6 +188,7 @@ export class Materials {
         mesh.material = new MeshLambertMaterial({
           name: name,
           color: new Color(0xffffff),
+          vertexColors: false,
         });
 
         const materialConfig = this.studioMaterials[name];
