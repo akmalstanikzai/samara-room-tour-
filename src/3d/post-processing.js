@@ -91,9 +91,9 @@ class PostProcessing {
     // Effect pass combining motion blur, tone mapping, and warm color overlay
     this.effectPass = new EffectPass(
       this.engine.camera,
-      this.motionBlur,
-      this.toneMappingEffect,
-      this.warmColorEffect
+      this.motionBlur
+      // this.toneMappingEffect,
+      // this.warmColorEffect
       // this.tiltShiftEffect
     );
 

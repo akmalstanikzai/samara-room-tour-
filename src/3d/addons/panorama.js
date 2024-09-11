@@ -71,7 +71,7 @@ export class Panorama {
       this.engine.scene.add(sprite);
     });
 
-    const geometry = new THREE.SphereGeometry(6, 60, 40);
+    const geometry = new THREE.SphereGeometry(6, 600, 400);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
@@ -99,21 +99,36 @@ export class Panorama {
 
   toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {
     this.name = name;
+    !this.gsap && (this.gsap = gsap.timeline());
     const mesh = this.engine.scene.getObjectByName('pano');
-    if (!mesh) return;
+    if (mesh) {
+      if (name === 'pano') {
+        this.gsap.to(mesh.material, {
+          opacity: 1,
+          ease: params.animation.fadeIn.ease,
+          duration: params.animation.fadeIn.duration,
+          onUpdate: () => {
+            appState.renderingStatus.next(true);
+          },
+          onComplete: () => {
+            appState.renderingStatus.next(false);
+          },
+        });
+      }
 
-    const isPanoView = name === 'pano';
-    const animationParams = isPanoView
-      ? params.animation.fadeIn
-      : params.animation.fadeOut;
-
-    this.gsap = this.gsap || gsap.timeline();
-    this.gsap.to(mesh.material, {
-      opacity: isPanoView ? 1 : 0,
-      ease: animationParams.ease,
-      duration: animationParams.duration,
-      onUpdate: () => appState.renderingStatus.next(true),
-      onComplete: () => appState.renderingStatus.next(false),
-    });
+      if (name === '3d') {
+        this.gsap.to(mesh.material, {
+          opacity: 0,
+          ease: params.animation.fadeOut.ease,
+          duration: params.animation.fadeOut.duration,
+          onUpdate: () => {
+            appState.renderingStatus.next(true);
+          },
+          onComplete: () => {
+            appState.renderingStatus.next(false);
+          },
+        });
+      }
+    }
   }
 }

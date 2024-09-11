@@ -119,6 +119,7 @@ export class CreateScene {
       // Load and setup additional assets.
       this.assets.loadAndSetupRest();
 
+      await this.models.setupEnv();
       this.renderer.compile(this.scene, this.camera);
 
       this.CameraGsap = new CameraGsap();

@@ -959,6 +959,17 @@ export class GuiComponent extends LitElement {
 
     // _shadowPlaneFolder.close();
 
+    // Light
+
+    this.gui
+      .addFolder('Ambient light')
+      .add(this.engine.ambientLight, 'intensity')
+      .min(0.1)
+      .max(5)
+      .onChange(() => {
+        this.engine.update();
+      });
+
     // Materials
 
     this.createMaterialsFolder();
@@ -984,7 +995,7 @@ export class GuiComponent extends LitElement {
       });
 
     _panoMeshFolder
-      .add(this.engine.panoMesh.rotation, 'y', -2, 2)
+      .add(this.engine.panoMesh.rotation, 'y', -10, 10)
       .name('rotation')
       .step(0.01)
       .onChange((value) => {
