@@ -98,7 +98,11 @@ class PostProcessing {
     );
 
     // All passes
-    this.allPasses = [this.renderPass, this.velocityPass, this.effectPass];
+    this.allPasses = [
+      this.renderPass,
+      // this.velocityPass,
+      this.effectPass,
+    ];
 
     this.allPasses.forEach((pass) => {
       this.composer.addPass(pass);

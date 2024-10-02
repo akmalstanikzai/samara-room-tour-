@@ -3,6 +3,7 @@ import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { params } from './settings';
 import { appState } from '../services/app-state';
 import { delayMs } from '../utils/delay';
+import * as THREE from 'three';
 
 /** Class for smooth camera transitions with gsap. */
 
@@ -178,7 +179,6 @@ class CameraGsap {
 
       this.engine.plan.cutTop(false);
 
-      params.postProcessing.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
       this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
 
@@ -188,6 +188,8 @@ class CameraGsap {
         appState.complectation.value.layout === 'XL 8' ? 'right' : 'front';
       const pos = params.cameras[camera].position;
       appState.cam.next('outside');
+      params.postProcessing.enabled = false;
+      this.engine.ambientLight.intensity = 1;
 
       this.engine.controls.setPosition(pos.x, pos.y, pos.z);
       this.engine.controls.enabled = true;
@@ -200,15 +202,15 @@ class CameraGsap {
       this.engine.labels.labels.forEach((label) => {
         label.visible = false;
       });
-      this.engine.ambientLight.intensity = 1;
     } else if (name === 'floor plan') {
+      params.postProcessing.enabled = true;
+      this.engine.ambientLight.intensity = Math.PI;
       this.engine.cursor.pin.visible = false;
 
       this.engine.plan.cutTop(true);
 
       appState.cam.next('floor plan');
 
-      params.postProcessing.enabled = false;
       this.engine.controls.enabled = false;
       this.engine.cameraControls.setThirdPersonParams();
       this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
@@ -228,13 +230,12 @@ class CameraGsap {
       this.engine.labels.labels.forEach((label) => {
         label.visible = true;
       });
-      this.engine.ambientLight.intensity = Math.PI;
     } else {
+      params.postProcessing.enabled = true;
       this.engine.ambientLight.intensity = Math.PI;
       this.engine.plan.cutTop(false);
       this.engine.cursor.pin.visible = true;
 
-      params.postProcessing.enabled = true;
       this.engine.controls.enabled = true;
 
       this.engine.cameraControls.setFirstPersonParams();
@@ -279,8 +280,8 @@ class CameraGsap {
           (pano) => pano.cameraMap === name
         ).textureMap;
         const texture = this.engine.textures.getTexture(textureMap);
-        texture.flipY = true;
-        pano.material.map = texture;
+        pano.material.uniforms.texture1.value = texture;
+        pano.material.uniforms.texture2.value = texture;
         this.engine.panorama.toggleVisibility('pano');
       }
     }
@@ -289,69 +290,51 @@ class CameraGsap {
   }
 
   async move(name) {
-    const textureMap = this.engine.panorama.items.find(
-      (pano) => pano.cameraMap === name
-    ).textureMap;
+    const material = this.engine.scene.getObjectByName('pano').material;
+
+    const currentTextureMap = material.uniforms.texture1.value;
+
     const { x, z } = params.cameras.studio[name].position;
-
-    this.engine.panorama.toggleVisibility('3d');
-
     const positionA = this.engine.controls.getPosition();
-
     const positionB = { x: x, y: positionA.y, z: z };
-
     const targetA = this.engine.controls.getTarget();
-    const targetB = {
-      x: x,
-      y: positionB.y,
-      z: z,
-    };
+    const targetB = { x: x, y: positionB.y, z: z };
 
     const obj = {
-      t: 0,
       x: positionA.x,
       y: positionA.y,
       z: positionA.z,
-      tarX: targetA.x,
-      tarY: targetA.y,
-      tarZ: targetA.z,
+      blend: 0,
     };
 
-    let panoramaChanged = false;
-    this.moveGsap = gsap.timeline().to(obj, {
+    this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
+
+    !this.moveGsap && (this.moveGsap = gsap.timeline());
+
+    this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
       ease: params.animation.move.ease,
-      t: 1,
+      blend: 1,
       x: positionB.x,
       y: positionB.y,
       z: positionB.z,
-      tarX: targetB.x,
-      tarY: targetB.y,
-      tarZ: targetB.z,
       onStart: () => {
-        this.engine.postprocessing.motionBlur.intensity =
-          params.animation.blur.intensity;
+        const nextTextureMap = this.engine.textures.getTexture(
+          this.engine.panorama.items.find((pano) => pano.cameraMap === name)
+            .textureMap
+        );
+        material.uniforms.texture2.value = nextTextureMap;
       },
       onComplete: () => {
         appState.renderingStatus.next(false);
         appState.cam.next(name);
+        const nextTextureMap = material.uniforms.texture2.value;
+        material.uniforms.texture1.value = nextTextureMap;
       },
       onUpdate: () => {
-        this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
+        // this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
         appState.renderingStatus.next(true);
-
-        // Change panorama at 75% of the animation progress
-        if (
-          !panoramaChanged &&
-          this.moveGsap.progress() >=
-            params.animation.transitionDelay.percentage
-        ) {
-          panoramaChanged = true;
-          const pano = this.engine.scene.getObjectByName('pano');
-          pano.material.map = this.engine.textures.getTexture(textureMap);
-          pano.material.map.flipY = true;
-          this.engine.panorama.toggleVisibility('pano');
-        }
+        material.uniforms.mixRatio.value = obj.blend;
       },
     });
 

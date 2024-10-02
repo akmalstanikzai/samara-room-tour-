@@ -75,14 +75,41 @@ export class Panorama {
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
-    const material = new THREE.MeshLambertMaterial({
-      map: this.engine.textures.getTexture('studio_360'),
-      depthTest: false,
-      transparent: true,
-      opacity: 0,
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        texture1: { value: this.engine.textures.getTexture('studio_360') },
+        texture2: { value: this.engine.textures.getTexture('studio_360') },
+        mixRatio: { value: 0.0 },
+        ambientLightColor: { value: new THREE.Color(0xffffff) },
+        ambientLightIntensity: { value: 1.0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D texture1;
+        uniform sampler2D texture2;
+        uniform float mixRatio;
+        uniform vec3 ambientLightColor;
+        uniform float ambientLightIntensity;
+        varying vec2 vUv;
+        void main() {
+          vec4 tex1 = texture2D(texture1, vUv);
+          vec4 tex2 = texture2D(texture2, vUv);
+          vec4 mixedColor = mix(tex1, tex2, mixRatio);
+          
+          // Apply ambient light
+          vec3 ambient = ambientLightColor * ambientLightIntensity;
+          vec3 finalColor = mixedColor.rgb * ambient;
+          
+          gl_FragColor = vec4(finalColor, mixedColor.a);
+        }
+      `,
     });
-    material.map.mapping = THREE.EquirectangularReflectionMapping;
-    material.map.flipY = true;
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.setScalar(1);
@@ -99,35 +126,16 @@ export class Panorama {
 
   toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {
     this.name = name;
-    !this.gsap && (this.gsap = gsap.timeline());
     const mesh = this.engine.scene.getObjectByName('pano');
     if (mesh) {
       if (name === 'pano') {
-        this.gsap.to(mesh.material, {
-          opacity: 1,
-          ease: params.animation.fadeIn.ease,
-          duration: params.animation.fadeIn.duration,
-          onUpdate: () => {
-            appState.renderingStatus.next(true);
-          },
-          onComplete: () => {
-            appState.renderingStatus.next(false);
-          },
-        });
+        mesh.visible = true;
+        this.engine.models.visible = false;
       }
 
       if (name === '3d') {
-        this.gsap.to(mesh.material, {
-          opacity: 0,
-          ease: params.animation.fadeOut.ease,
-          duration: params.animation.fadeOut.duration,
-          onUpdate: () => {
-            appState.renderingStatus.next(true);
-          },
-          onComplete: () => {
-            appState.renderingStatus.next(false);
-          },
-        });
+        mesh.visible = false;
+        this.engine.models.visible = true;
       }
     }
   }

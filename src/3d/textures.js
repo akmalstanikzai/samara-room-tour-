@@ -161,6 +161,8 @@ export class Textures {
     //   texture.magFilter = LinearFilter;
     // }
 
-    texture.flipY = false;
+    if (!obj.flip) {
+      texture.flipY = false;
+    }
   }
 }

@@ -68,9 +68,9 @@ const params = {
       intensity: 3,
     },
     move: {
-      duration: 1,
-      ease: Power3.easeOut,
-      easeName: 'Power3.easeOut',
+      duration: 0.5,
+      ease: Linear,
+      easeName: 'Linear',
     },
     fadeIn: {
       ease: Linear,
@@ -507,6 +507,7 @@ const params = {
       name: 'studio_360',
       anisotropy: true,
       filter: true,
+      flip: true,
     },
 
     {
@@ -514,12 +515,14 @@ const params = {
       name: 'studio_360_1',
       anisotropy: true,
       filter: true,
+      flip: true,
     },
     {
       path: 'panorama3.png',
       name: 'studio_360_2',
       anisotropy: true,
       filter: true,
+      flip: true,
     },
     { path: 'grid_solar_panel_tiled_basecolor_dark.jpg', name: 'Solar_Panel' },
     {

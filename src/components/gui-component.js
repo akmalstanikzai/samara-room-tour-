@@ -1085,26 +1085,6 @@ export class GuiComponent extends LitElement {
       },
     };
 
-    const fadeInEaseProxy = {
-      get ease() {
-        return params.animation.fadeIn.easeName;
-      },
-      set ease(value) {
-        params.animation.fadeIn.easeName = value;
-        params.animation.fadeIn.ease = easings[value];
-      },
-    };
-
-    const fadeOutEaseProxy = {
-      get ease() {
-        return params.animation.fadeOut.easeName;
-      },
-      set ease(value) {
-        params.animation.fadeOut.easeName = value;
-        params.animation.fadeOut.ease = easings[value];
-      },
-    };
-
     const _moveAnimationFolder = _animationFolder.addFolder('Move');
 
     _moveAnimationFolder
@@ -1118,46 +1098,6 @@ export class GuiComponent extends LitElement {
       .add(params.animation.move, 'duration', 0, 5)
       .onChange((value) => {})
       .name('Duration');
-
-    const _fadeInAnimationFolder = _animationFolder.addFolder('Fade in');
-
-    _fadeInAnimationFolder
-      .add(fadeInEaseProxy, 'ease', Object.keys(easings))
-      .name('Ease')
-      .onChange((value) => {
-        fadeInEaseProxy.ease = value;
-      });
-
-    _fadeInAnimationFolder
-      .add(params.animation.fadeIn, 'duration', 0, 2)
-      .onChange((value) => {})
-      .name('Duration');
-
-    const _fadeOutAnimationFolder = _animationFolder.addFolder('Fade out');
-
-    _fadeOutAnimationFolder
-      .add(fadeOutEaseProxy, 'ease', Object.keys(easings))
-      .name('Ease')
-      .onChange((value) => {
-        fadeOutEaseProxy.ease = value;
-      });
-    _fadeOutAnimationFolder
-      .add(params.animation.fadeOut, 'duration', 0, 2)
-      .onChange((value) => {})
-      .name('Duration');
-
-    _animationFolder
-      .add(params.animation.transitionDelay, 'percentage', 0, 1)
-      .onChange((value) => {})
-      .name('transitionDelay percent');
-
-    _animationFolder
-      .add(params.animation.blur, 'intensity', 0, 10)
-      .onChange((value) => {
-        this.engine.postprocessing.motionBlur.intensity = value;
-      })
-      .name('Blur')
-      .listen();
 
     _panoMeshFolder.close();
   }
