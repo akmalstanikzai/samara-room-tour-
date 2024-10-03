@@ -975,6 +975,27 @@ export class GuiComponent extends LitElement {
       .add(params.animation.move, 'duration', 0, 5)
       .onChange((value) => {})
       .name('Duration');
+
+    // Mix
+
+    const _mixPanoramasFolder = this.gui.addFolder('Mix');
+    _mixPanoramasFolder
+      .add({ mix: 0 }, 'mix')
+      .min(0)
+      .max(1)
+      .onChange((value) => {
+        const material = this.engine.scene.getObjectByName('pano').material;
+
+        const nextTextureMap = this.engine.textures.getTexture(
+          this.engine.panorama.items.find(
+            (pano) => pano.cameraMap === 'kitchen'
+          ).textureMap
+        );
+        material.uniforms.texture2.value = nextTextureMap;
+
+        material.uniforms.mixRatio.value = value;
+        this.engine.update();
+      });
   }
 }
 
