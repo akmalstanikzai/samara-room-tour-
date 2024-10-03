@@ -68,9 +68,9 @@ const params = {
       intensity: 3,
     },
     move: {
-      duration: 1,
-      ease: Power4.easeOut,
-      easeName: 'Power4.easeOut',
+      duration: 0.5,
+      ease: Linear,
+      easeName: 'Linear',
     },
     fadeIn: {
       ease: Linear,
