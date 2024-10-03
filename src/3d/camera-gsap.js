@@ -283,6 +283,12 @@ class CameraGsap {
         pano.material.uniforms.texture1.value = texture;
         pano.material.uniforms.texture2.value = texture;
         this.engine.panorama.toggleVisibility('pano');
+
+        const { x, z } = params.cameras.studio[name].position;
+        const positionA = this.engine.controls.getPosition();
+        const positionB = { x: x, y: positionA.y, z: z };
+
+        this.engine.panoMesh.position.copy(positionB);
       }
     }
 
@@ -307,7 +313,7 @@ class CameraGsap {
       blend: 0,
     };
 
-    this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
+    // this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
 
     !this.moveGsap && (this.moveGsap = gsap.timeline());
 
@@ -324,6 +330,7 @@ class CameraGsap {
             .textureMap
         );
         material.uniforms.texture2.value = nextTextureMap;
+        this.engine.panoMesh.position.copy(positionB);
       },
       onComplete: () => {
         appState.renderingStatus.next(false);
@@ -332,9 +339,14 @@ class CameraGsap {
         material.uniforms.texture1.value = nextTextureMap;
       },
       onUpdate: () => {
-        // this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
-        appState.renderingStatus.next(true);
+        this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
+
         material.uniforms.mixRatio.value = obj.blend;
+        material.uniforms.cameraPos.value.copy(
+          this.engine.controls.getPosition()
+        );
+
+        appState.renderingStatus.next(true);
       },
     });
 

@@ -387,7 +387,6 @@ export class CreateScene {
   onControlsUpdate() {
     // console.log(this.controls.getPosition());
     // console.log(this.controls.getTarget());
-    this.panoMesh && this.panoMesh.position.copy(this.controls.getPosition());
   }
 
   onControlsEnd() {

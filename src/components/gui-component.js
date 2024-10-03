@@ -872,93 +872,6 @@ export class GuiComponent extends LitElement {
 
     this.guiDomEl.appendChild(this.gui.domElement);
 
-    // Options
-
-    // const _complectationFolder = this.gui.addFolder('Complectation');
-
-    // for (const [key, value] of Object.entries(
-    //   params.models.samara.complectationVars
-    // )) {
-    //   const folder = _complectationFolder.addFolder(key);
-    //   folder.$children.innerHTML = `<options-component parent="${key}"></options-component>`;
-    //   folder.close();
-    // }
-
-    // Envmap
-
-    // const _envmapFolder = this.gui.addFolder('Envmap');
-    // _envmapFolder
-    //   .add(params.envMap, 'intensity', 0, 5)
-    //   .step(0.01)
-    //   .onChange((value) => {
-    //     this.engine.scene.traverse((el) => {
-    //       if (el.material && el.material.envMap) {
-    //         el.material.envMapIntensity = value;
-    //       }
-    //     });
-    //     this.engine.update();
-    //   })
-    //   .listen();
-
-    // params.environment.assetsArray.forEach((env) => {
-    //   env.click = async () => {
-    //     params.envMap.intensity = env.defaultHdrIntensity;
-
-    //     const obj = params.environment.assetsArray.find(
-    //       (el) => el.id === env.id
-    //     );
-
-    //     !obj.loadedHDRTexture &&
-    //       (await this.engine.textures.loadTexture(obj, 'pmrem'));
-
-    //     this.engine.scene.traverse((el) => {
-    //       if (el.material && el.material.envMap) {
-    //         el.material.envMap = this.textures.getHdrTexture(env.name);
-    //         el.material.envMapIntensity = env.defaultHdrIntensity;
-    //       }
-    //     });
-    //     this.engine.update();
-    //   };
-    //   const selector = _envmapFolder.add(env, 'click').name(env.name);
-    // });
-
-    // _envmapFolder.close();
-
-    // Camera
-
-    // const _cameraFolder = this.gui.addFolder('Camera');
-    // _cameraFolder
-    //   .add(params.camera, 'fov', 5, 90)
-    //   .step(0.1)
-    //   .onChange(() => {
-    //     this.engine.setupPerspectiveView();
-    //   });
-
-    // _cameraFolder
-    //   .add(params.models.samara, 'modelScaleAspectValue', 100, 150)
-    //   .step(10)
-    //   .onChange(() => {
-    //     this.engine.setupPerspectiveView();
-    //   });
-
-    // _cameraFolder.close();
-
-    // Shadow
-    // const _shadowPlaneFolder = this.gui.addFolder('Shadow');
-    // _shadowPlaneFolder
-    //   .add(params.shadowMesh, 'opacity', 0.1, 1)
-    //   .step(0.1)
-    //   .onChange((value) => {
-    //     this.engine.scene.traverse((el) => {
-    //       if (el.name.includes('_shadow')) {
-    //         el.material.opacity = value;
-    //       }
-    //     });
-    //     this.engine.update();
-    //   });
-
-    // _shadowPlaneFolder.close();
-
     // Light
 
     this.gui
@@ -986,46 +899,10 @@ export class GuiComponent extends LitElement {
     // Pano mesh
 
     const _panoMeshFolder = this.gui.addFolder('Pano');
-    _panoMeshFolder
-      .add({ scale: this.engine.panoMesh.scale.y }, 'scale', 0.1, 2)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.panoMesh.scale.setScalar(value);
-        this.engine.update();
-      });
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh.rotation, 'y', -10, 10)
-      .name('rotation')
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.update();
-      });
-
-    _panoMeshFolder
-      .add(this.engine.camera, 'fov', 10, 60)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.camera.updateProjectionMatrix();
-        this.engine.update();
-      });
 
     _panoMeshFolder.add(this.engine.panoMesh, 'visible').onChange((value) => {
       this.engine.update();
     });
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh, 'renderOrder', 0, 30)
-      .onChange((value) => {
-        this.engine.update();
-      });
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh.material, 'opacity', 0, 1)
-      .listen()
-      .onChange((value) => {
-        this.engine.update();
-      });
 
     // Animation
     const _animationFolder = this.gui.addFolder('Animation').close();
@@ -1098,8 +975,6 @@ export class GuiComponent extends LitElement {
       .add(params.animation.move, 'duration', 0, 5)
       .onChange((value) => {})
       .name('Duration');
-
-    _panoMeshFolder.close();
   }
 }
 
