@@ -310,7 +310,7 @@ class CameraGsap {
       x: positionA.x,
       y: positionA.y,
       z: positionA.z,
-      blend: 0.5,
+      blend: 0,
     };
 
     // this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
@@ -319,8 +319,8 @@ class CameraGsap {
 
     this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
-      ease: Power0.easeInOut,
-      blend: 1, // Changed from 1 to 2 to double the speed
+      ease: params.animation.move.ease,
+      blend: 1,
       x: positionB.x,
       y: positionB.y,
       z: positionB.z,
@@ -336,14 +336,21 @@ class CameraGsap {
         appState.renderingStatus.next(false);
         appState.cam.next(name);
         material.uniforms.texture1.value = material.uniforms.texture2.value;
-        material.uniforms.mixRatio.value = 0; // Reset mixRatio to 0
+        material.uniforms.mixRatio.value = 0; // Set mixRatio to 1 at the end
       },
       onUpdate: () => {
         this.engine.cursor.pin.visible = false;
-
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
 
-        material.uniforms.mixRatio.value = Math.min(obj.blend, 1); // Clamp mixRatio to 1
+        // console.log(material.uniforms.mixRatio.value);
+
+        const progress = this.moveGsap.progress();
+
+        if (progress >= 0.5) {
+          // Start updating blend from 0.5 to 1 progress
+          const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
+          material.uniforms.mixRatio.value = blendProgress;
+        }
       },
     });
 
