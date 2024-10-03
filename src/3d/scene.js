@@ -306,13 +306,13 @@ export class CreateScene {
 
   initListeners() {
     this.listeners = [
-      {
-        eventTarget: params.container,
-        eventName: 'mousedown',
-        eventFunction: () => {
-          hasMouseMoved = false;
-        },
-      },
+      // {
+      //   eventTarget: params.container,
+      //   eventName: 'mousedown',
+      //   eventFunction: () => {
+      //     hasMouseMoved = false;
+      //   },
+      // },
 
       // Listener for mouse move to set the movement flag
       {
@@ -327,11 +327,11 @@ export class CreateScene {
       // Modify the mouseup listener to check the movement flag
       {
         eventTarget: params.container,
-        eventName: 'mouseup',
+        eventName: 'mousedown',
         eventFunction: (e) => {
-          if (!hasMouseMoved) {
-            this.cursor.onClick(e);
-          }
+          // if (!hasMouseMoved) {
+          this.cursor.onClick(e);
+          // }
         },
       },
       {

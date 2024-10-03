@@ -157,15 +157,15 @@ export class CursorPin {
   }
 
   onClick(e) {
-    const containerRect = params.container.getBoundingClientRect();
-    const containerX = containerRect.left;
-    const containerY = containerRect.top;
-    const mouseX = e.clientX - containerX;
-    const mouseY = e.clientY - containerY;
+    // const containerRect = params.container.getBoundingClientRect();
+    // const containerX = containerRect.left;
+    // const containerY = containerRect.top;
+    // const mouseX = e.clientX - containerX;
+    // const mouseY = e.clientY - containerY;
 
-    this.mouse.x = (mouseX / params.container.clientWidth) * 2 - 1;
-    this.mouse.y = -(mouseY / params.container.clientHeight) * 2 + 1;
-    this.raycaster.setFromCamera(this.mouse, this.engine.camera);
+    // this.mouse.x = (mouseX / params.container.clientWidth) * 2 - 1;
+    // this.mouse.y = -(mouseY / params.container.clientHeight) * 2 + 1;
+    // this.raycaster.setFromCamera(this.mouse, this.engine.camera);
 
     this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
 
