@@ -1,7 +1,7 @@
 import { SRGBColorSpace, NoToneMapping, Vector3 } from 'three';
 import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
-import { Power3, Linear } from 'gsap';
+import { Power3, Linear, Power4 } from 'gsap';
 import { repeat } from 'lodash';
 
 function setPixelRatio() {
