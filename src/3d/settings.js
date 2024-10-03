@@ -188,7 +188,7 @@ const params = {
       },
       minZoom: 0.35,
       maxZoom: 0.8,
-      defaultZoom: 0.45,
+      defaultZoom: 0.5,
       near: 0.01,
       polarRotateSpeed: 1,
       azimuthRotateSpeed: 1,
