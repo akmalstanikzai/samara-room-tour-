@@ -342,9 +342,6 @@ class CameraGsap {
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
 
         material.uniforms.mixRatio.value = obj.blend;
-        material.uniforms.cameraPos.value.copy(
-          this.engine.controls.getPosition()
-        );
 
         appState.renderingStatus.next(true);
       },
