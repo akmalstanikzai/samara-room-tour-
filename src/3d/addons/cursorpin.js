@@ -106,9 +106,13 @@ export class CursorPin {
       if (firstIntersect.object.name.includes('Sprite')) {
         this.pin.visible = false;
         params.container.style.cursor = 'pointer';
+        // Disable camera rotation
+        this.engine.controls.enabled = false;
       } else {
         this.pin.visible = true;
         params.container.style.cursor = 'auto';
+        // Enable camera rotation
+        this.engine.controls.enabled = true;
 
         const point = firstIntersect.point;
         this.mouseHelper.position.copy(point);
@@ -131,6 +135,8 @@ export class CursorPin {
     } else {
       this.intersection.intersects = false;
       this.pin.visible = false;
+      // Enable camera rotation when not intersecting with any object
+      this.engine.controls.enabled = true;
     }
   }
 
