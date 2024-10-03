@@ -310,7 +310,7 @@ class CameraGsap {
       x: positionA.x,
       y: positionA.y,
       z: positionA.z,
-      blend: 0,
+      blend: 0.5,
     };
 
     // this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
@@ -319,7 +319,7 @@ class CameraGsap {
 
     this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
-      ease: params.animation.move.ease,
+      ease: Power0.easeInOut,
       blend: 1,
       x: positionB.x,
       y: positionB.y,
@@ -339,6 +339,8 @@ class CameraGsap {
         material.uniforms.texture1.value = nextTextureMap;
       },
       onUpdate: () => {
+        this.engine.cursor.pin.visible = false;
+
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
 
         material.uniforms.mixRatio.value = obj.blend;

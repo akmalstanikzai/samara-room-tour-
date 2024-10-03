@@ -68,7 +68,7 @@ const params = {
       intensity: 3,
     },
     move: {
-      duration: 2,
+      duration: 0.5,
       ease: Linear,
       easeName: 'Linear',
     },
