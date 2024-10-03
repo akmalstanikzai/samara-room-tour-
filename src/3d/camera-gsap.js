@@ -320,7 +320,7 @@ class CameraGsap {
     this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
       ease: Power0.easeInOut,
-      blend: 2, // Changed from 1 to 2 to double the speed
+      blend: 1, // Changed from 1 to 2 to double the speed
       x: positionB.x,
       y: positionB.y,
       z: positionB.z,
