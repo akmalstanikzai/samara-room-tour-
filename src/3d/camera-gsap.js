@@ -320,7 +320,7 @@ class CameraGsap {
     this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
       ease: Power0.easeInOut,
-      blend: 1,
+      blend: 2, // Changed from 1 to 2 to double the speed
       x: positionB.x,
       y: positionB.y,
       z: positionB.z,
@@ -335,17 +335,15 @@ class CameraGsap {
       onComplete: () => {
         appState.renderingStatus.next(false);
         appState.cam.next(name);
-        const nextTextureMap = material.uniforms.texture2.value;
-        material.uniforms.texture1.value = nextTextureMap;
+        material.uniforms.texture1.value = material.uniforms.texture2.value;
+        material.uniforms.mixRatio.value = 0; // Reset mixRatio to 0
       },
       onUpdate: () => {
         this.engine.cursor.pin.visible = false;
 
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
 
-        material.uniforms.mixRatio.value = obj.blend;
-
-        appState.renderingStatus.next(true);
+        material.uniforms.mixRatio.value = Math.min(obj.blend, 1); // Clamp mixRatio to 1
       },
     });
 
