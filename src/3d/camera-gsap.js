@@ -317,6 +317,7 @@ class CameraGsap {
 
     !this.moveGsap && (this.moveGsap = gsap.timeline());
 
+    if (this.moveGsap.isActive()) return;
     this.moveGsap.to(obj, {
       duration: params.animation.move.duration,
       ease: params.animation.move.ease,
