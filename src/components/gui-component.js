@@ -959,21 +959,6 @@ export class GuiComponent extends LitElement {
 
     // _shadowPlaneFolder.close();
 
-    // Light
-
-    this.gui
-      .addFolder('Ambient light')
-      .add(this.engine.ambientLight, 'intensity')
-      .min(0.1)
-      .max(5)
-      .onChange(() => {
-        this.engine.update();
-      });
-
-    // Materials
-
-    this.createMaterialsFolder();
-
     // Stats
 
     // this.engine.stats = Stats();
@@ -986,13 +971,6 @@ export class GuiComponent extends LitElement {
     // Pano mesh
 
     const _panoMeshFolder = this.gui.addFolder('Pano');
-    _panoMeshFolder
-      .add({ scale: this.engine.panoMesh.scale.y }, 'scale', 0.1, 2)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.panoMesh.scale.setScalar(value);
-        this.engine.update();
-      });
 
     _panoMeshFolder
       .add(this.engine.panoMesh.rotation, 'y', -10, 10)
@@ -1013,19 +991,6 @@ export class GuiComponent extends LitElement {
     _panoMeshFolder.add(this.engine.panoMesh, 'visible').onChange((value) => {
       this.engine.update();
     });
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh, 'renderOrder', 0, 30)
-      .onChange((value) => {
-        this.engine.update();
-      });
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh.material, 'opacity', 0, 1)
-      .listen()
-      .onChange((value) => {
-        this.engine.update();
-      });
 
     // Animation
     const _animationFolder = this.gui.addFolder('Animation').close();

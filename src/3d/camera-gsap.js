@@ -175,7 +175,7 @@ class CameraGsap {
 
   setCam(name, move) {
     if (name === 'outside') {
-      this.engine.cursor.pin.visible = false;
+      // this.engine.cursor.pin.visible = false;
 
       this.engine.plan.cutTop(false);
 
@@ -205,7 +205,7 @@ class CameraGsap {
     } else if (name === 'floor plan') {
       params.postProcessing.enabled = true;
       this.engine.ambientLight.intensity = Math.PI;
-      this.engine.cursor.pin.visible = false;
+      // this.engine.cursor.pin.visible = false;
 
       this.engine.plan.cutTop(true);
 
@@ -234,7 +234,7 @@ class CameraGsap {
       params.postProcessing.enabled = true;
       this.engine.ambientLight.intensity = Math.PI;
       this.engine.plan.cutTop(false);
-      this.engine.cursor.pin.visible = true;
+      // this.engine.cursor.pin.visible = true;
 
       this.engine.controls.enabled = true;
 
@@ -248,15 +248,7 @@ class CameraGsap {
       });
 
       this.engine.labels.labels.forEach((label) => {
-        label.visible = false;
-      });
-      this.engine.panorama.items.forEach((item) => {
-        item.visibleLabels.forEach((el) => {
-          if (item.cameraMap === name) {
-            const helper = this.engine.scene.getObjectByName(el);
-            helper.visible = true;
-          }
-        });
+        label.visible = true;
       });
 
       if (move) {
@@ -340,7 +332,7 @@ class CameraGsap {
         material.uniforms.mixRatio.value = 0; // Set mixRatio to 1 at the end
       },
       onUpdate: () => {
-        this.engine.cursor.pin.visible = false;
+        // this.engine.cursor.pin.visible = false;
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
 
         // console.log(material.uniforms.mixRatio.value);

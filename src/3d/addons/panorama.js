@@ -14,40 +14,44 @@ export class Panorama {
     this.items = [
       {
         name: 'Sprite_pano1',
-        cameraMap: 'bed',
+        cameraMap: '360_Bathroom_01',
         textureMap: 'studio_360_1',
         position: {
-          x: params.cameras.studio.bed.position.x,
-          y: params.cameras.studio.bed.position.y,
-          z: params.cameras.studio.bed.position.z,
+          x: params.cameras.studio['360_Bathroom_01'].position.x,
+          y: params.cameras.studio['360_Bathroom_01'].position.y,
+          z: params.cameras.studio['360_Bathroom_01'].position.z,
         },
         visible: ['Sprite_pano1', 'Sprite_pano2'],
-        visibleLabels: ['label_bed', 'label_kitchen'],
+        visibleLabels: ['label_b360_Bathroom_01', 'label_360_Living_02'],
       },
       {
         name: 'Sprite_pano2',
-        cameraMap: 'kitchen',
+        cameraMap: '360_Living_02',
         textureMap: 'studio_360',
         position: {
-          x: params.cameras.studio.kitchen.position.x,
-          y: params.cameras.studio.kitchen.position.y,
-          z: params.cameras.studio.kitchen.position.z,
+          x: params.cameras.studio['360_Living_02'].position.x,
+          y: params.cameras.studio['360_Living_02'].position.y,
+          z: params.cameras.studio['360_Living_02'].position.z,
         },
         visible: ['Sprite_pano1', 'Sprite_pano2', 'Sprite_pano3'],
-        visibleLabels: ['label_bed', 'label_kitchen', 'label_hallway'],
+        visibleLabels: [
+          'label_360_Bathroom_01',
+          'label_360_Living_02',
+          'label_360_Entry_01',
+        ],
       },
 
       {
         name: 'Sprite_pano3',
-        cameraMap: 'hallway',
+        cameraMap: '360_Entry_01',
         textureMap: 'studio_360_2',
         position: {
-          x: params.cameras.studio.hallway.position.x,
-          y: params.cameras.studio.hallway.position.y,
-          z: params.cameras.studio.hallway.position.z,
+          x: params.cameras.studio['360_Entry_01'].position.x,
+          y: params.cameras.studio['360_Entry_01'].position.y,
+          z: params.cameras.studio['360_Entry_01'].position.z,
         },
         visible: ['Sprite_pano3', 'Sprite_pano2'],
-        visibleLabels: ['label_kitchen', 'label_hallway'],
+        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
       },
     ];
 
@@ -113,7 +117,7 @@ export class Panorama {
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.setScalar(1);
-    mesh.rotation.y = 1.567;
+    mesh.rotation.y = 3.36;
     mesh.name = 'pano';
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
@@ -121,7 +125,7 @@ export class Panorama {
 
     // this.engine.models.visible = false;
     // this.engine.models.skydome.visible = false;
-    // this.engine.setCam('kitchen');
+    // this.engine.setCam('360_Living_02');
   }
 
   toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {

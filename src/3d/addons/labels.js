@@ -42,7 +42,7 @@ export class Labels {
   }
 
   initCursor() {
-    this.engine.cursor.pin.visible = true;
+    // this.engine.cursor.pin.visible = true;
     this.engine.meshes = [];
     this.engine.scene.traverse((object) => {
       if (object.name === appState.complectation.value.layout) {

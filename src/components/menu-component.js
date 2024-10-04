@@ -96,13 +96,7 @@ export class MenuComponent extends LitElement {
   firstUpdated() {}
 
   render() {
-    return html`
-      <div class="menu">
-        <div class="picker" @click="${this.toggleView}">
-          ${!this.isFloorPlan ? 'Floor plan' : 'X'}
-        </div>
-      </div>
-    `;
+    return html``;
   }
 }
 

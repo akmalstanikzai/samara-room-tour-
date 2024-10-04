@@ -203,11 +203,11 @@ const params = {
 
   cameras: {
     studio: {
-      kitchen: {
+      '360_Living_02': {
         type: 'interior',
         get position() {
           return window.engine.scene
-            .getObjectByName('pano1')
+            .getObjectByName('360_Living_02')
             .getWorldPosition(new Vector3());
         },
         get target() {
@@ -219,11 +219,11 @@ const params = {
         },
       },
 
-      bed: {
+      '360_Bathroom_01': {
         type: 'interior',
         get position() {
           return window.engine.scene
-            .getObjectByName('pano2')
+            .getObjectByName('360_Bathroom_01')
             .getWorldPosition(new Vector3());
         },
         get target() {
@@ -235,11 +235,11 @@ const params = {
         },
       },
 
-      hallway: {
+      '360_Entry_01': {
         type: 'interior',
         get position() {
           return window.engine.scene
-            .getObjectByName('pano3')
+            .getObjectByName('360_Entry_01')
             .getWorldPosition(new Vector3());
         },
         get target() {
@@ -333,12 +333,10 @@ const params = {
   },
   textures: [
     { path: 'Circle_512.png', name: 'pin' },
+
     {
-      path: 'field.png',
-      name: 'field',
-    },
-    {
-      path: 'panorama1.png',
+      path: '241002_samara_360 Living 02.jpg',
+
       name: 'studio_360',
       anisotropy: true,
       filter: true,
@@ -346,57 +344,18 @@ const params = {
     },
 
     {
-      path: 'panorama2.png',
+      path: '241002_samara_360 Bathroom 01.jpg',
       name: 'studio_360_1',
       anisotropy: true,
       filter: true,
       flip: true,
     },
     {
-      path: 'panorama3.png',
+      path: '241002_samara_360 Entry 01.jpg',
       name: 'studio_360_2',
       anisotropy: true,
       filter: true,
       flip: true,
-    },
-    { path: 'grid_solar_panel_tiled_basecolor_dark.jpg', name: 'Solar_Panel' },
-    {
-      path: 'grid_solar_panel_tiled_metallic.jpg',
-      name: 'Solar_Panel_metalness',
-    },
-    {
-      path: 'Support/Deck_2K.png',
-      name: 'cedar_ao_new',
-    },
-    {
-      path: 'Support/SupportPatio_2K.png',
-      name: 'patio_supp_ao',
-    },
-
-    {
-      path: 'AO_AirEx.png',
-      ktxPath: 'ktx/AO_AirEx.ktx2',
-      name: 'ao_air_ex',
-    },
-
-    {
-      path: 'Albedo_Faucet_512.jpg',
-      name: 'Albedo_Faucet_512',
-    },
-
-    {
-      path: 'Air_purification.jpg',
-      name: 'Air_purification',
-    },
-    {
-      path: 'Oak_Wood_Varnished_Albedo_2Kt.jpg',
-      name: 'Oak_Wood_Varnished_Albedo_2Kt',
-      repeat: true,
-    },
-    {
-      path: 'glass_orm.png',
-      name: 'glass_orm',
-      repeat: true,
     },
   ],
 
@@ -631,175 +590,15 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 60,
-          path: 'Studio.glb',
-          textures: [
-            { path: '1_S.png', name: '1_S' },
-            { path: '2_S.png', name: '2_S' },
-            { path: '3_S.png', name: '3_S' },
-            { path: '4_S.png', name: '4_S' },
-            { path: '5_S.png', name: '5_S' },
-            { path: '6_S.png', name: '6_S' },
-
-            {
-              path: 'Wall_e_S_W.png',
-              name: 'exterior_ao_wood_studio',
-            },
-            {
-              path: 'Wall_e_S.png',
-              name: 'exterior_ao_studio',
-            },
-
-            {
-              path: 'Wall_e_S_W_1.png',
-              name: 'exterior_ao_wood_studio_no_cables',
-            },
-
-            {
-              path: 'Wall_e_S_1.png',
-              name: 'exterior_ao_studio_no_cables',
-            },
-
-            {
-              path: 'Wall_e_S_W_2.png',
-              name: 'exterior_ao_wood_studio_nosolar',
-            },
-            {
-              path: 'Wall_e_S_2.png',
-              name: 'exterior_ao_studio_nosolar',
-            },
-
-            {
-              path: 'Wall_e_S_W_D.png',
-              name: 'studio_exterior_ao_wood_stairs_solar',
-            },
-            {
-              path: 'Wall_e_S_D.png',
-              name: 'studio_exterior_ao_stairs_solar',
-            },
-
-            {
-              path: 'Wall_e_S_W_1D.png',
-              name: 'studio_exterior_ao_wood_stairs_solar_no_cables',
-            },
-
-            {
-              path: 'Wall_e_S_1D.png',
-              name: 'studio_exterior_ao_stairs_solar_no_cables',
-            },
-
-            {
-              path: 'Wall_e_S_W_2D.png',
-              name: 'studio_exterior_ao_wood_stairs_no_solar',
-            },
-
-            {
-              path: 'Wall_e_S_2D.png',
-              name: 'studio_exterior_ao_stairs_no_solar',
-            },
-            {
-              path: 'S_AO_RoofSolarFull.png',
-              name: 'roof_solar_full_ao_studio',
-            },
-            {
-              path: 'AO_RoofSolarFull - no cables.png',
-              name: 'roof_solar_full_ao_studio_no_cables',
-            },
-            {
-              path: 'S_AO_RoofSolarFull - no cables.png',
-              name: 'roof_solar_full_ao_studio_no_cables',
-            },
-            {
-              path: 'S_AO_RoofSolarOne.png',
-              name: 'roof_solar_half_ao_studio',
-            },
-            {
-              path: 'S_AO_RoofSolarOne - no cables.png',
-              name: 'roof_solar_half_ao_studio_no_cables',
-            },
-            {
-              path: 'AO_RoofSolarClean_S_1K.png',
-              name: 'roof_solar_none_ao_studio',
-            },
-
-            {
-              path: 'Studio_Chair1_Basecolor.png',
-              name: 'Studio_Chair1_BaseColor',
-            },
-
-            {
-              path: 'Studio_Chair1_Lightmap.png',
-              name: 'Studio_Chair1_Lightmap',
-            },
-
-            {
-              path: 'Studio_Chair_Basecolor.png',
-              name: 'Studio_Chair_BaseColor',
-            },
-
-            {
-              path: 'Studio_Chair_Lightmap.png',
-              name: 'Studio_Chair_Lightmap',
-            },
-
-            {
-              path: 'floor.jpg',
-              name: 'Studio_Floor_BaseColor',
-              repeat: true,
-              repeatSet: 8,
-            },
-
-            {
-              path: 'Studio_Floor_Lightmap.png',
-              name: 'Studio_Floor_Lightmap',
-            },
-            {
-              path: 'Studio_Wood_Basecolor.png',
-              name: 'Studio_Wood_BaseColor',
-            },
-
-            {
-              path: 'Studio_Wood_Lightmap.png',
-              name: 'Studio_Wood_Lightmap',
-            },
-            {
-              path: 'Studio_Wall_Lightmap.png',
-              name: 'Studio_Wall_Lightmap',
-            },
-            {
-              path: 'Studio_Shelves_Lightmap.png',
-              name: 'Studio_Shelves_Lightmap',
-            },
-            {
-              path: 'Studio_Shelves_Basecolor.png',
-              name: 'Studio_Shelves_BaseColor',
-            },
-            {
-              path: 'Studio_Oven_Basecolor.png',
-              name: 'Studio_Oven_BaseColor',
-            },
-            {
-              path: 'Studio_Chrome_Basecolor.png',
-              name: 'Studio_Chrome_Basecolor',
-            },
-            {
-              path: 'Studio_Chrome_Lightmap.png',
-              name: 'Studio_Chrome_Lightmap',
-            },
-            {
-              path: 'Studio_Oven_Lightmap.png',
-              name: 'Studio_Oven_Lightmap',
-            },
-            { path: 'Studio_Bed_Basecolor.png', name: 'Studio_Bed_Basecolor' },
-            { path: 'Studio_Bed_Lightmap.png', name: 'Studio_Bed_Lightmap' },
-            { path: 'Studio_Bath_Lightmap.png', name: 'Studio_Bath_Lightmap' },
-          ],
+          totalAssetsCount: 7,
+          path: 'сameras.glb',
+          textures: [],
         },
       ],
       scale: {
-        x: 0.3,
-        y: 0.3,
-        z: 0.3,
+        x: 1,
+        y: 1,
+        z: 1,
       },
       rotation: Math.PI,
     },
