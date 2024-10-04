@@ -86,10 +86,8 @@ export class Model extends Group {
     }
 
     assets.forEach((asset) => {
-      console.log(asset);
       if (asset && asset.scene)
         asset.scene.children[0].children.forEach((object) => {
-          console.log(object);
           this.group.add(object.clone());
         });
     });

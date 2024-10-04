@@ -661,7 +661,7 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 7,
+          totalAssetsCount: 10,
           path: 'сameras.glb',
           textures: [],
         },
