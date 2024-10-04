@@ -150,7 +150,7 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.CameraGsap.setCam('360_Bathroom_01');
+      this.CameraGsap.setCam('360_Entry_01');
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
