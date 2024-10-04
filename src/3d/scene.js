@@ -116,7 +116,7 @@ export class CreateScene {
       params.loadOnDemand.loadingManager.enabled = false;
 
       // Load and setup additional assets.
-      this.assets.loadAndSetupRest();
+      // this.assets.loadAndSetupRest();
 
       this.renderer.compile(this.scene, this.camera);
 

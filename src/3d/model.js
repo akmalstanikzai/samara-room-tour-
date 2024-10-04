@@ -90,7 +90,7 @@ export class Model extends Group {
       if (asset && asset.scene)
         asset.scene.children[0].children.forEach((object) => {
           console.log(object);
-          this.group.add(object);
+          this.group.add(object.clone());
         });
     });
   }

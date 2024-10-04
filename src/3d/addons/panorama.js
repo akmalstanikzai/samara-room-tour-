@@ -15,7 +15,7 @@ export class Panorama {
       {
         name: 'Sprite_pano1',
         cameraMap: '360_Bathroom_01',
-        textureMap: 'studio_360_1',
+        textureMap: '241002_samara_360 Bathroom 01',
         position: {
           x: params.cameras.studio['360_Bathroom_01'].position.x,
           y: params.cameras.studio['360_Bathroom_01'].position.y,
@@ -27,7 +27,7 @@ export class Panorama {
       {
         name: 'Sprite_pano2',
         cameraMap: '360_Living_02',
-        textureMap: 'studio_360',
+        textureMap: '241002_samara_360 Living 02',
         position: {
           x: params.cameras.studio['360_Living_02'].position.x,
           y: params.cameras.studio['360_Living_02'].position.y,
@@ -44,11 +44,50 @@ export class Panorama {
       {
         name: 'Sprite_pano3',
         cameraMap: '360_Entry_01',
-        textureMap: 'studio_360_2',
+        textureMap: '241002_samara_360 Entry 01',
         position: {
           x: params.cameras.studio['360_Entry_01'].position.x,
           y: params.cameras.studio['360_Entry_01'].position.y,
           z: params.cameras.studio['360_Entry_01'].position.z,
+        },
+        visible: ['Sprite_pano3', 'Sprite_pano2'],
+        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
+      },
+
+      {
+        name: 'Sprite_pano4',
+        cameraMap: '360_Living_01',
+        textureMap: '241002_samara_360 Living 01',
+        position: {
+          x: params.cameras.studio['360_Living_01'].position.x,
+          y: params.cameras.studio['360_Living_01'].position.y,
+          z: params.cameras.studio['360_Living_01'].position.z,
+        },
+        visible: ['Sprite_pano3', 'Sprite_pano2'],
+        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
+      },
+
+      {
+        name: 'Sprite_pano4',
+        cameraMap: '360_Living_03',
+        textureMap: '241002_samara_360 Living 03',
+        position: {
+          x: params.cameras.studio['360_Living_03'].position.x,
+          y: params.cameras.studio['360_Living_03'].position.y,
+          z: params.cameras.studio['360_Living_03'].position.z,
+        },
+        visible: ['Sprite_pano3', 'Sprite_pano2'],
+        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
+      },
+
+      {
+        name: 'Sprite_pano5',
+        cameraMap: '360_Bedroom_01',
+        textureMap: '241002_samara_360 Bedroom 01',
+        position: {
+          x: params.cameras.studio['360_Bedroom_01'].position.x,
+          y: params.cameras.studio['360_Bedroom_01'].position.y,
+          z: params.cameras.studio['360_Bedroom_01'].position.z,
         },
         visible: ['Sprite_pano3', 'Sprite_pano2'],
         visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
@@ -81,8 +120,8 @@ export class Panorama {
 
     const material = new THREE.ShaderMaterial({
       uniforms: {
-        texture1: { value: this.engine.textures.getTexture('studio_360') },
-        texture2: { value: this.engine.textures.getTexture('studio_360') },
+        texture1: { value: null },
+        texture2: { value: null },
         mixRatio: { value: 0.0 },
         ambientLightColor: { value: new THREE.Color(0xffffff) },
         ambientLightIntensity: { value: 1.0 },

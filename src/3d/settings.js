@@ -218,6 +218,53 @@ const params = {
           };
         },
       },
+      '360_Living_01': {
+        type: 'interior',
+        get position() {
+          return window.engine.scene
+            .getObjectByName('360_Living_01')
+            .getWorldPosition(new Vector3());
+        },
+        get target() {
+          return {
+            x: this.position.x + EPS * 15,
+            y: this.position.y + EPS * 0.0001,
+            z: this.position.z - EPS,
+          };
+        },
+      },
+
+      '360_Bedroom_01': {
+        type: 'interior',
+        get position() {
+          return window.engine.scene
+            .getObjectByName('360_Bedroom_01')
+            .getWorldPosition(new Vector3());
+        },
+        get target() {
+          return {
+            x: this.position.x + EPS * 15,
+            y: this.position.y + EPS * 0.0001,
+            z: this.position.z - EPS,
+          };
+        },
+      },
+
+      '360_Living_03': {
+        type: 'interior',
+        get position() {
+          return window.engine.scene
+            .getObjectByName('360_Living_03')
+            .getWorldPosition(new Vector3());
+        },
+        get target() {
+          return {
+            x: this.position.x + EPS * 15,
+            y: this.position.y + EPS * 0.0001,
+            z: this.position.z - EPS,
+          };
+        },
+      },
 
       '360_Bathroom_01': {
         type: 'interior',
@@ -335,24 +382,48 @@ const params = {
     { path: 'Circle_512.png', name: 'pin' },
 
     {
-      path: '241002_samara_360 Living 02.jpg',
+      path: '241002_samara_360 Living 02.webp',
 
-      name: 'studio_360',
+      name: '241002_samara_360 Living 02',
       anisotropy: true,
       filter: true,
       flip: true,
     },
 
     {
-      path: '241002_samara_360 Bathroom 01.jpg',
-      name: 'studio_360_1',
+      path: '241002_samara_360 Bathroom 01.webp',
+      name: '241002_samara_360 Bathroom 01',
       anisotropy: true,
       filter: true,
       flip: true,
     },
     {
-      path: '241002_samara_360 Entry 01.jpg',
-      name: 'studio_360_2',
+      path: '241002_samara_360 Entry 01.webp',
+      name: '241002_samara_360 Entry 01',
+      anisotropy: true,
+      filter: true,
+      flip: true,
+    },
+
+    {
+      path: '241002_samara_360 Living 01.webp',
+      name: '241002_samara_360 Living 01',
+      anisotropy: true,
+      filter: true,
+      flip: true,
+    },
+
+    {
+      path: '241002_samara_360 Living 03.webp',
+      name: '241002_samara_360 Living 03',
+      anisotropy: true,
+      filter: true,
+      flip: true,
+    },
+
+    {
+      path: '241002_samara_360 Bedroom 01.webp',
+      name: '241002_samara_360 Bedroom 01',
       anisotropy: true,
       filter: true,
       flip: true,
@@ -596,9 +667,9 @@ const params = {
         },
       ],
       scale: {
-        x: 1,
-        y: 1,
-        z: 1,
+        x: 2,
+        y: 2,
+        z: 2,
       },
       rotation: Math.PI,
     },
