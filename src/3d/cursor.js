@@ -10,9 +10,9 @@ import {
 } from 'three';
 
 import * as THREE from 'three';
-import { params } from '../settings';
-import { appState } from '../../services/app-state';
-import { delayMs } from '../../utils/delay';
+import { params } from './settings';
+import { appState } from '../services/app-state';
+import { delayMs } from '../utils/delay';
 
 export class CursorPin {
   constructor(engine) {

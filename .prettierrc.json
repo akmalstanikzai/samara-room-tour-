@@ -5,6 +5,10 @@
   "singleQuote": true,
   "overrides": [
     {
+      "files": ["*.frag", "*.vert"],
+      "options": { "parser": "glsl-parser" }
+    },
+    {
       "files": "*.md",
       "options": {
         "tabWidth": 4

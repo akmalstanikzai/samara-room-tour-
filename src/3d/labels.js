@@ -6,8 +6,8 @@ import {
 } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { capitalize } from 'lodash';
 
-import { params } from '../settings';
-import { appState } from '../../services/app-state';
+import { params } from './settings';
+import { appState } from '../services/app-state';
 
 export class Labels {
   constructor(engine) {

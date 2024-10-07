@@ -1,8 +1,10 @@
 import * as THREE from 'three';
-import { loadGltf } from '../model-loader';
-import { params } from '../settings';
+import { loadGltf } from './model-loader';
+import { params } from './settings';
 import { gsap } from 'gsap';
-import { appState } from '../../services/app-state';
+import { appState } from '../services/app-state';
+import lerpFrag from './shaders/lerp/lerp.frag';
+import lerpVert from './shaders/lerp/lerp.vert';
 
 export class Panorama {
   constructor(engine) {
@@ -126,32 +128,8 @@ export class Panorama {
         ambientLightColor: { value: new THREE.Color(0xffffff) },
         ambientLightIntensity: { value: 1.0 },
       },
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform sampler2D texture1;
-        uniform sampler2D texture2;
-        uniform float mixRatio;
-        uniform vec3 ambientLightColor;
-        uniform float ambientLightIntensity;
-        varying vec2 vUv;
-        void main() {
-          vec4 tex1 = texture2D(texture1, vUv);
-          vec4 tex2 = texture2D(texture2, vUv);
-          vec4 mixedColor = mix(tex1, tex2, mixRatio);
-          
-          // Apply ambient light
-          vec3 ambient = ambientLightColor * ambientLightIntensity;
-          vec3 finalColor = mixedColor.rgb * ambient;
-          
-          gl_FragColor = vec4(finalColor, mixedColor.a);
-        }
-      `,
+      vertexShader: lerpVert,
+      fragmentShader: lerpFrag,
     });
 
     const mesh = new THREE.Mesh(geometry, material);

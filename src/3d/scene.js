@@ -30,15 +30,10 @@ import {
 import { delayMs } from '../utils/delay';
 import { Assets } from './assets';
 import { Options } from '../services/options';
-import { Plan } from './addons/plan';
-import { Labels } from './addons/labels';
-import { CursorPin } from './addons/cursorpin';
-
-import { Mirrors } from './addons/mirrors';
+import { Plan } from './plan';
+import { Labels } from './labels';
 import { PostProcessing } from './post-processing';
-import * as THREE from 'three';
-import { Panorama } from './addons/panorama';
-let hasMouseMoved = false;
+import { Panorama } from './panorama';
 
 /** Main class for 3d scene */
 export class CreateScene {
