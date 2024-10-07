@@ -98,8 +98,9 @@ export class Panorama {
       sprite.visible = false;
       sprite.position.copy(pano.position);
       sprite.name = pano.name;
-      sprite.position.y = -0.41;
-      sprite.renderOrder = 50;
+      sprite.position.y = -0.9;
+      sprite.scale.setScalar(2);
+      sprite.renderOrder = 10;
       this.engine.scene.add(sprite);
     });
 
