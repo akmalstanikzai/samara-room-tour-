@@ -11,7 +11,6 @@ import {
 import { params } from './settings';
 import { Textures } from './textures';
 import { MeshTransmissionMaterial } from './libs/MeshTransmissionMaterial';
-import MeshReflectorMaterial from './libs/MeshReflectorMaterial';
 
 export class Materials {
   constructor() {
