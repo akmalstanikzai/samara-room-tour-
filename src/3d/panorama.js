@@ -62,7 +62,7 @@ export class Panorama {
       },
 
       {
-        name: 'Sprite_pano4',
+        name: 'Sprite_pano5',
         cameraMap: '360_Living_03',
         textureMap: '241002_samara_360 Living 03',
         position: {
@@ -73,7 +73,7 @@ export class Panorama {
       },
 
       {
-        name: 'Sprite_pano5',
+        name: 'Sprite_pano6',
         cameraMap: '360_Bedroom_01',
         textureMap: '241002_samara_360 Bedroom 01',
         position: {
