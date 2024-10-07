@@ -376,7 +376,8 @@ const params = {
     opacity: 0.8,
   },
   textures: [
-    { path: 'Circle_512.png', name: 'pin' },
+    { path: 'pin.png', name: 'pin' },
+    { path: 'cursor.png', name: 'cursor' },
 
     {
       path: '241002_samara_360 Living 02.webp',
@@ -658,7 +659,7 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 10,
+          totalAssetsCount: 11,
           path: '1B_roomtour.glb',
           textures: [],
         },

@@ -18,21 +18,22 @@ export class CursorPin {
   }
 
   init() {
-    const geometry = new PlaneGeometry(0.03, 0.03);
+    const geometry = new PlaneGeometry(0.1, 0.1);
 
     const material = new MeshPhysicalMaterial({
-      color: 0x333333,
+      color: 0xffffff,
       side: DoubleSide,
-      map: this.engine.textures.getTexture('pin'),
+      map: this.engine.textures.getTexture('cursor'),
       transparent: true,
       opacity: 0.8,
-      // depthWrite: false,
-      // depthTest: false,
+      depthWrite: false,
+      depthTest: false,
     });
     this.pin = new Mesh(geometry, material);
     this.pin.visible = false;
     this.pin.renderOrder = 50;
     this.pin.name = 'pin';
+    this.pin.scale.setScalar(3);
     this.engine.scene.add(this.pin);
 
     this.raycaster = new Raycaster();
@@ -167,6 +168,7 @@ export class CursorPin {
     this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
 
     if (this.intersects.length > 0) {
+      console.log(this.intersects[0].object.name);
       this.intersects.forEach((object) => {
         if (object.object.name.includes('Sprite')) {
           const cameraMap = this.engine.panorama.items.find(

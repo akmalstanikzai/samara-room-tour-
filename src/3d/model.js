@@ -90,10 +90,10 @@ export class Model extends Group {
       if (asset && asset.scene)
         asset.scene.children.forEach((child) => {
           child.children.forEach((object) => {
-            console.log(object);
             if (object.material) {
               object.material.transparent = true;
               object.material.opacity = 0.5;
+              object.visible = false;
             }
             this.group.add(object.clone());
           });
