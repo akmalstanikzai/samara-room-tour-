@@ -1,10 +1,14 @@
-import * as THREE from 'three';
-import { loadGltf } from './model-loader';
 import { params } from './settings';
-import { gsap } from 'gsap';
-import { appState } from '../services/app-state';
 import lerpFrag from './shaders/lerp/lerp.frag';
 import lerpVert from './shaders/lerp/lerp.vert';
+import {
+  Mesh,
+  ShaderMaterial,
+  PlaneGeometry,
+  MeshBasicMaterial,
+  SphereGeometry,
+  Color,
+} from 'three';
 
 export class Panorama {
   constructor(engine) {
@@ -23,8 +27,6 @@ export class Panorama {
           y: params.cameras.studio['360_Bathroom_01'].position.y,
           z: params.cameras.studio['360_Bathroom_01'].position.z,
         },
-        visible: ['Sprite_pano1', 'Sprite_pano2'],
-        visibleLabels: ['label_b360_Bathroom_01', 'label_360_Living_02'],
       },
       {
         name: 'Sprite_pano2',
@@ -35,12 +37,6 @@ export class Panorama {
           y: params.cameras.studio['360_Living_02'].position.y,
           z: params.cameras.studio['360_Living_02'].position.z,
         },
-        visible: ['Sprite_pano1', 'Sprite_pano2', 'Sprite_pano3'],
-        visibleLabels: [
-          'label_360_Bathroom_01',
-          'label_360_Living_02',
-          'label_360_Entry_01',
-        ],
       },
 
       {
@@ -52,8 +48,6 @@ export class Panorama {
           y: params.cameras.studio['360_Entry_01'].position.y,
           z: params.cameras.studio['360_Entry_01'].position.z,
         },
-        visible: ['Sprite_pano3', 'Sprite_pano2'],
-        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
       },
 
       {
@@ -65,8 +59,6 @@ export class Panorama {
           y: params.cameras.studio['360_Living_01'].position.y,
           z: params.cameras.studio['360_Living_01'].position.z,
         },
-        visible: ['Sprite_pano3', 'Sprite_pano2'],
-        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
       },
 
       {
@@ -78,8 +70,6 @@ export class Panorama {
           y: params.cameras.studio['360_Living_03'].position.y,
           z: params.cameras.studio['360_Living_03'].position.z,
         },
-        visible: ['Sprite_pano3', 'Sprite_pano2'],
-        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
       },
 
       {
@@ -91,23 +81,20 @@ export class Panorama {
           y: params.cameras.studio['360_Bedroom_01'].position.y,
           z: params.cameras.studio['360_Bedroom_01'].position.z,
         },
-        visible: ['Sprite_pano3', 'Sprite_pano2'],
-        visibleLabels: ['label_360_Living_02', 'label_360_Entry_01'],
       },
     ];
 
     this.items.forEach((pano) => {
-      const sprite = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.1, 0.1),
-        new THREE.MeshBasicMaterial({
+      const sprite = new Mesh(
+        new PlaneGeometry(0.1, 0.1),
+        new MeshBasicMaterial({
           map: this.engine.textures.getTexture('pin'),
           transparent: true,
-          side: THREE.DoubleSide,
           depthTest: false,
         })
       );
 
-      sprite.rotation.x = Math.PI / 2;
+      sprite.rotation.x = -Math.PI / 2;
       sprite.visible = false;
       sprite.position.copy(pano.position);
       sprite.name = pano.name;
@@ -116,23 +103,23 @@ export class Panorama {
       this.engine.scene.add(sprite);
     });
 
-    const geometry = new THREE.SphereGeometry(6, 200, 200);
+    const geometry = new SphereGeometry(6, 200, 200);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
-    const material = new THREE.ShaderMaterial({
+    const material = new ShaderMaterial({
       uniforms: {
         texture1: { value: null },
         texture2: { value: null },
         mixRatio: { value: 0.0 },
-        ambientLightColor: { value: new THREE.Color(0xffffff) },
+        ambientLightColor: { value: new Color(0xffffff) },
         ambientLightIntensity: { value: 1.0 },
       },
       vertexShader: lerpVert,
       fragmentShader: lerpFrag,
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new Mesh(geometry, material);
     mesh.scale.setScalar(1);
     mesh.rotation.y = 3.36;
     mesh.name = 'pano';
