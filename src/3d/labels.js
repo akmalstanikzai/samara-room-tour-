@@ -38,24 +38,6 @@ export class Labels {
         this.engine.controls.enabled = true;
       }
     });
-    this.initCursor();
-  }
-
-  initCursor() {
-    // this.engine.cursor.pin.visible = true;
-    this.engine.meshes = [];
-    this.engine.scene.traverse((object) => {
-      if (object.name === appState.complectation.value.layout) {
-        object.traverse((child) => {
-          if (child instanceof Mesh) this.engine.meshes.push(child);
-        });
-      }
-    });
-    this.engine.scene.traverse((object) => {
-      if (object.name.includes('Sprite')) {
-        this.engine.meshes.push(object);
-      }
-    });
   }
 
   removeLabels() {

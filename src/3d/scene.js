@@ -34,6 +34,7 @@ import { Plan } from './plan';
 import { Labels } from './labels';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './panorama';
+import { CursorPin } from './cursor';
 
 /** Main class for 3d scene */
 export class CreateScene {
@@ -131,7 +132,7 @@ export class CreateScene {
 
       this.panorama = new Panorama(this);
       this.panorama.setup();
-      // this.cursor = new CursorPin(this);
+      this.cursor = new CursorPin(this);
 
       this.labels = new Labels(this);
       this.labels.addLabels();
@@ -244,34 +245,21 @@ export class CreateScene {
 
   initListeners() {
     this.listeners = [
-      // {
-      //   eventTarget: params.container,
-      //   eventName: 'mousedown',
-      //   eventFunction: () => {
-      //     hasMouseMoved = false;
-      //   },
-      // },
+      {
+        eventTarget: params.container,
+        eventName: 'mousemove',
+        eventFunction: (e) => {
+          this.cursor.onMove(e);
+        },
+      },
 
-      // Listener for mouse move to set the movement flag
-      // {
-      //   eventTarget: params.container,
-      //   eventName: 'mousemove',
-      //   eventFunction: (e) => {
-      //     hasMouseMoved = true;
-      //     this.cursor.onMove(e);
-      //   },
-      // },
-
-      // Modify the mouseup listener to check the movement flag
-      // {
-      //   eventTarget: params.container,
-      //   eventName: 'mousedown',
-      //   eventFunction: (e) => {
-      //     // if (!hasMouseMoved) {
-      //     this.cursor.onClick(e);
-      //     // }
-      //   },
-      // },
+      {
+        eventTarget: params.container,
+        eventName: 'mousedown',
+        eventFunction: (e) => {
+          this.cursor.onClick(e);
+        },
+      },
       {
         eventTarget: document,
         eventName: 'visibilitychange',

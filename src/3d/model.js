@@ -23,6 +23,7 @@ export class Model extends Group {
     this.textures = new Textures();
     this.materials = new Materials();
     this.engine = engine;
+    this.engine.meshes = [];
   }
 
   async load(reInit) {
@@ -87,10 +88,22 @@ export class Model extends Group {
 
     assets.forEach((asset) => {
       if (asset && asset.scene)
-        asset.scene.children[0].children.forEach((object) => {
-          this.group.add(object.clone());
+        asset.scene.children.forEach((child) => {
+          child.children.forEach((object) => {
+            console.log(object);
+            if (object.material) {
+              object.material.transparent = true;
+              object.material.opacity = 0.5;
+            }
+            this.group.add(object.clone());
+          });
         });
     });
+
+    this.engine.scene.traverse((object) => {
+      if (object instanceof Mesh) this.engine.meshes.push(object);
+    });
+    console.log(this.engine.meshes);
   }
 
   getAssets(name = appState.complectation.value.layout) {

@@ -102,6 +102,7 @@ export class Panorama {
       sprite.scale.setScalar(2);
       sprite.renderOrder = 10;
       this.engine.scene.add(sprite);
+      this.engine.meshes.push(sprite);
     });
 
     const geometry = new SphereGeometry(6, 200, 200);
@@ -122,7 +123,7 @@ export class Panorama {
 
     const mesh = new Mesh(geometry, material);
     mesh.scale.setScalar(1);
-    mesh.rotation.y = 3.36;
+    mesh.rotation.y = 3.14;
     mesh.name = 'pano';
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;

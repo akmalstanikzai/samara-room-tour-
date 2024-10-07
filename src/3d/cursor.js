@@ -8,11 +8,8 @@ import {
   Raycaster,
   Vector3,
 } from 'three';
-
-import * as THREE from 'three';
 import { params } from './settings';
 import { appState } from '../services/app-state';
-import { delayMs } from '../utils/delay';
 
 export class CursorPin {
   constructor(engine) {
@@ -143,17 +140,17 @@ export class CursorPin {
   update() {
     const currentCam = appState.cam.value;
 
-    this.engine.panorama.items.forEach((item) => {
-      if (item.cameraMap === currentCam) {
-        item.visible.forEach((el) => {
-          const helper = this.engine.scene.getObjectByName(el);
-          helper.material.opacity += (1 - helper.material.opacity) * 0.1;
-        });
-      } else {
-        const helper = this.engine.scene.getObjectByName(item.name);
-        helper.material.opacity += (0 - helper.material.opacity) * 0.1;
-      }
-    });
+    // this.engine.panorama.items.forEach((item) => {
+    //   if (item.cameraMap === currentCam) {
+    //     item.visible.forEach((el) => {
+    //       const helper = this.engine.scene.getObjectByName(el);
+    //       helper.material.opacity += (1 - helper.material.opacity) * 0.1;
+    //     });
+    //   } else {
+    //     const helper = this.engine.scene.getObjectByName(item.name);
+    //     helper.material.opacity += (0 - helper.material.opacity) * 0.1;
+    //   }
+    // });
   }
 
   onClick(e) {

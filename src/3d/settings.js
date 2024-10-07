@@ -342,9 +342,6 @@ const params = {
   },
 
   environment: {
-    model: {
-      assetsArray: ['env_uvs.glb'],
-    },
     assetsArray: [
       {
         id: 1,
@@ -662,14 +659,14 @@ const params = {
         {
           name: 'studio',
           totalAssetsCount: 10,
-          path: 'сameras.glb',
+          path: '1B_roomtour.glb',
           textures: [],
         },
       ],
       scale: {
-        x: 2,
-        y: 2,
-        z: 2,
+        x: 1,
+        y: 1,
+        z: 1,
       },
       rotation: Math.PI,
     },
