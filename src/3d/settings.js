@@ -12,7 +12,7 @@ const EPS = 0.000011177461712 * 0.0001;
 
 const params = {
   postProcessing: {
-    enabled: false,
+    enabled: true,
     antialias: {
       multisampling: 4,
       taa: {

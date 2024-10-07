@@ -139,10 +139,6 @@ export class Panorama {
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
     this.engine.scene.add(mesh);
-
-    // this.engine.models.visible = false;
-    // this.engine.models.skydome.visible = false;
-    // this.engine.setCam('360_Living_02');
   }
 
   toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {

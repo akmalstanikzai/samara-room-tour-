@@ -76,23 +76,6 @@ export class MenuComponent extends LitElement {
     super.disconnectedCallback();
   }
 
-  async toggleView() {
-    if (
-      this.engine.CameraGsap.moveGsap &&
-      this.engine.CameraGsap.moveGsap.isActive()
-    ) {
-      await this.engine.CameraGsap.moveGsap;
-    }
-    this.isFloorPlan = !this.isFloorPlan;
-    if (this.isFloorPlan) {
-      this.engine.CameraGsap.setCam('floor plan');
-    } else {
-      this.engine.CameraGsap.setCam('outside');
-    }
-
-    this.engine.update();
-  }
-
   firstUpdated() {}
 
   render() {

@@ -118,7 +118,6 @@ export class CreateScene {
       this.CameraGsap = new CameraGsap();
       this.postprocessing = new PostProcessing(this);
       this.postprocessing.init();
-      this.CameraGsap.setDefaultCam();
 
       this.initListeners();
       this.setupPerspectiveView();
@@ -145,7 +144,7 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.CameraGsap.setCam('360_Entry_01');
+      this.CameraGsap.setCam('360_Entry_01', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });

@@ -80,10 +80,7 @@ export class Labels {
         textLabel.name = `label_${camKey}`;
 
         div.onclick = () => {
-          this.engine.CameraGsap.setCam(
-            camKey,
-            appState.cam.value !== 'floor plan'
-          );
+          this.engine.CameraGsap.setCam(camKey);
         };
 
         const pos =

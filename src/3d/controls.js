@@ -56,7 +56,7 @@ export class cameraControls {
     this.engine.controls.mouseButtons.right = none;
     this.engine.controls.restThreshold = 3;
 
-    this.setThirdPersonParams();
+    this.setFirstPersonParams();
 
     const KEYCODE = {
       W: 87,
@@ -171,6 +171,7 @@ export class cameraControls {
     this.engine.controls.normalizeRotations();
     const { x, y, z } = params.controls.thirdPerson.focalOffset;
     this.engine.controls.setFocalOffset(x, y, z);
+    this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
   }
 
   setFirstPersonParams() {
@@ -196,5 +197,6 @@ export class cameraControls {
     this.engine.controls.normalizeRotations();
     const { x, y, z } = params.controls.firstPerson.focalOffset;
     this.engine.controls.setFocalOffset(x, y, z);
+    this.engine.controls.zoomTo(params.controls.firstPerson.defaultZoom);
   }
 }

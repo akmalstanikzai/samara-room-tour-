@@ -175,7 +175,7 @@ export class CursorPin {
           const cameraMap = this.engine.panorama.items.find(
             (pano) => pano.name === object.object.name
           ).cameraMap;
-          this.engine.CameraGsap.setCam(cameraMap, true);
+          this.engine.CameraGsap.setCam(cameraMap);
         }
       });
     }

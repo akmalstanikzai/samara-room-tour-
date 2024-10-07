@@ -158,145 +158,34 @@ class CameraGsap {
     return tl;
   }
 
-  /**
-   * Sets the default camera position based on the current layout.
-   */
-
-  setDefaultCam() {
-    const camera = params.models.samara.complectationVars.Layout.variants.find(
-      (variant) => variant.name === appState.complectation.value.layout
-    ).camera;
-    const position = params.cameras[camera].position;
-    appState.cam.next('outside');
-    this.engine.cameraControls.setThirdPersonParams();
-    this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
-    this.engine.controls.setLookAt(position.x, position.y, position.z, 0, 0, 0);
-  }
-
-  setCam(name, move) {
-    if (name === 'outside') {
-      // this.engine.cursor.pin.visible = false;
-
-      this.engine.plan.cutTop(false);
-
-      this.engine.cameraControls.setThirdPersonParams();
-      this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
-
-      this.engine.controls.setTarget(0, 0, 0);
-
-      const camera =
-        appState.complectation.value.layout === 'XL 8' ? 'right' : 'front';
-      const pos = params.cameras[camera].position;
-      appState.cam.next('outside');
-      params.postProcessing.enabled = false;
-      this.engine.ambientLight.intensity = 1;
-
-      this.engine.controls.setPosition(pos.x, pos.y, pos.z);
-      this.engine.controls.enabled = true;
-      this.engine.panorama.toggleVisibility('3d');
-      this.engine.scene.traverse((object) => {
-        if (object.name.includes('Sprite')) {
-          object.visible = false;
-        }
-      });
-      this.engine.labels.labels.forEach((label) => {
-        label.visible = false;
-      });
-    } else if (name === 'floor plan') {
-      params.postProcessing.enabled = true;
-      this.engine.ambientLight.intensity = Math.PI;
-      // this.engine.cursor.pin.visible = false;
-
-      this.engine.plan.cutTop(true);
-
-      appState.cam.next('floor plan');
-
-      this.engine.controls.enabled = false;
-      this.engine.cameraControls.setThirdPersonParams();
-      this.engine.controls.zoomTo(params.controls.thirdPerson.defaultZoom);
-
-      this.engine.controls.setTarget(0, 0, 0);
-      this.engine.plan.cutTop(true);
-
-      const pos = params.cameras['floor plan'].position;
-
-      this.engine.controls.setPosition(pos.x, pos.y, pos.z);
-      this.engine.panorama.toggleVisibility('3d');
-      this.engine.scene.traverse((object) => {
-        if (object.name.includes('Sprite')) {
-          object.visible = false;
-        }
-      });
-      this.engine.labels.labels.forEach((label) => {
-        label.visible = true;
-      });
-    } else {
-      params.postProcessing.enabled = true;
-      this.engine.ambientLight.intensity = Math.PI;
-      this.engine.plan.cutTop(false);
-      // this.engine.cursor.pin.visible = true;
-
-      this.engine.controls.enabled = true;
-
-      this.engine.cameraControls.setFirstPersonParams();
-      this.engine.controls.zoomTo(params.controls.firstPerson.defaultZoom);
-
-      this.engine.scene.traverse((object) => {
-        if (object.name.includes('Sprite')) {
-          object.visible = true;
-        }
-      });
-
-      this.engine.labels.labels.forEach((label) => {
-        label.visible = true;
-      });
-
-      if (move) {
-        this.move(name);
-      } else {
-        const cam = params.cameras[appState.complectation.value.layout][name];
-        appState.cam.next(name);
-
-        this.engine.controls.setLookAt(
-          cam.position.x,
-          cam.position.y,
-          cam.position.z,
-          cam.target.x,
-          cam.target.y,
-          cam.target.z
-        );
-
-        const pano = this.engine.scene.getObjectByName('pano');
-
-        const textureMap = this.engine.panorama.items.find(
-          (pano) => pano.cameraMap === name
-        ).textureMap;
-        const texture = this.engine.textures.getTexture(textureMap);
-        pano.material.uniforms.texture1.value = texture;
-        pano.material.uniforms.texture2.value = texture;
-        this.engine.panorama.toggleVisibility('pano');
-
-        const { x, z } = params.cameras.studio[name].position;
-        const positionA = this.engine.controls.getPosition();
-        const positionB = { x: x, y: positionA.y, z: z };
-
-        this.engine.panoMesh.position.copy(positionB);
+  setCam(name, firstInit) {
+    this.engine.scene.traverse((object) => {
+      if (object.name.includes('Sprite')) {
+        object.visible = true;
       }
-    }
+    });
 
-    this.engine.update();
-  }
-
-  async move(name) {
+    this.engine.labels.labels.forEach((label) => {
+      label.visible = true;
+    });
     const material = this.engine.scene.getObjectByName('pano').material;
 
-    const currentTextureMap = material.uniforms.texture1.value;
-
-    const { x, z } = params.cameras.studio[name].position;
+    const { position, target } = params.cameras.studio[name];
     const positionA = this.engine.controls.getPosition();
-    const positionB = { x: x, y: positionA.y, z: z };
+    const positionB = { x: position.x, y: position.y, z: position.z };
     const targetA = this.engine.controls.getTarget();
-    const targetB = { x: x, y: positionB.y, z: z };
+    const targetB = { x: target.x, y: target.y, z: target.z };
+
+    if (firstInit) {
+      this.engine.controls.setLookAt(
+        positionB.x,
+        positionB.y,
+        positionB.z,
+        targetB.x,
+        targetB.y,
+        targetB.z
+      );
+    }
 
     const obj = {
       x: positionA.x,
@@ -311,7 +200,7 @@ class CameraGsap {
 
     if (this.moveGsap.isActive()) return;
     this.moveGsap.to(obj, {
-      duration: params.animation.move.duration,
+      duration: firstInit ? 0.01 : params.animation.move.duration,
       ease: params.animation.move.ease,
       blend: 1,
       x: positionB.x,
