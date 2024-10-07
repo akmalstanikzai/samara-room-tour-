@@ -161,6 +161,7 @@ class CameraGsap {
 
   setCam(name, firstInit) {
     if (this.moveGsap.isActive()) return;
+    const material = this.engine.panoMesh.material;
 
     const { position, target } = params.cameras.studio[name];
     const positionA = this.engine.controls.getPosition();
@@ -194,8 +195,6 @@ class CameraGsap {
       y: positionB.y,
       z: positionB.z,
       onStart: () => {
-        const material = this.engine.panoMesh.material;
-
         const nextTextureMap = this.engine.textures.getTexture(
           this.engine.panorama.items.find((pano) => pano.cameraMap === name)
             .textureMap
