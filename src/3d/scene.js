@@ -141,6 +141,15 @@ export class CreateScene {
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
       this.CameraGsap.setCam('360_Entry_01', true);
+      this.scene.traverse((object) => {
+        if (object.name.includes('Sprite')) {
+          object.visible = true;
+        }
+      });
+
+      this.labels.labels.forEach((label) => {
+        label.visible = true;
+      });
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });

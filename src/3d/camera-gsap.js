@@ -11,6 +11,7 @@ class CameraGsap {
   constructor() {
     this.targetIndex = 0;
     this.engine = window.engine;
+    this.moveGsap = gsap.timeline();
   }
 
   /**
@@ -159,16 +160,7 @@ class CameraGsap {
   }
 
   setCam(name, firstInit) {
-    this.engine.scene.traverse((object) => {
-      if (object.name.includes('Sprite')) {
-        object.visible = true;
-      }
-    });
-
-    this.engine.labels.labels.forEach((label) => {
-      label.visible = true;
-    });
-    const material = this.engine.scene.getObjectByName('pano').material;
+    if (this.moveGsap.isActive()) return;
 
     const { position, target } = params.cameras.studio[name];
     const positionA = this.engine.controls.getPosition();
@@ -194,11 +186,6 @@ class CameraGsap {
       blend: 0,
     };
 
-    // this.engine.controls.moveTo(positionB.x, positionB.y, positionB.z, true);
-
-    !this.moveGsap && (this.moveGsap = gsap.timeline());
-
-    if (this.moveGsap.isActive()) return;
     this.moveGsap.to(obj, {
       duration: firstInit ? 0.01 : params.animation.move.duration,
       ease: params.animation.move.ease,
@@ -207,6 +194,8 @@ class CameraGsap {
       y: positionB.y,
       z: positionB.z,
       onStart: () => {
+        const material = this.engine.panoMesh.material;
+
         const nextTextureMap = this.engine.textures.getTexture(
           this.engine.panorama.items.find((pano) => pano.cameraMap === name)
             .textureMap
@@ -218,7 +207,7 @@ class CameraGsap {
         appState.renderingStatus.next(false);
         appState.cam.next(name);
         material.uniforms.texture1.value = material.uniforms.texture2.value;
-        material.uniforms.mixRatio.value = 0; // Set mixRatio to 1 at the end
+        // material.uniforms.mixRatio.value = 0;
       },
       onUpdate: () => {
         // this.engine.cursor.pin.visible = false;
