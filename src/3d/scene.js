@@ -136,10 +136,6 @@ export class CreateScene {
       this.labels = new Labels(this);
       this.labels.addLabels();
 
-      // this.reflector = new Mirrors(this);
-
-      // this.showOverlayWithTextAnimation('Samara room tour');
-
       // this.tests.testContextLoss(5);
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
@@ -149,64 +145,6 @@ export class CreateScene {
       await delayMs(1);
       appState.loading.next({ isLoading: false });
     }
-  }
-
-  showOverlayWithTextAnimation(text) {
-    // Create overlay element
-    const overlay = document.createElement('div');
-    overlay.id = 'overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.background = 'rgba(224, 222, 212, 0.8)';
-    overlay.style.display = 'flex';
-    overlay.style.justifyContent = 'center';
-    overlay.style.alignItems = 'center';
-    overlay.style.zIndex = '1000';
-    overlay.style.opacity = '1'; // Initial opacity
-
-    // Create text container
-    const overlayText = document.createElement('div');
-    overlayText.id = 'overlayText';
-    overlayText.style.color = 'black';
-    overlayText.style.fontSize = '3em';
-    overlayText.style.fontFamily = 'Sans-Serif';
-    overlayText.style.textAlign = 'center';
-
-    // Append text container to overlay
-    overlay.appendChild(overlayText);
-    document.body.appendChild(overlay);
-
-    // Split text into individual letters and append to text container
-    text.split('').forEach((char) => {
-      const span = document.createElement('span');
-      span.textContent = char;
-      overlayText.appendChild(span);
-    });
-
-    // Animate each letter
-    gsap.fromTo(
-      overlayText.children,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.05,
-        onComplete: () => {
-          // Smoothly hide overlay
-          gsap.to(overlay, {
-            opacity: 0,
-            duration: 1,
-            onComplete: () => {
-              // Remove overlay after it is hidden
-              document.body.removeChild(overlay);
-            },
-          });
-        },
-      }
-    );
   }
 
   /**
