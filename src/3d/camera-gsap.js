@@ -206,7 +206,7 @@ class CameraGsap {
         appState.renderingStatus.next(false);
         appState.cam.next(name);
         material.uniforms.texture1.value = material.uniforms.texture2.value;
-        // material.uniforms.mixRatio.value = 0;
+        material.uniforms.mixRatio.value = 0;
       },
       onUpdate: () => {
         // this.engine.cursor.pin.visible = false;
