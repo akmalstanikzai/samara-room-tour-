@@ -100,6 +100,8 @@ export class Model extends Group {
         });
     });
 
+    this.group.box = this.computeBoundingBox(this.group);
+
     this.engine.scene.traverse((object) => {
       if (object instanceof Mesh) this.engine.meshes.push(object);
     });

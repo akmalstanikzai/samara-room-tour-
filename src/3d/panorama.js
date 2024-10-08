@@ -99,7 +99,7 @@ export class Panorama {
       sprite.visible = false;
       sprite.position.copy(pano.position);
       sprite.name = pano.name;
-      sprite.position.y = -0.2;
+      sprite.position.y = this.engine.models.group.box.min.y + 0.001;
       sprite.scale.setScalar(2);
       sprite.renderOrder = 10;
       this.engine.scene.add(sprite);
