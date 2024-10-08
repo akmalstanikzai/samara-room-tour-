@@ -10,11 +10,13 @@ import {
 } from 'three';
 import { params } from './settings';
 import { appState } from '../services/app-state';
+import { gsap } from 'gsap';
 
 export class CursorPin {
   constructor(engine) {
     this.engine = engine;
     this.init();
+    this.hoveredSprite = null;
   }
 
   init() {
@@ -104,12 +106,19 @@ export class CursorPin {
       if (firstIntersect.object.name.includes('Sprite')) {
         this.pin.visible = false;
         params.container.style.cursor = 'pointer';
-        // Disable camera rotation
         this.engine.controls.enabled = false;
+
+        // Animate sprite opacity to 1
+        if (this.hoveredSprite !== firstIntersect.object) {
+          if (this.hoveredSprite) {
+            this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+          }
+          this.hoveredSprite = firstIntersect.object;
+          this.animateSpriteOpacity(this.hoveredSprite, 1);
+        }
       } else {
         this.pin.visible = true;
         params.container.style.cursor = 'auto';
-        // Enable camera rotation
         this.engine.controls.enabled = true;
 
         const point = firstIntersect.point;
@@ -127,6 +136,12 @@ export class CursorPin {
         this.pin.rotation.copy(this.mouseHelper.rotation);
 
         this.intersection.intersects = true;
+
+        // Animate previously hovered sprite opacity back to 0.5
+        if (this.hoveredSprite) {
+          this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+          this.hoveredSprite = null;
+        }
       }
 
       this.intersects.length = 0;
@@ -135,7 +150,21 @@ export class CursorPin {
       this.pin.visible = false;
       // Enable camera rotation when not intersecting with any object
       this.engine.controls.enabled = true;
+
+      // Animate previously hovered sprite opacity back to 0.5
+      if (this.hoveredSprite) {
+        this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+        this.hoveredSprite = null;
+      }
     }
+  }
+
+  animateSpriteOpacity(sprite, targetOpacity) {
+    gsap.to(sprite.material, {
+      opacity: targetOpacity,
+      duration: 0.3,
+      ease: 'power2.out',
+    });
   }
 
   update() {

@@ -30,7 +30,6 @@ import {
 import { delayMs } from '../utils/delay';
 import { Assets } from './assets';
 import { Options } from '../services/options';
-import { Plan } from './plan';
 import { Labels } from './labels';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './panorama';
@@ -127,10 +126,7 @@ export class CreateScene {
       this.onResize();
       this.addSubs();
       this.startRendering();
-      await delayMs(1);
-
       this.tests = new Tests(this);
-      this.plan = new Plan(this);
 
       this.panorama = new Panorama(this);
       this.panorama.setup();
