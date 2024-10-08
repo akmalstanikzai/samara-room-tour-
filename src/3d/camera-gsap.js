@@ -196,7 +196,7 @@ class CameraGsap {
       z: positionB.z,
       onStart: () => {
         const nextTextureMap = this.engine.textures.getTexture(
-          this.engine.panorama.items.find((pano) => pano.cameraMap === name)
+          this.engine.sprites.items.find((pano) => pano.cameraMap === name)
             .textureMap
         );
         material.uniforms.texture2.value = nextTextureMap;

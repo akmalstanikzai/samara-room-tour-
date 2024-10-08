@@ -34,6 +34,7 @@ import { Labels } from './labels';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './panorama';
 import { CursorPin } from './cursor';
+import { Sprites } from './sprites';
 
 /** Main class for 3d scene */
 export class CreateScene {
@@ -129,7 +130,7 @@ export class CreateScene {
       this.tests = new Tests(this);
 
       this.panorama = new Panorama(this);
-      this.panorama.setup();
+      this.sprites = new Sprites(this);
       this.cursor = new CursorPin(this);
 
       // this.labels = new Labels(this);

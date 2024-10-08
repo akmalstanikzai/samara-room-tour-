@@ -193,7 +193,7 @@ export class CursorPin {
       );
 
       if (spriteIntersect) {
-        const cameraMap = this.engine.panorama.items.find(
+        const cameraMap = this.engine.sprites.items.find(
           (pano) => pano.name === spriteIntersect.object.name
         ).cameraMap;
         this.engine.CameraGsap.setCam(cameraMap);
@@ -216,7 +216,7 @@ export class CursorPin {
         });
 
         if (closestSprite) {
-          const cameraMap = this.engine.panorama.items.find(
+          const cameraMap = this.engine.sprites.items.find(
             (pano) => pano.name === closestSprite.name
           ).cameraMap;
           this.engine.CameraGsap.setCam(cameraMap);
