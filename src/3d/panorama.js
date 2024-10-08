@@ -91,6 +91,7 @@ export class Panorama {
           map: this.engine.textures.getTexture('pin'),
           transparent: true,
           depthTest: false,
+          opacity: 0.5,
         })
       );
 

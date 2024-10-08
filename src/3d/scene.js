@@ -42,6 +42,8 @@ export class CreateScene {
     if (settings) {
       safeMerge(params, settings);
     }
+    this.mouseDownPosition = null;
+    this.mouseMoveThreshold = 5; // pixels
   }
 
   /**
@@ -134,8 +136,8 @@ export class CreateScene {
       this.panorama.setup();
       this.cursor = new CursorPin(this);
 
-      this.labels = new Labels(this);
-      this.labels.addLabels();
+      // this.labels = new Labels(this);
+      // this.labels.addLabels();
 
       // this.tests.testContextLoss(5);
       // this.tests.testDestroy(5);
@@ -148,9 +150,10 @@ export class CreateScene {
         }
       });
 
-      this.labels.labels.forEach((label) => {
-        label.visible = true;
-      });
+      this.labels &&
+        this.labels.labels.forEach((label) => {
+          label.visible = true;
+        });
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -250,14 +253,30 @@ export class CreateScene {
         eventName: 'mousemove',
         eventFunction: (e) => {
           this.cursor.onMove(e);
+          if (this.mouseDownPosition) {
+            const dx = e.clientX - this.mouseDownPosition.x;
+            const dy = e.clientY - this.mouseDownPosition.y;
+            if (Math.sqrt(dx * dx + dy * dy) > this.mouseMoveThreshold) {
+              this.mouseDownPosition = null;
+            }
+          }
         },
       },
-
       {
         eventTarget: params.container,
         eventName: 'mousedown',
         eventFunction: (e) => {
-          this.cursor.onClick(e);
+          this.mouseDownPosition = { x: e.clientX, y: e.clientY };
+        },
+      },
+      {
+        eventTarget: params.container,
+        eventName: 'mouseup',
+        eventFunction: (e) => {
+          if (this.mouseDownPosition) {
+            this.cursor.onClick(e);
+          }
+          this.mouseDownPosition = null;
         },
       },
       {

@@ -155,28 +155,44 @@ export class CursorPin {
   }
 
   onClick(e) {
-    // const containerRect = params.container.getBoundingClientRect();
-    // const containerX = containerRect.left;
-    // const containerY = containerRect.top;
-    // const mouseX = e.clientX - containerX;
-    // const mouseY = e.clientY - containerY;
-
-    // this.mouse.x = (mouseX / params.container.clientWidth) * 2 - 1;
-    // this.mouse.y = -(mouseY / params.container.clientHeight) * 2 + 1;
-    // this.raycaster.setFromCamera(this.mouse, this.engine.camera);
-
     this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
 
     if (this.intersects.length > 0) {
-      console.log(this.intersects[0].object.name);
-      this.intersects.forEach((object) => {
-        if (object.object.name.includes('Sprite')) {
+      // Check all intersected objects for Sprites
+      const spriteIntersect = this.intersects.find((intersect) =>
+        intersect.object.name.includes('Sprite')
+      );
+
+      if (spriteIntersect) {
+        const cameraMap = this.engine.panorama.items.find(
+          (pano) => pano.name === spriteIntersect.object.name
+        ).cameraMap;
+        this.engine.CameraGsap.setCam(cameraMap);
+      } else {
+        // If no Sprite found, find the closest Sprite
+        const clickPoint = this.intersects[0].point;
+        let closestSprite = null;
+        let closestDistance = Infinity;
+
+        const sprites = this.engine.meshes.filter((mesh) =>
+          mesh.name.includes('Sprite')
+        );
+
+        sprites.forEach((sprite) => {
+          const distance = clickPoint.distanceTo(sprite.position);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestSprite = sprite;
+          }
+        });
+
+        if (closestSprite) {
           const cameraMap = this.engine.panorama.items.find(
-            (pano) => pano.name === object.object.name
+            (pano) => pano.name === closestSprite.name
           ).cameraMap;
           this.engine.CameraGsap.setCam(cameraMap);
         }
-      });
+      }
     }
   }
 }
