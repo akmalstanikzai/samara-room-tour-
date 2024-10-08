@@ -660,7 +660,7 @@ const params = {
         {
           name: 'studio',
           totalAssetsCount: 11,
-          path: '1B_roomtour.glb',
+          path: '1B_roomtour_new.glb',
           textures: [],
         },
       ],

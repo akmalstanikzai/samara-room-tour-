@@ -68,7 +68,7 @@ export class cameraControls {
       ARROW_RIGHT: 39,
       ARROW_DOWN: 40,
     };
-    this.holdIntervalDelay = 0.001;
+    this.holdIntervalDelay = 0.01;
 
     this.wKey = new holdEvent.KeyboardKeyHold(KEYCODE.W, 10);
     this.aKey = new holdEvent.KeyboardKeyHold(KEYCODE.A, 10);

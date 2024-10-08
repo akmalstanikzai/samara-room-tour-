@@ -9,6 +9,7 @@ import {
   Color,
   Vector2,
   LinearSRGBColorSpace,
+  BoxHelper,
 } from 'three';
 import { loadGltf } from './model-loader';
 import { params } from './settings';
@@ -99,8 +100,11 @@ export class Model extends Group {
           });
         });
     });
+    // this.centerModels(this.group);
 
     this.group.box = this.computeBoundingBox(this.group);
+
+    console.log(this.group.box);
 
     this.engine.scene.traverse((object) => {
       if (object instanceof Mesh) this.engine.meshes.push(object);
@@ -116,12 +120,12 @@ export class Model extends Group {
     return new Box3().setFromObject(obj);
   }
 
-  centerModels(model, adjustX, adjustY, adjustZ) {
+  centerModels(model, adjustX = 0, adjustY = 0, adjustZ = 0) {
     const tempBox = new Box3();
     const box = tempBox.setFromObject(model);
     const center = box.getCenter(new Vector3());
-    // model.position.x += this.engine.scene.position.x - center.x + adjustX;
+    model.position.x += this.engine.scene.position.x - center.x + adjustX;
     model.position.y += this.engine.scene.position.y - center.y + adjustY;
-    // model.position.z += this.engine.scene.position.z - center.z + adjustZ;
+    model.position.z += this.engine.scene.position.z - center.z + adjustZ;
   }
 }

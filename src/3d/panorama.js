@@ -90,7 +90,7 @@ export class Panorama {
         new MeshBasicMaterial({
           map: this.engine.textures.getTexture('pin'),
           transparent: true,
-          depthTest: false,
+          // depthTest: false,
           opacity: 0.5,
         })
       );
@@ -99,7 +99,7 @@ export class Panorama {
       sprite.visible = false;
       sprite.position.copy(pano.position);
       sprite.name = pano.name;
-      sprite.position.y = this.engine.models.group.box.min.y + 0.001;
+      sprite.position.y = this.engine.models.group.box.min.y + 0.6;
       sprite.scale.setScalar(2);
       sprite.renderOrder = 10;
       this.engine.scene.add(sprite);
@@ -129,6 +129,7 @@ export class Panorama {
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
     this.engine.scene.add(mesh);
+    // this.engine.models.centerModels(mesh);
   }
 
   toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {
