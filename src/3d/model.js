@@ -95,6 +95,10 @@ export class Model extends Group {
               object.material.transparent = true;
               object.material.opacity = 0.5;
               object.visible = false;
+              object.renderOrder = 10;
+            }
+            if (object.material && object.material.name === 'Tables') {
+              object.renderOrder = 20;
             }
             this.group.add(object.clone());
           });
@@ -107,7 +111,12 @@ export class Model extends Group {
     console.log(this.group.box);
 
     this.engine.scene.traverse((object) => {
-      if (object instanceof Mesh) this.engine.meshes.push(object);
+      if (
+        object instanceof Mesh &&
+        object.material
+        // && object.material.name !== 'Tables'
+      )
+        this.engine.meshes.push(object);
     });
     console.log(this.engine.meshes);
   }

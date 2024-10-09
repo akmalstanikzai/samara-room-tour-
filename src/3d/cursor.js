@@ -29,11 +29,11 @@ export class CursorPin {
       transparent: true,
       opacity: 0.8,
       depthWrite: false,
-      depthTest: false,
+      // depthTest: false,
     });
     this.pin = new Mesh(geometry, material);
     this.pin.visible = false;
-    this.pin.renderOrder = 50;
+    this.pin.renderOrder = 15;
     this.pin.name = 'pin';
     this.pin.scale.setScalar(3);
     this.engine.scene.add(this.pin);
@@ -80,9 +80,6 @@ export class CursorPin {
     this.raycaster.setFromCamera(this.mouse, this.engine.camera);
     const visibleObjects = this.engine.meshes.filter(
       (mesh) => mesh.material && mesh.material.opacity > 0.3
-
-      // &&  mesh.material.name !== 'WoodCh_S_studio' &&
-      // mesh.material.name !== 'Chair_studio'
     );
     this.raycaster.intersectObjects(visibleObjects, false, this.intersects);
 

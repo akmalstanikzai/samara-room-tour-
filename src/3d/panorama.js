@@ -42,20 +42,4 @@ export class Panorama {
     this.engine.scene.add(mesh);
     // this.engine.models.centerModels(mesh);
   }
-
-  toggleVisibility(name = this.name === 'pano' ? '3d' : 'pano') {
-    this.name = name;
-    const mesh = this.engine.scene.getObjectByName('pano');
-    if (mesh) {
-      if (name === 'pano') {
-        mesh.visible = true;
-        this.engine.models.visible = false;
-      }
-
-      if (name === '3d') {
-        mesh.visible = false;
-        this.engine.models.visible = true;
-      }
-    }
-  }
 }
