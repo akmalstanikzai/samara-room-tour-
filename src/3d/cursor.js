@@ -1,5 +1,6 @@
 import {
   BoxGeometry,
+  Color,
   DoubleSide,
   Mesh,
   MeshNormalMaterial,
@@ -7,6 +8,9 @@ import {
   PlaneGeometry,
   Raycaster,
   Vector3,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+  Quaternion,
 } from 'three';
 import { params } from './settings';
 import { appState } from '../services/app-state';
@@ -17,19 +21,21 @@ export class CursorPin {
     this.engine = engine;
     this.init();
     this.hoveredSprite = null;
+    this.targetQuaternion = new Quaternion();
+    this.lerpFactor = 0.1; // Adjust this value to control the smoothness (0.1 = smooth, 1 = instant)
   }
 
   init() {
     const geometry = new PlaneGeometry(0.1, 0.1);
 
-    const material = new MeshPhysicalMaterial({
-      color: 0xffffff,
+    const material = new MeshBasicMaterial({
+      color: new Color(0xcccccc),
       side: DoubleSide,
       map: this.engine.textures.getTexture('cursor'),
       transparent: true,
-      opacity: 0.8,
+      // opacity: 0.8,
       depthWrite: false,
-      // depthTest: false,
+      depthTest: false,
     });
     this.pin = new Mesh(geometry, material);
     this.pin.visible = false;
@@ -130,7 +136,12 @@ export class CursorPin {
         this.mouseHelper.lookAt(normal);
 
         this.pin.position.copy(this.intersection.point);
-        this.pin.rotation.copy(this.mouseHelper.rotation);
+
+        // Store the target rotation
+        this.targetQuaternion.setFromEuler(this.mouseHelper.rotation);
+
+        // Don't copy rotation directly here, we'll interpolate in the update method
+        // this.pin.rotation.copy(this.mouseHelper.rotation);
 
         this.intersection.intersects = true;
 
@@ -159,12 +170,12 @@ export class CursorPin {
   animateSpriteOpacity(sprite, targetOpacity) {
     gsap.to(sprite.material, {
       opacity: targetOpacity,
-      duration: 0.3,
+      duration: 1,
       ease: 'power2.out',
     });
   }
 
-  update() {
+  update(deltaTime) {
     const currentCam = appState.cam.value;
 
     // this.engine.panorama.items.forEach((item) => {
@@ -178,6 +189,9 @@ export class CursorPin {
     //     helper.material.opacity += (0 - helper.material.opacity) * 0.1;
     //   }
     // });
+
+    // Smoothly interpolate the rotation
+    this.pin.quaternion.slerp(this.targetQuaternion, this.lerpFactor);
   }
 
   onClick(e) {

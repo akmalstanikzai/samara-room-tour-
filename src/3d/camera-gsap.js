@@ -159,8 +159,8 @@ class CameraGsap {
     return tl;
   }
 
-  setCam(name, firstInit) {
-    if (this.moveGsap.isActive()) return;
+  async setCam(name, firstInit) {
+    if (this.moveGsap.isActive()) await this.moveGsap;
     const material = this.engine.panoMesh.material;
 
     const { position, target } = params.cameras.studio[name];
@@ -210,7 +210,7 @@ class CameraGsap {
       },
       onUpdate: () => {
         // this.engine.cursor.pin.visible = false;
-        this.engine.controls.moveTo(obj.x, obj.y, obj.z, false);
+        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
 
         // console.log(material.uniforms.mixRatio.value);
 

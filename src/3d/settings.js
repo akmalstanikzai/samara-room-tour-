@@ -164,8 +164,8 @@ const params = {
         y: 0,
         z: 0,
       },
-      smoothTime: 0.07,
-      draggingSmoothTime: 0.07,
+      smoothTime: 0.3,
+      draggingSmoothTime: 0.3,
       polarRotateSpeed: 1,
       azimuthRotateSpeed: 1,
       maxDistance: 4,
@@ -376,8 +376,8 @@ const params = {
     opacity: 0.8,
   },
   textures: [
-    { path: 'pin.png', name: 'pin' },
-    { path: 'cursor.png', name: 'cursor' },
+    { path: 'pin.png', name: 'pin', anisotropy: true },
+    { path: 'cursor.png', name: 'cursor', anisotropy: true },
 
     {
       path: '241002_samara_360 Living 02.webp',

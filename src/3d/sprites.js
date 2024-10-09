@@ -100,7 +100,7 @@ export class Sprites {
       sprite.position.copy(pano.position);
       sprite.name = pano.name;
       sprite.position.y = this.engine.models.group.box.min.y + 0.6;
-      sprite.scale.setScalar(2);
+      sprite.scale.setScalar(3.25);
       sprite.renderOrder = 10;
       this.engine.scene.add(sprite);
       this.engine.meshes.push(sprite);
