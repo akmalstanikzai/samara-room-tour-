@@ -160,7 +160,7 @@ class CameraGsap {
   }
 
   async setCam(name, firstInit) {
-    if (this.moveGsap.isActive()) await this.moveGsap;
+    if (this.moveGsap.isActive()) return;
     const material = this.engine.panoMesh.material;
 
     const { position, target } = params.cameras.studio[name];
