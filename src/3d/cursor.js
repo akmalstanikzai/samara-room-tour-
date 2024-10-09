@@ -99,8 +99,10 @@ export class CursorPin {
       const firstIntersect = this.intersects[0];
       if (firstIntersect.object.name.includes('Sprite')) {
         this.pin.visible = false;
-        params.container.style.cursor = 'pointer';
-        this.engine.controls.enabled = false;
+        if (!userDevice.isMobile) {
+          params.container.style.cursor = 'pointer';
+          this.engine.controls.enabled = false;
+        }
 
         // Animate sprite opacity to 1
         if (this.hoveredSprite !== firstIntersect.object) {
@@ -111,9 +113,11 @@ export class CursorPin {
           this.animateSpriteOpacity(this.hoveredSprite, 1);
         }
       } else {
-        if (!userDevice.isMobile) this.pin.visible = true;
-        params.container.style.cursor = 'auto';
-        this.engine.controls.enabled = true;
+        if (!userDevice.isMobile) {
+          this.pin.visible = true;
+          params.container.style.cursor = 'auto';
+          this.engine.controls.enabled = true;
+        }
 
         const point = firstIntersect.point;
         this.mouseHelper.position.copy(point);

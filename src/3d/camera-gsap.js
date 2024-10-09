@@ -125,7 +125,7 @@ class CameraGsap {
       t: 1,
       duration: !animate ? 0.01 : 0.3,
       onStart: () => {
-        this.engine.controls.enabled = false;
+        // this.engine.controls.enabled = false;
         appState.renderingStatus.next(true);
       },
       onComplete: () => {
