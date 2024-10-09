@@ -15,6 +15,7 @@ import {
 import { params } from './settings';
 import { appState } from '../services/app-state';
 import { gsap } from 'gsap';
+import { userDevice } from '../utils/browser-detection';
 
 export class CursorPin {
   constructor(engine) {
@@ -64,16 +65,6 @@ export class CursorPin {
   }
 
   onMove(e) {
-    if (
-      appState.cam.value === 'outside' ||
-      appState.cam.value === 'floor plan'
-    ) {
-      this.pin.visible = false;
-      params.container.style.cursor = 'auto';
-
-      return;
-    }
-
     const containerRect = params.container.getBoundingClientRect();
     const containerX = containerRect.left;
     const containerY = containerRect.top;
@@ -120,7 +111,7 @@ export class CursorPin {
           this.animateSpriteOpacity(this.hoveredSprite, 1);
         }
       } else {
-        this.pin.visible = true;
+        if (!userDevice.isMobile) this.pin.visible = true;
         params.container.style.cursor = 'auto';
         this.engine.controls.enabled = true;
 

@@ -37,7 +37,7 @@
     "webpack-plugin-hash-output": "^3.2.1"
   },
   "dependencies": {
-    "camera-controls": "^2.8.3",
+    "camera-controls": "^2.9.0",
     "glsl-parser": "^2.0.1",
     "glslify-loader": "^2.0.0",
     "gsap": "^3.12.5",
