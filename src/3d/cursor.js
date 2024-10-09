@@ -85,7 +85,7 @@ export class CursorPin {
 
     this.raycaster.setFromCamera(this.mouse, this.engine.camera);
     const visibleObjects = this.engine.meshes.filter(
-      (mesh) => mesh.material && mesh.material.opacity > 0.3
+      (mesh) => mesh.material && mesh.material.opacity > 0.2
     );
     this.raycaster.intersectObjects(visibleObjects, false, this.intersects);
 
@@ -147,7 +147,7 @@ export class CursorPin {
 
         // Animate previously hovered sprite opacity back to 0.5
         if (this.hoveredSprite) {
-          this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+          this.animateSpriteOpacity(this.hoveredSprite, 0.3);
           this.hoveredSprite = null;
         }
       }
@@ -161,7 +161,7 @@ export class CursorPin {
 
       // Animate previously hovered sprite opacity back to 0.5
       if (this.hoveredSprite) {
-        this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+        this.animateSpriteOpacity(this.hoveredSprite, 0.3);
         this.hoveredSprite = null;
       }
     }
