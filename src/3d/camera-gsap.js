@@ -125,7 +125,7 @@ class CameraGsap {
       t: 1,
       duration: !animate ? 0.01 : 0.3,
       onStart: () => {
-        // this.engine.controls.enabled = false;
+        this.engine.controls.enabled = false;
         appState.renderingStatus.next(true);
       },
       onComplete: () => {
@@ -194,8 +194,7 @@ class CameraGsap {
       z: positionB.z,
       onStart: () => {
         const nextTextureMap = this.engine.textures.getTexture(
-          this.engine.sprites.items.find((pano) => pano.cameraMap === name)
-            .textureMap
+          params.pano().find((pano) => pano.cameraMap === name).textureMap
         );
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);

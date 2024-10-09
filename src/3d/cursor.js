@@ -171,20 +171,6 @@ export class CursorPin {
   }
 
   update(deltaTime) {
-    const currentCam = appState.cam.value;
-
-    // this.engine.panorama.items.forEach((item) => {
-    //   if (item.cameraMap === currentCam) {
-    //     item.visible.forEach((el) => {
-    //       const helper = this.engine.scene.getObjectByName(el);
-    //       helper.material.opacity += (1 - helper.material.opacity) * 0.1;
-    //     });
-    //   } else {
-    //     const helper = this.engine.scene.getObjectByName(item.name);
-    //     helper.material.opacity += (0 - helper.material.opacity) * 0.1;
-    //   }
-    // });
-
     // Smoothly interpolate the rotation
     this.pin.quaternion.slerp(this.targetQuaternion, this.lerpFactor);
   }
@@ -199,9 +185,9 @@ export class CursorPin {
       );
 
       if (spriteIntersect) {
-        const cameraMap = this.engine.sprites.items.find(
-          (pano) => pano.name === spriteIntersect.object.name
-        ).cameraMap;
+        const cameraMap = params
+          .pano()
+          .find((pano) => pano.name === spriteIntersect.object.name).cameraMap;
         this.engine.CameraGsap.setCam(cameraMap);
       } else {
         // If no Sprite found, find the closest Sprite
@@ -222,9 +208,9 @@ export class CursorPin {
         });
 
         if (closestSprite) {
-          const cameraMap = this.engine.sprites.items.find(
-            (pano) => pano.name === closestSprite.name
-          ).cameraMap;
+          const cameraMap = params
+            .pano()
+            .find((pano) => pano.name === closestSprite.name).cameraMap;
           this.engine.CameraGsap.setCam(cameraMap);
         }
       }

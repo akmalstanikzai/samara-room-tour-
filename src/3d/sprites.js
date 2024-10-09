@@ -17,74 +17,7 @@ export class Sprites {
   }
 
   async setup() {
-    this.items = [
-      {
-        name: 'Sprite_pano1',
-        cameraMap: '360_Bathroom_01',
-        textureMap: '241002_samara_360 Bathroom 01',
-        position: {
-          x: params.cameras.studio['360_Bathroom_01'].position.x,
-          y: params.cameras.studio['360_Bathroom_01'].position.y,
-          z: params.cameras.studio['360_Bathroom_01'].position.z,
-        },
-      },
-      {
-        name: 'Sprite_pano2',
-        cameraMap: '360_Living_02',
-        textureMap: '241002_samara_360 Living 02',
-        position: {
-          x: params.cameras.studio['360_Living_02'].position.x,
-          y: params.cameras.studio['360_Living_02'].position.y,
-          z: params.cameras.studio['360_Living_02'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano3',
-        cameraMap: '360_Entry_01',
-        textureMap: '241002_samara_360 Entry 01',
-        position: {
-          x: params.cameras.studio['360_Entry_01'].position.x,
-          y: params.cameras.studio['360_Entry_01'].position.y,
-          z: params.cameras.studio['360_Entry_01'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano4',
-        cameraMap: '360_Living_01',
-        textureMap: '241002_samara_360 Living 01',
-        position: {
-          x: params.cameras.studio['360_Living_01'].position.x,
-          y: params.cameras.studio['360_Living_01'].position.y,
-          z: params.cameras.studio['360_Living_01'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano5',
-        cameraMap: '360_Living_03',
-        textureMap: '241002_samara_360 Living 03',
-        position: {
-          x: params.cameras.studio['360_Living_03'].position.x,
-          y: params.cameras.studio['360_Living_03'].position.y,
-          z: params.cameras.studio['360_Living_03'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano6',
-        cameraMap: '360_Bedroom_01',
-        textureMap: '241002_samara_360 Bedroom 01',
-        position: {
-          x: params.cameras.studio['360_Bedroom_01'].position.x,
-          y: params.cameras.studio['360_Bedroom_01'].position.y,
-          z: params.cameras.studio['360_Bedroom_01'].position.z,
-        },
-      },
-    ];
-
-    this.items.forEach((pano) => {
+    params.pano().forEach((pano) => {
       const sprite = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({
