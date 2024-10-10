@@ -61,9 +61,7 @@ export class Panorama {
 
   async setup() {
     try {
-      const response = await fetch(
-        `${params.paths.assets_path}/panoItems.json`
-      );
+      const response = await fetch(`${params.paths.assets_path}panoItems.json`);
       const data = await response.json();
 
       console.log(data);
