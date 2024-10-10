@@ -185,10 +185,10 @@ export class CursorPin {
       );
 
       if (spriteIntersect) {
-        const cameraMap = params
-          .pano()
-          .find((pano) => pano.name === spriteIntersect.object.name).cameraMap;
-        this.engine.CameraGsap.setCam(cameraMap);
+        const cameraMap = params.pano.find((pano) =>
+          spriteIntersect.object.name.includes(pano.name)
+        );
+        this.engine.CameraGsap.setCam(cameraMap.name);
       } else {
         // If no Sprite found, find the closest Sprite
         const clickPoint = this.intersects[0].point;
@@ -208,10 +208,10 @@ export class CursorPin {
         });
 
         if (closestSprite) {
-          const cameraMap = params
-            .pano()
-            .find((pano) => pano.name === closestSprite.name).cameraMap;
-          this.engine.CameraGsap.setCam(cameraMap);
+          const cameraMap = params.pano.find((pano) =>
+            closestSprite.name.includes(pano.name)
+          );
+          this.engine.CameraGsap.setCam(cameraMap.name);
         }
       }
     }

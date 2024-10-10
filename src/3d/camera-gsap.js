@@ -94,78 +94,25 @@ class CameraGsap {
     return this.engine.controls;
   }
 
-  /**
-   * Moves camera to specified position
-   * @param {string} positionName  'front', 'left', 'roof' Optional (moves camera to named position)
-   * @param {boolean} animate Whether to animate the camera movement (default is true)
-   */
-
-  async setPosition(positionName, animate = true) {
-    const positionA = this.engine.controls.getPosition();
-    const positionB = params.cameras[positionName].position;
-
-    const deviation = 0.05;
-
-    if (
-      Math.abs(positionA.x - positionB.x) <= deviation &&
-      Math.abs(positionA.y - positionB.y) <= deviation &&
-      Math.abs(positionA.z - positionB.z) <= deviation
-    ) {
-      return 'Positions are same';
-    }
-
-    const obj = {
-      t: 0,
-    };
-    const targetA = this.engine.controls.getTarget();
-    const targetB = params.cameras[positionName].target;
-
-    const tl = gsap.timeline();
-    tl.to(obj, {
-      t: 1,
-      duration: !animate ? 0.01 : 0.3,
-      onStart: () => {
-        this.engine.controls.enabled = false;
-        appState.renderingStatus.next(true);
-      },
-      onComplete: () => {
-        this.engine.controls.enabled = true;
-        appState.renderingStatus.next(false);
-      },
-      onUpdate: () => {
-        appState.renderingStatus.next(true);
-        const progress = tl.progress();
-        this.engine.controls.lerpLookAt(
-          positionA.x,
-          positionA.y,
-          positionA.z,
-          targetA.x,
-          targetA.y,
-          targetA.z,
-          positionB.x,
-          positionB.y,
-          positionB.z,
-          targetB.x,
-          targetB.y,
-          targetB.z,
-          progress,
-          animate
-        );
-      },
-    });
-    this.engine.update();
-    return tl;
-  }
-
   async setCam(name, firstInit) {
     if (this.moveGsap.isActive()) return;
+
+    if (!this.cameraPositions) {
+      this.cameraPositions = {};
+
+      params.pano.forEach((pano) => {
+        this.cameraPositions[pano.name] = {
+          position: new Vector3().copy(pano.position),
+          target: new Vector3(pano.target.x, pano.target.y, pano.target.z),
+        };
+      });
+    }
+
     const material = this.engine.panoMesh.material;
 
-    const { position, target } = params.cameras.studio[name];
+    const { position: positionB, target: targetB } = this.cameraPositions[name];
     const positionA = this.engine.controls.getPosition();
-    const positionB = { x: position.x, y: position.y, z: position.z };
-    const targetA = this.engine.controls.getTarget();
-    const targetB = { x: target.x, y: target.y, z: target.z };
+    // const targetA = this.engine.controls.getTarget();
 
     if (firstInit) {
       this.engine.controls.setLookAt(
@@ -194,7 +141,7 @@ class CameraGsap {
       z: positionB.z,
       onStart: () => {
         const nextTextureMap = this.engine.textures.getTexture(
-          params.pano().find((pano) => pano.cameraMap === name).textureMap
+          params.pano.find((pano) => pano.name === name).textureMap
         );
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);

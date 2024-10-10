@@ -30,7 +30,6 @@ import {
 import { delayMs } from '../utils/delay';
 import { Assets } from './assets';
 import { Options } from '../services/options';
-import { Labels } from './labels';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './panorama';
 import { CursorPin } from './cursor';
@@ -133,9 +132,6 @@ export class CreateScene {
       this.sprites = new Sprites(this);
       this.cursor = new CursorPin(this);
 
-      // this.labels = new Labels(this);
-      // this.labels.addLabels();
-
       // this.tests.testContextLoss(5);
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
@@ -146,11 +142,6 @@ export class CreateScene {
           object.visible = true;
         }
       });
-
-      this.labels &&
-        this.labels.labels.forEach((label) => {
-          label.visible = true;
-        });
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -429,7 +420,6 @@ export class CreateScene {
     }
 
     this.camera.updateProjectionMatrix();
-    this.labels && this.labels.onResize(width, height);
     this.update();
   }
 

@@ -200,79 +200,27 @@ const params = {
       maxAzimuthAngle: Infinity,
     },
   },
-  pano: () => {
+  get pano() {
     return [
       {
-        name: 'Sprite_pano1',
-        cameraMap: '360_Bathroom_01',
+        name: '360_Bathroom_01',
         textureMap: '241002_samara_360 Bathroom 01',
-        position: {
-          x: params.cameras.studio['360_Bathroom_01'].position.x,
-          y: params.cameras.studio['360_Bathroom_01'].position.y,
-          z: params.cameras.studio['360_Bathroom_01'].position.z,
+        get position() {
+          return window.engine.scene
+            .getObjectByName('360_Bathroom_01')
+            .getWorldPosition(new Vector3());
+        },
+        get target() {
+          return {
+            x: this.position.x + EPS * 15,
+            y: this.position.y + EPS * 0.0001,
+            z: this.position.z - EPS,
+          };
         },
       },
       {
-        name: 'Sprite_pano2',
-        cameraMap: '360_Living_02',
+        name: '360_Living_02',
         textureMap: '241002_samara_360 Living 02',
-        position: {
-          x: params.cameras.studio['360_Living_02'].position.x,
-          y: params.cameras.studio['360_Living_02'].position.y,
-          z: params.cameras.studio['360_Living_02'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano3',
-        cameraMap: '360_Entry_01',
-        textureMap: '241002_samara_360 Entry 01',
-        position: {
-          x: params.cameras.studio['360_Entry_01'].position.x,
-          y: params.cameras.studio['360_Entry_01'].position.y,
-          z: params.cameras.studio['360_Entry_01'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano4',
-        cameraMap: '360_Living_01',
-        textureMap: '241002_samara_360 Living 01',
-        position: {
-          x: params.cameras.studio['360_Living_01'].position.x,
-          y: params.cameras.studio['360_Living_01'].position.y,
-          z: params.cameras.studio['360_Living_01'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano5',
-        cameraMap: '360_Living_03',
-        textureMap: '241002_samara_360 Living 03',
-        position: {
-          x: params.cameras.studio['360_Living_03'].position.x,
-          y: params.cameras.studio['360_Living_03'].position.y,
-          z: params.cameras.studio['360_Living_03'].position.z,
-        },
-      },
-
-      {
-        name: 'Sprite_pano6',
-        cameraMap: '360_Bedroom_01',
-        textureMap: '241002_samara_360 Bedroom 01',
-        position: {
-          x: params.cameras.studio['360_Bedroom_01'].position.x,
-          y: params.cameras.studio['360_Bedroom_01'].position.y,
-          z: params.cameras.studio['360_Bedroom_01'].position.z,
-        },
-      },
-    ];
-  },
-
-  cameras: {
-    studio: {
-      '360_Living_02': {
-        type: 'interior',
         get position() {
           return window.engine.scene
             .getObjectByName('360_Living_02')
@@ -286,8 +234,27 @@ const params = {
           };
         },
       },
-      '360_Living_01': {
-        type: 'interior',
+
+      {
+        name: '360_Entry_01',
+        textureMap: '241002_samara_360 Entry 01',
+        get position() {
+          return window.engine.scene
+            .getObjectByName('360_Entry_01')
+            .getWorldPosition(new Vector3());
+        },
+        get target() {
+          return {
+            x: this.position.x + EPS * 15,
+            y: this.position.y + EPS * 0.0001,
+            z: this.position.z - EPS,
+          };
+        },
+      },
+
+      {
+        name: '360_Living_01',
+        textureMap: '241002_samara_360 Living 01',
         get position() {
           return window.engine.scene
             .getObjectByName('360_Living_01')
@@ -302,24 +269,9 @@ const params = {
         },
       },
 
-      '360_Bedroom_01': {
-        type: 'interior',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Bedroom_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-
-      '360_Living_03': {
-        type: 'interior',
+      {
+        name: '360_Living_03',
+        textureMap: '241002_samara_360 Living 03',
         get position() {
           return window.engine.scene
             .getObjectByName('360_Living_03')
@@ -334,79 +286,23 @@ const params = {
         },
       },
 
-      '360_Bathroom_01': {
-        type: 'interior',
+      {
+        name: '360_Bedroom_01',
+        textureMap: '241002_samara_360 Bedroom 01',
         get position() {
           return window.engine.scene
-            .getObjectByName('360_Bathroom_01')
+            .getObjectByName('360_Bedroom_01')
             .getWorldPosition(new Vector3());
         },
         get target() {
           return {
-            x: this.position.x + EPS * 20,
+            x: this.position.x + EPS * 15,
             y: this.position.y + EPS * 0.0001,
             z: this.position.z - EPS,
           };
         },
       },
-
-      '360_Entry_01': {
-        type: 'interior',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Entry_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 20,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-    },
-
-    'floor plan': {
-      position: {
-        x: 0.03154852632367916,
-        y: 12.007266406546096,
-        z: -0.000002439029155059685,
-      },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    front: {
-      position: { x: 0, y: 0.4188578127354573, z: 12 },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    rear: {
-      position: { x: 0, y: 0.4188578127354573, z: -12 },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    left: {
-      position: { x: -11.375, y: 0.4188578127354573, z: 0 },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    right: {
-      position: { x: 11.375, y: 0.4188578127354573, z: 0 },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    roof: {
-      position: {
-        x: 10.906420218726824,
-        y: 1.3678992277499347,
-        z: -4.81444178646579,
-      },
-      target: { x: 0, y: 0, z: 0 },
-    },
-    'roof-XL 8': {
-      position: {
-        x: -10.906420218726824,
-        y: 1.3678992277499347,
-        z: 4.81444178646579,
-      },
-      target: { x: 0, y: 0, z: 0 },
-    },
+    ];
   },
 
   environment: {

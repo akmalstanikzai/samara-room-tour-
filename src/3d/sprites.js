@@ -17,7 +17,7 @@ export class Sprites {
   }
 
   async setup() {
-    params.pano().forEach((pano) => {
+    params.pano.forEach((pano) => {
       const sprite = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({
@@ -31,10 +31,10 @@ export class Sprites {
       sprite.rotation.x = -Math.PI / 2;
       sprite.visible = false;
       sprite.position.copy(pano.position);
-      sprite.name = pano.name;
       sprite.position.y = this.engine.models.group.box.min.y + 0.6;
       sprite.scale.setScalar(3.25);
       sprite.renderOrder = 0;
+      sprite.name = `Sprite_${pano.name}`;
       this.engine.scene.add(sprite);
       this.engine.meshes.push(sprite);
     });
