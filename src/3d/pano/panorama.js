@@ -68,12 +68,13 @@ export class Panorama {
 
       console.log(data);
 
-      this.panoItems = data['1B'].pano.map(({ name, textureMap, visible }) =>
-        this.createPanoItem(name, textureMap, visible)
+      this.panoItems = data['1B'].hotspots.map(
+        ({ name, textureMap, visible }) =>
+          this.createPanoItem(name, textureMap, visible)
       );
 
       // Create texture objects in a new array
-      const newTextureObjects = data['1B'].pano.map(({ textureMap }) =>
+      const newTextureObjects = this.panoItems.map(({ textureMap }) =>
         this.createTextureObject(textureMap)
       );
 
