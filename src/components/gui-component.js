@@ -861,8 +861,6 @@ export class GuiComponent extends LitElement {
   }
 
   initGui() {
-    this.textures = new Textures();
-
     this.gui = new GUI({
       load: JSON,
       autoPlace: false,

@@ -31,7 +31,7 @@ import { delayMs } from '../utils/delay';
 import { Assets } from './assets';
 import { Options } from '../services/options';
 import { PostProcessing } from './post-processing';
-import { Panorama } from './panorama';
+import { Panorama } from './pano/panorama';
 
 /** Main class for 3d scene */
 export class CreateScene {

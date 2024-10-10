@@ -1,4 +1,4 @@
-import { params } from './settings';
+import { params } from '../settings';
 import lerpFrag from './shaders/lerp/lerp.frag';
 import lerpVert from './shaders/lerp/lerp.vert';
 import {
@@ -11,10 +11,10 @@ import {
   Vector3,
 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
-import { appState } from '../services/app-state';
+import { appState } from '../../services/app-state';
 import { CursorPin } from './cursor';
 import { Hotspots } from './hotspots';
-import { loadGltf } from './model-loader';
+import { loadGltf } from '../model-loader';
 const EPS = 0.000011177461712 * 0.0001;
 
 export class Panorama {

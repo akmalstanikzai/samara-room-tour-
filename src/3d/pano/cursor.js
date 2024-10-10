@@ -12,10 +12,10 @@ import {
   MeshLambertMaterial,
   Quaternion,
 } from 'three';
-import { params } from './settings';
-import { appState } from '../services/app-state';
+import { params } from '../settings';
+import { appState } from '../../services/app-state';
 import { gsap } from 'gsap';
-import { userDevice } from '../utils/browser-detection';
+import { userDevice } from '../../utils/browser-detection';
 
 export class CursorPin {
   constructor(engine) {
