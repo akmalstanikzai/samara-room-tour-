@@ -108,8 +108,6 @@ export class Model extends Group {
 
     this.group.box = this.computeBoundingBox(this.group);
 
-    console.log(this.group.box);
-
     this.engine.scene.traverse((object) => {
       if (
         object instanceof Mesh &&
