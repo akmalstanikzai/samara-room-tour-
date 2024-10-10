@@ -116,7 +116,6 @@ export class Model extends Group {
       )
         this.engine.meshes.push(object);
     });
-    console.log(this.engine.meshes);
   }
 
   getAssets(name = appState.complectation.value.layout) {

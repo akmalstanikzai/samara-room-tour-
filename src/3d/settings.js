@@ -43,6 +43,7 @@ const params = {
     models_path: '/models/',
     textures_path: '/textures/',
     decoders_path: '/decoders/',
+    assets_path: '/assets/',
   },
   loadOnDemand: {
     enabled: true,

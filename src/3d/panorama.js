@@ -59,7 +59,9 @@ export class Panorama {
 
   async setup() {
     try {
-      const response = await fetch('./json/panoItems.json');
+      const response = await fetch(
+        `${params.paths.assets_path}/panoItems.json`
+      );
       const data = await response.json();
 
       params.pano = data.map(({ name, textureMap, visible }) =>
@@ -83,7 +85,6 @@ export class Panorama {
     } catch (error) {
       console.error('Error loading panoItems.json:', error);
     }
-    console.log(params.textures);
     this.hotspots = new Hotspots(this.engine);
     this.cursor = new CursorPin(this.engine);
     const geometry = new SphereGeometry(6, 200, 200);
@@ -169,7 +170,6 @@ export class Panorama {
             object.visible = false;
           }
         });
-        console.log(params.pano);
         params.pano.forEach((pano) => {
           if (pano.name === name) {
             pano.visible.forEach((item) => {

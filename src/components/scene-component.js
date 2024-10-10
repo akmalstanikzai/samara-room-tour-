@@ -139,6 +139,7 @@ export class SceneComponent extends LitElement {
       loading: { state: true },
       errors: { state: true },
       initialState: {},
+      url: {},
     };
   }
 
@@ -195,6 +196,17 @@ export class SceneComponent extends LitElement {
       'secondary bedroom': 'double doors',
       support: 'Dark bronze base',
     };
+
+    if (this.url) {
+      params.paths = {
+        models_path: this.url + 'models/',
+        textures_path: this.url + 'textures/',
+        decoders_path: this.url + 'decoders/',
+        assets_path: this.url + 'assets/',
+      };
+    }
+
+    console.log(this.url);
 
     appState.complectation = new BehaviorSubject(obj);
 
