@@ -21,7 +21,7 @@ export class CursorPin {
   constructor(engine) {
     this.engine = engine;
     this.init();
-    this.hoveredSprite = null;
+    this.hoveredHotspot = null;
     this.targetQuaternion = new Quaternion();
     this.lerpFactor = 0.1; // Adjust this value to control the smoothness (0.1 = smooth, 1 = instant)
   }
@@ -81,16 +81,16 @@ export class CursorPin {
     this.raycaster.intersectObjects(visibleObjects, false, this.intersects);
 
     if (this.intersects.length > 0) {
-      // Sort intersects to prioritize Sprites
+      // Sort intersects to prioritize Hotspots
       this.intersects.sort((a, b) => {
         if (
-          a.object.name.includes('Sprite') &&
-          !b.object.name.includes('Sprite')
+          a.object.name.includes('Hotspot') &&
+          !b.object.name.includes('Hotspot')
         )
           return -1;
         if (
-          !a.object.name.includes('Sprite') &&
-          b.object.name.includes('Sprite')
+          !a.object.name.includes('Hotspot') &&
+          b.object.name.includes('Hotspot')
         )
           return 1;
         return 0;
@@ -99,7 +99,7 @@ export class CursorPin {
       const firstIntersect = this.intersects[0];
       if (
         firstIntersect.object.visible &&
-        firstIntersect.object.name.includes('Sprite')
+        firstIntersect.object.name.includes('Hotspot')
       ) {
         this.pin.visible = false;
         if (!userDevice.isMobile) {
@@ -107,13 +107,13 @@ export class CursorPin {
           this.engine.controls.enabled = false;
         }
 
-        // Animate sprite opacity to 1
-        if (this.hoveredSprite !== firstIntersect.object) {
-          if (this.hoveredSprite) {
-            this.animateSpriteOpacity(this.hoveredSprite, 0.5);
+        // Animate hotspot opacity to 1
+        if (this.hoveredHotspot !== firstIntersect.object) {
+          if (this.hoveredHotspot) {
+            this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
           }
-          this.hoveredSprite = firstIntersect.object;
-          this.animateSpriteOpacity(this.hoveredSprite, 1);
+          this.hoveredHotspot = firstIntersect.object;
+          this.animateHotspotOpacity(this.hoveredHotspot, 1);
         }
       } else {
         if (!userDevice.isMobile) {
@@ -143,10 +143,10 @@ export class CursorPin {
 
         this.intersection.intersects = true;
 
-        // Animate previously hovered sprite opacity back to 0.5
-        if (this.hoveredSprite) {
-          this.animateSpriteOpacity(this.hoveredSprite, 0.3);
-          this.hoveredSprite = null;
+        // Animate previously hovered hotspot opacity back to 0.5
+        if (this.hoveredHotspot) {
+          this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+          this.hoveredHotspot = null;
         }
       }
 
@@ -157,16 +157,16 @@ export class CursorPin {
       // Enable camera rotation when not intersecting with any object
       this.engine.controls.enabled = true;
 
-      // Animate previously hovered sprite opacity back to 0.5
-      if (this.hoveredSprite) {
-        this.animateSpriteOpacity(this.hoveredSprite, 0.3);
-        this.hoveredSprite = null;
+      // Animate previously hovered hotspot opacity back to 0.5
+      if (this.hoveredHotspot) {
+        this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+        this.hoveredHotspot = null;
       }
     }
   }
 
-  animateSpriteOpacity(sprite, targetOpacity) {
-    gsap.to(sprite.material, {
+  animateHotspotOpacity(hotspot, targetOpacity) {
+    gsap.to(hotspot.material, {
       opacity: targetOpacity,
       duration: 1,
       ease: 'power2.out',
@@ -182,40 +182,40 @@ export class CursorPin {
     this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
 
     if (this.intersects.length > 0) {
-      // Check all intersected objects for Sprites
-      const spriteIntersect = this.intersects.find(
+      // Check all intersected objects for Hotspots
+      const hotspotIntersect = this.intersects.find(
         (intersect) =>
-          intersect.object.name.includes('Sprite') && intersect.object.visible
+          intersect.object.name.includes('Hotspot') && intersect.object.visible
       );
 
-      if (spriteIntersect) {
+      if (hotspotIntersect) {
         const cameraMap = params.pano.find((pano) =>
-          spriteIntersect.object.name.includes(pano.name)
+          hotspotIntersect.object.name.includes(pano.name)
         );
-        this.engine.CameraGsap.setCam(cameraMap.name);
+        this.engine.pano.move(cameraMap.name);
       } else {
-        // If no Sprite found, find the closest visible Sprite
+        // If no Hotspot found, find the closest visible Hotspot
         const clickPoint = this.intersects[0].point;
-        let closestSprite = null;
+        let closestHotspot = null;
         let closestDistance = Infinity;
 
-        const visibleSprites = this.engine.meshes.filter(
-          (mesh) => mesh.name.includes('Sprite') && mesh.visible
+        const visibleHotspots = this.engine.meshes.filter(
+          (mesh) => mesh.name.includes('Hotspot') && mesh.visible
         );
 
-        visibleSprites.forEach((sprite) => {
-          const distance = clickPoint.distanceTo(sprite.position);
+        visibleHotspots.forEach((hostpot) => {
+          const distance = clickPoint.distanceTo(hostpot.position);
           if (distance < closestDistance) {
             closestDistance = distance;
-            closestSprite = sprite;
+            closestHotspot = hostpot;
           }
         });
 
-        if (closestSprite) {
+        if (closestHotspot) {
           const cameraMap = params.pano.find((pano) =>
-            closestSprite.name.includes(pano.name)
+            closestHotspot.name.includes(pano.name)
           );
-          this.engine.CameraGsap.setCam(cameraMap.name);
+          this.engine.pano.move(cameraMap.name);
         }
       }
     }

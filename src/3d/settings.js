@@ -2,41 +2,12 @@ import { SRGBColorSpace, NoToneMapping, Vector3 } from 'three';
 import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
-import { repeat } from 'lodash';
+import { createPanoItem, createTextureObject } from './panorama';
 import panoItems from '../json/panoItems.json';
 
 function setPixelRatio() {
   return Math.max(1, window.devicePixelRatio);
 }
-
-const EPS = 0.000011177461712 * 0.0001;
-
-const createPanoItem = (name, textureMap, visible) => ({
-  name,
-  textureMap,
-  get position() {
-    return window.engine.scene
-      .getObjectByName(name)
-      .getWorldPosition(new Vector3());
-  },
-  get target() {
-    const { x, y, z } = this.position;
-    return {
-      x: x + EPS * 15,
-      y: y + EPS * 0.0001,
-      z: z - EPS,
-    };
-  },
-  visible,
-});
-
-const createTextureObject = (textureMap) => ({
-  path: `${textureMap}.webp`,
-  name: textureMap,
-  anisotropy: true,
-  filter: true,
-  flip: true,
-});
 
 const params = {
   postProcessing: {

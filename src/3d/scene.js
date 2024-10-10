@@ -32,8 +32,6 @@ import { Assets } from './assets';
 import { Options } from '../services/options';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './panorama';
-import { CursorPin } from './cursor';
-import { Sprites } from './sprites';
 
 /** Main class for 3d scene */
 export class CreateScene {
@@ -41,8 +39,6 @@ export class CreateScene {
     if (settings) {
       safeMerge(params, settings);
     }
-    this.mouseDownPosition = null;
-    this.mouseMoveThreshold = 5; // pixels
   }
 
   /**
@@ -121,6 +117,7 @@ export class CreateScene {
       this.postprocessing = new PostProcessing(this);
       this.postprocessing.init();
 
+      this.pano = new Panorama(this);
       this.initListeners();
       this.setupPerspectiveView();
       this.onResize();
@@ -128,15 +125,11 @@ export class CreateScene {
       this.startRendering();
       this.tests = new Tests(this);
 
-      this.panorama = new Panorama(this);
-      this.sprites = new Sprites(this);
-      this.cursor = new CursorPin(this);
-
       // this.tests.testContextLoss(5);
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.CameraGsap.setCam('360_Entry_01', true);
+      this.pano.move('360_Entry_01', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -232,37 +225,6 @@ export class CreateScene {
   initListeners() {
     this.listeners = [
       {
-        eventTarget: params.container,
-        eventName: 'mousemove',
-        eventFunction: (e) => {
-          this.cursor.onMove(e);
-          if (this.mouseDownPosition) {
-            const dx = e.clientX - this.mouseDownPosition.x;
-            const dy = e.clientY - this.mouseDownPosition.y;
-            if (Math.sqrt(dx * dx + dy * dy) > this.mouseMoveThreshold) {
-              this.mouseDownPosition = null;
-            }
-          }
-        },
-      },
-      {
-        eventTarget: params.container,
-        eventName: 'mousedown',
-        eventFunction: (e) => {
-          this.mouseDownPosition = { x: e.clientX, y: e.clientY };
-        },
-      },
-      {
-        eventTarget: params.container,
-        eventName: 'mouseup',
-        eventFunction: (e) => {
-          if (this.mouseDownPosition) {
-            this.cursor.onClick(e);
-          }
-          this.mouseDownPosition = null;
-        },
-      },
-      {
         eventTarget: document,
         eventName: 'visibilitychange',
         eventFunction: () => this.onVisibilityChange(),
@@ -303,6 +265,8 @@ export class CreateScene {
         eventFunction: () => this.onControlsEnd(),
       },
     ];
+
+    this.pano && (this.listeners = [...this.listeners, ...this.pano.listeners]);
 
     this.listeners.forEach((listener) => {
       listener.eventTarget.addEventListener(
@@ -539,8 +503,7 @@ export class CreateScene {
       this.renderer.render(this.scene, this.camera);
     }
 
-    this.cursor && this.cursor.update();
-    this.sprites && this.sprites.update();
+    this.pano && this.pano.update();
 
     this.models.materials.transmissiveMaterials.forEach((material) => {
       material.time += delta;

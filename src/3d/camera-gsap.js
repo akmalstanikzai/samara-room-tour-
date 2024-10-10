@@ -1,9 +1,5 @@
-import { Vector3 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
-import { params } from './settings';
 import { appState } from '../services/app-state';
-import { delayMs } from '../utils/delay';
-import * as THREE from 'three';
 
 /** Class for smooth camera transitions with gsap. */
 
@@ -11,7 +7,6 @@ class CameraGsap {
   constructor() {
     this.targetIndex = 0;
     this.engine = window.engine;
-    this.moveGsap = gsap.timeline();
   }
 
   /**
@@ -84,108 +79,6 @@ class CameraGsap {
     });
     this.engine.update();
     return tl;
-  }
-
-  /**
-   * Function to get controls
-   */
-
-  getControls() {
-    return this.engine.controls;
-  }
-
-  async setCam(name, firstInit) {
-    console.log(name);
-
-    if (this.moveGsap.isActive()) return;
-
-    if (!this.cameraPositions) {
-      this.cameraPositions = {};
-
-      params.pano.forEach((pano) => {
-        this.cameraPositions[pano.name] = {
-          position: new Vector3().copy(pano.position),
-          target: new Vector3(pano.target.x, pano.target.y, pano.target.z),
-        };
-      });
-    }
-
-    const material = this.engine.panoMesh.material;
-
-    const { position: positionB, target: targetB } = this.cameraPositions[name];
-    const positionA = this.engine.controls.getPosition();
-    // const targetA = this.engine.controls.getTarget();
-
-    if (firstInit) {
-      this.engine.controls.setLookAt(
-        positionB.x,
-        positionB.y,
-        positionB.z,
-        targetB.x,
-        targetB.y,
-        targetB.z
-      );
-    }
-
-    const obj = {
-      x: positionA.x,
-      y: positionA.y,
-      z: positionA.z,
-      blend: 0,
-    };
-
-    this.moveGsap.to(obj, {
-      duration: firstInit ? 0.01 : params.animation.move.duration,
-      ease: params.animation.move.ease,
-      blend: 1,
-      x: positionB.x,
-      y: positionB.y,
-      z: positionB.z,
-      onStart: () => {
-        const nextTextureMap = this.engine.textures.getTexture(
-          params.pano.find((pano) => pano.name === name).textureMap
-        );
-        material.uniforms.texture2.value = nextTextureMap;
-        this.engine.panoMesh.position.copy(positionB);
-
-        this.engine.scene.traverse((object) => {
-          if (object.name.includes('Sprite')) {
-            object.visible = false;
-          }
-        });
-        params.pano.forEach((pano) => {
-          if (pano.name === name) {
-            pano.visible.forEach((item) => {
-              const object = this.engine.scene.getObjectByName(
-                `Sprite_${item}`
-              );
-              object.visible = true;
-            });
-          }
-        });
-      },
-      onComplete: () => {
-        appState.renderingStatus.next(false);
-        material.uniforms.texture1.value = material.uniforms.texture2.value;
-        material.uniforms.mixRatio.value = 0;
-      },
-      onUpdate: () => {
-        // this.engine.cursor.pin.visible = false;
-        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
-
-        // console.log(material.uniforms.mixRatio.value);
-
-        const progress = this.moveGsap.progress();
-
-        if (progress >= 0.5) {
-          // Start updating blend from 0.5 to 1 progress
-          const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
-          material.uniforms.mixRatio.value = blendProgress;
-        }
-      },
-    });
-
-    return this.moveGsap;
   }
 }
 
