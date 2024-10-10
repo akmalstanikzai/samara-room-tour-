@@ -93,8 +93,6 @@ export class Panorama {
         params.paths.decoders_path
       );
 
-      console.log(model);
-
       model.scene.children.forEach((child) => {
         child.children.forEach((object) => {
           if (object.material) {
