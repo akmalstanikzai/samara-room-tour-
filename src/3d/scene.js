@@ -103,9 +103,10 @@ export class CreateScene {
       this.textures.init(this);
 
       this.assets = new Assets(this);
-
       // Load and setup assets asynchronously.
       await this.assets.loadAndSetup();
+      this.pano = new Panorama(this);
+      await this.pano.setup();
       params.loadOnDemand.loadingManager.enabled = false;
 
       // Load and setup additional assets.
@@ -117,7 +118,6 @@ export class CreateScene {
       this.postprocessing = new PostProcessing(this);
       this.postprocessing.init();
 
-      this.pano = new Panorama(this);
       this.initListeners();
       this.setupPerspectiveView();
       this.onResize();

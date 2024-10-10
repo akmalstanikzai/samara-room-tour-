@@ -2,8 +2,7 @@ import { SRGBColorSpace, NoToneMapping, Vector3 } from 'three';
 import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
-import { createPanoItem, createTextureObject } from './panorama';
-import panoItems from '../json/panoItems.json';
+import { createPanoItem, createTextureObject, panoItems } from './panorama';
 
 function setPixelRatio() {
   return Math.max(1, window.devicePixelRatio);
@@ -153,12 +152,7 @@ const params = {
       maxAzimuthAngle: Infinity,
     },
   },
-  get pano() {
-    return panoItems.map(({ name, textureMap, visible }) =>
-      createPanoItem(name, textureMap, visible)
-    );
-  },
-
+  pano: [],
   environment: {
     assetsArray: [
       {
@@ -196,7 +190,6 @@ const params = {
   textures: [
     { path: 'pin.png', name: 'pin', anisotropy: true },
     { path: 'cursor.png', name: 'cursor', anisotropy: true },
-    ...panoItems.map(({ textureMap }) => createTextureObject(textureMap)),
   ],
 
   models: {

@@ -19,9 +19,7 @@ export class Panorama {
   constructor(engine) {
     this.engine = engine;
     this.moveGsap = gsap.timeline();
-    this.setup();
-    this.hotspots = new Hotspots(this.engine);
-    this.cursor = new CursorPin(this.engine);
+
     this.mouseDownPosition = null;
     this.mouseMoveThreshold = 5; // pixels
     this.listeners = [
@@ -60,6 +58,34 @@ export class Panorama {
   }
 
   async setup() {
+    try {
+      const response = await fetch('./json/panoItems.json');
+      const data = await response.json();
+
+      params.pano = data.map(({ name, textureMap, visible }) =>
+        createPanoItem(name, textureMap, visible)
+      );
+
+      // Create texture objects in a new array
+      const newTextureObjects = data.map(({ textureMap }) =>
+        createTextureObject(textureMap)
+      );
+
+      // Load textures and wait for all to complete
+      await Promise.all(
+        newTextureObjects.map(async (texture) => {
+          await this.engine.textures.loadTexture(texture, 'map');
+        })
+      );
+
+      // Push loaded textures to params.textures
+      params.textures.push(...newTextureObjects);
+    } catch (error) {
+      console.error('Error loading panoItems.json:', error);
+    }
+    console.log(params.textures);
+    this.hotspots = new Hotspots(this.engine);
+    this.cursor = new CursorPin(this.engine);
     const geometry = new SphereGeometry(6, 200, 200);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
@@ -143,6 +169,7 @@ export class Panorama {
             object.visible = false;
           }
         });
+        console.log(params.pano);
         params.pano.forEach((pano) => {
           if (pano.name === name) {
             pano.visible.forEach((item) => {
