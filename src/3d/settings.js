@@ -29,6 +29,14 @@ const createPanoItem = (name, textureMap) => ({
   },
 });
 
+const createTextureObject = (textureMap) => ({
+  path: `${textureMap}.webp`,
+  name: textureMap,
+  anisotropy: true,
+  filter: true,
+  flip: true,
+});
+
 const params = {
   postProcessing: {
     enabled: true,
@@ -262,54 +270,7 @@ const params = {
   textures: [
     { path: 'pin.png', name: 'pin', anisotropy: true },
     { path: 'cursor.png', name: 'cursor', anisotropy: true },
-
-    {
-      path: '241002_samara_360 Living 02.webp',
-
-      name: '241002_samara_360 Living 02',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
-
-    {
-      path: '241002_samara_360 Bathroom 01.webp',
-      name: '241002_samara_360 Bathroom 01',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
-    {
-      path: '241002_samara_360 Entry 01.webp',
-      name: '241002_samara_360 Entry 01',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
-
-    {
-      path: '241002_samara_360 Living 01.webp',
-      name: '241002_samara_360 Living 01',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
-
-    {
-      path: '241002_samara_360 Living 03.webp',
-      name: '241002_samara_360 Living 03',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
-
-    {
-      path: '241002_samara_360 Bedroom 01.webp',
-      name: '241002_samara_360 Bedroom 01',
-      anisotropy: true,
-      filter: true,
-      flip: true,
-    },
+    ...panoItems.map(([, textureMap]) => createTextureObject(textureMap)),
   ],
 
   models: {
