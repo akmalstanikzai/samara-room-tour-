@@ -18,6 +18,8 @@ export class Sprites {
 
   async setup() {
     params.pano.forEach((pano) => {
+      console.log(pano);
+
       const sprite = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({

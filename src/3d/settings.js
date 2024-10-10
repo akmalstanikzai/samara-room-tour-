@@ -11,7 +11,7 @@ function setPixelRatio() {
 
 const EPS = 0.000011177461712 * 0.0001;
 
-const createPanoItem = (name, textureMap) => ({
+const createPanoItem = (name, textureMap, visible) => ({
   name,
   textureMap,
   get position() {
@@ -27,6 +27,7 @@ const createPanoItem = (name, textureMap) => ({
       z: z - EPS,
     };
   },
+  visible,
 });
 
 const createTextureObject = (textureMap) => ({
@@ -228,8 +229,8 @@ const params = {
     },
   },
   get pano() {
-    return panoItems.map(([name, textureMap]) =>
-      createPanoItem(name, textureMap)
+    return panoItems.map(({ name, textureMap, visible }) =>
+      createPanoItem(name, textureMap, visible)
     );
   },
 
@@ -270,7 +271,7 @@ const params = {
   textures: [
     { path: 'pin.png', name: 'pin', anisotropy: true },
     { path: 'cursor.png', name: 'cursor', anisotropy: true },
-    ...panoItems.map(([, textureMap]) => createTextureObject(textureMap)),
+    ...panoItems.map(({ textureMap }) => createTextureObject(textureMap)),
   ],
 
   models: {
