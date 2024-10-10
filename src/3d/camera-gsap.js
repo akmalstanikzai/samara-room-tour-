@@ -95,6 +95,8 @@ class CameraGsap {
   }
 
   async setCam(name, firstInit) {
+    console.log(name);
+
     if (this.moveGsap.isActive()) return;
 
     if (!this.cameraPositions) {
@@ -145,10 +147,25 @@ class CameraGsap {
         );
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);
+
+        this.engine.scene.traverse((object) => {
+          if (object.name.includes('Sprite')) {
+            object.visible = false;
+          }
+        });
+        params.pano.forEach((pano) => {
+          if (pano.name === name) {
+            pano.visible.forEach((item) => {
+              const object = this.engine.scene.getObjectByName(
+                `Sprite_${item}`
+              );
+              object.visible = true;
+            });
+          }
+        });
       },
       onComplete: () => {
         appState.renderingStatus.next(false);
-        appState.cam.next(name);
         material.uniforms.texture1.value = material.uniforms.texture2.value;
         material.uniforms.mixRatio.value = 0;
       },

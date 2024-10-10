@@ -137,11 +137,6 @@ export class CreateScene {
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
       this.CameraGsap.setCam('360_Entry_01', true);
-      this.scene.traverse((object) => {
-        if (object.name.includes('Sprite')) {
-          object.visible = true;
-        }
-      });
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -545,8 +540,8 @@ export class CreateScene {
     }
 
     this.cursor && this.cursor.update();
+    this.sprites && this.sprites.update();
 
-    // this.reflector.update();
     this.models.materials.transmissiveMaterials.forEach((material) => {
       material.time += delta;
     });

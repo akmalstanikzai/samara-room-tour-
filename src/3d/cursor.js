@@ -97,7 +97,10 @@ export class CursorPin {
       });
 
       const firstIntersect = this.intersects[0];
-      if (firstIntersect.object.name.includes('Sprite')) {
+      if (
+        firstIntersect.object.visible &&
+        firstIntersect.object.name.includes('Sprite')
+      ) {
         this.pin.visible = false;
         if (!userDevice.isMobile) {
           params.container.style.cursor = 'pointer';
@@ -180,8 +183,9 @@ export class CursorPin {
 
     if (this.intersects.length > 0) {
       // Check all intersected objects for Sprites
-      const spriteIntersect = this.intersects.find((intersect) =>
-        intersect.object.name.includes('Sprite')
+      const spriteIntersect = this.intersects.find(
+        (intersect) =>
+          intersect.object.name.includes('Sprite') && intersect.object.visible
       );
 
       if (spriteIntersect) {
@@ -190,16 +194,16 @@ export class CursorPin {
         );
         this.engine.CameraGsap.setCam(cameraMap.name);
       } else {
-        // If no Sprite found, find the closest Sprite
+        // If no Sprite found, find the closest visible Sprite
         const clickPoint = this.intersects[0].point;
         let closestSprite = null;
         let closestDistance = Infinity;
 
-        const sprites = this.engine.meshes.filter((mesh) =>
-          mesh.name.includes('Sprite')
+        const visibleSprites = this.engine.meshes.filter(
+          (mesh) => mesh.name.includes('Sprite') && mesh.visible
         );
 
-        sprites.forEach((sprite) => {
+        visibleSprites.forEach((sprite) => {
           const distance = clickPoint.distanceTo(sprite.position);
           if (distance < closestDistance) {
             closestDistance = distance;

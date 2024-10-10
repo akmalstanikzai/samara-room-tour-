@@ -18,8 +18,6 @@ export class Sprites {
 
   async setup() {
     params.pano.forEach((pano) => {
-      console.log(pano);
-
       const sprite = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({
@@ -40,5 +38,9 @@ export class Sprites {
       this.engine.scene.add(sprite);
       this.engine.meshes.push(sprite);
     });
+  }
+
+  update() {
+    params.pano.forEach((item) => {});
   }
 }
