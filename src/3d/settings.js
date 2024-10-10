@@ -3,12 +3,31 @@ import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
 import { repeat } from 'lodash';
+import panoItems from '../json/panoItems.json';
 
 function setPixelRatio() {
   return Math.max(1, window.devicePixelRatio);
 }
 
 const EPS = 0.000011177461712 * 0.0001;
+
+const createPanoItem = (name, textureMap) => ({
+  name,
+  textureMap,
+  get position() {
+    return window.engine.scene
+      .getObjectByName(name)
+      .getWorldPosition(new Vector3());
+  },
+  get target() {
+    const { x, y, z } = this.position;
+    return {
+      x: x + EPS * 15,
+      y: y + EPS * 0.0001,
+      z: z - EPS,
+    };
+  },
+});
 
 const params = {
   postProcessing: {
@@ -201,108 +220,9 @@ const params = {
     },
   },
   get pano() {
-    return [
-      {
-        name: '360_Bathroom_01',
-        textureMap: '241002_samara_360 Bathroom 01',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Bathroom_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-      {
-        name: '360_Living_02',
-        textureMap: '241002_samara_360 Living 02',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Living_02')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-
-      {
-        name: '360_Entry_01',
-        textureMap: '241002_samara_360 Entry 01',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Entry_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-
-      {
-        name: '360_Living_01',
-        textureMap: '241002_samara_360 Living 01',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Living_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-
-      {
-        name: '360_Living_03',
-        textureMap: '241002_samara_360 Living 03',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Living_03')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-
-      {
-        name: '360_Bedroom_01',
-        textureMap: '241002_samara_360 Bedroom 01',
-        get position() {
-          return window.engine.scene
-            .getObjectByName('360_Bedroom_01')
-            .getWorldPosition(new Vector3());
-        },
-        get target() {
-          return {
-            x: this.position.x + EPS * 15,
-            y: this.position.y + EPS * 0.0001,
-            z: this.position.z - EPS,
-          };
-        },
-      },
-    ];
+    return panoItems.map(([name, textureMap]) =>
+      createPanoItem(name, textureMap)
+    );
   },
 
   environment: {
