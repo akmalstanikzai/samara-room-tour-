@@ -189,10 +189,10 @@ export class CursorPin {
       );
 
       if (hotspotIntersect) {
-        const cameraMap = params.pano.find((pano) =>
+        const cameraMap = this.engine.pano.panoItems.find((pano) =>
           hotspotIntersect.object.name.includes(pano.name)
         );
-        this.engine.pano.move(cameraMap.name);
+        this.engine.pano.change(cameraMap.name);
       } else {
         // If no Hotspot found, find the closest visible Hotspot
         const clickPoint = this.intersects[0].point;
@@ -212,10 +212,10 @@ export class CursorPin {
         });
 
         if (closestHotspot) {
-          const cameraMap = params.pano.find((pano) =>
+          const cameraMap = this.engine.pano.panoItems.find((pano) =>
             closestHotspot.name.includes(pano.name)
           );
-          this.engine.pano.move(cameraMap.name);
+          this.engine.pano.change(cameraMap.name);
         }
       }
     }

@@ -129,7 +129,7 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.pano.move('360_Entry_01', true);
+      this.pano.change('360_Entry_01', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });

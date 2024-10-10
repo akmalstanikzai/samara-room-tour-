@@ -14,6 +14,7 @@ import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../services/app-state';
 import { CursorPin } from './cursor';
 import { Hotspots } from './hotspots';
+const EPS = 0.000011177461712 * 0.0001;
 
 export class Panorama {
   constructor(engine) {
@@ -64,13 +65,13 @@ export class Panorama {
       );
       const data = await response.json();
 
-      params.pano = data.map(({ name, textureMap, visible }) =>
-        createPanoItem(name, textureMap, visible)
+      this.panoItems = data.map(({ name, textureMap, visible }) =>
+        this.createPanoItem(name, textureMap, visible)
       );
 
       // Create texture objects in a new array
       const newTextureObjects = data.map(({ textureMap }) =>
-        createTextureObject(textureMap)
+        this.createTextureObject(textureMap)
       );
 
       // Load textures and wait for all to complete
@@ -85,8 +86,7 @@ export class Panorama {
     } catch (error) {
       console.error('Error loading panoItems.json:', error);
     }
-    this.hotspots = new Hotspots(this.engine);
-    this.cursor = new CursorPin(this.engine);
+
     const geometry = new SphereGeometry(6, 200, 200);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
@@ -111,15 +111,18 @@ export class Panorama {
     this.engine.panoMesh = mesh;
     this.engine.scene.add(mesh);
     // this.engine.models.centerModels(mesh);
+
+    this.hotspots = new Hotspots(this.engine);
+    this.cursor = new CursorPin(this.engine);
   }
 
-  async move(name, firstInit) {
+  async change(name, firstInit) {
     if (this.moveGsap.isActive()) return;
 
     if (!this.cameraPositions) {
       this.cameraPositions = {};
 
-      params.pano.forEach((pano) => {
+      this.panoItems.forEach((pano) => {
         this.cameraPositions[pano.name] = {
           position: new Vector3().copy(pano.position),
           target: new Vector3(pano.target.x, pano.target.y, pano.target.z),
@@ -160,7 +163,7 @@ export class Panorama {
       z: positionB.z,
       onStart: () => {
         const nextTextureMap = this.engine.textures.getTexture(
-          params.pano.find((pano) => pano.name === name).textureMap
+          this.panoItems.find((pano) => pano.name === name).textureMap
         );
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);
@@ -170,7 +173,7 @@ export class Panorama {
             object.visible = false;
           }
         });
-        params.pano.forEach((pano) => {
+        this.panoItems.forEach((pano) => {
           if (pano.name === name) {
             pano.visible.forEach((item) => {
               const object = this.engine.scene.getObjectByName(
@@ -209,33 +212,35 @@ export class Panorama {
     this.cursor && this.cursor.update();
     this.hotspots && this.hotspots.update();
   }
-}
 
-const EPS = 0.000011177461712 * 0.0001;
-
-export const createPanoItem = (name, textureMap, visible) => ({
-  name,
-  textureMap,
-  get position() {
-    return window.engine.scene
-      .getObjectByName(name)
-      .getWorldPosition(new Vector3());
-  },
-  get target() {
-    const { x, y, z } = this.position;
+  createPanoItem(name, textureMap, visible) {
     return {
-      x: x + EPS * 15,
-      y: y + EPS * 0.0001,
-      z: z - EPS,
+      name,
+      textureMap,
+      get position() {
+        return window.engine.scene
+          .getObjectByName(name)
+          .getWorldPosition(new Vector3());
+      },
+      get target() {
+        const { x, y, z } = this.position;
+        return {
+          x: x + EPS * 15,
+          y: y + EPS * 0.0001,
+          z: z - EPS,
+        };
+      },
+      visible,
     };
-  },
-  visible,
-});
+  }
 
-export const createTextureObject = (textureMap) => ({
-  path: `${textureMap}.webp`,
-  name: textureMap,
-  anisotropy: true,
-  filter: true,
-  flip: true,
-});
+  createTextureObject(textureMap) {
+    return {
+      path: `${textureMap}.webp`,
+      name: textureMap,
+      anisotropy: true,
+      filter: true,
+      flip: true,
+    };
+  }
+}

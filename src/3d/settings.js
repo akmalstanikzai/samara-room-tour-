@@ -153,7 +153,6 @@ const params = {
       maxAzimuthAngle: Infinity,
     },
   },
-  pano: [],
   environment: {
     assetsArray: [
       {

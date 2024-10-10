@@ -8,7 +8,7 @@ export class Hotspots {
   }
 
   async setup() {
-    params.pano.forEach((pano) => {
+    this.engine.pano.panoItems.forEach((pano) => {
       const hotspot = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({
@@ -31,7 +31,5 @@ export class Hotspots {
     });
   }
 
-  update() {
-    params.pano.forEach((item) => {});
-  }
+  update() {}
 }
