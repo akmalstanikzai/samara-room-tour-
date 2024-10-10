@@ -16,7 +16,6 @@ import { params } from './settings';
 import { appState } from '../services/app-state';
 import { Materials } from './materials';
 import { Textures } from './textures';
-import { delayMs } from '../utils/delay';
 
 export class Model extends Group {
   constructor(engine) {
@@ -24,40 +23,10 @@ export class Model extends Group {
     this.textures = new Textures();
     this.materials = new Materials();
     this.engine = engine;
-    this.engine.meshes = [];
   }
 
   async load(reInit) {
-    const loadModels = async (assetsArray) => {
-      return Promise.all(
-        assetsArray.map(async (asset) => {
-          if (
-            (asset.name === this.engine.assets.initialAsset && !reInit) ||
-            (reInit && asset.name !== this.engine.assets.initialAsset)
-          ) {
-            const promise = loadGltf(
-              `${params.paths.models_path}samara/${asset.path}`,
-              params.paths.decoders_path
-            );
-            asset.modelPromise = promise;
-            return {
-              file: await promise,
-              name: asset.name,
-            };
-          }
-        })
-      );
-    };
-
-    const assets = await loadModels(params.models.samara.assetsArray);
-
-    if (!reInit) {
-      assets
-        .filter((asset) => asset !== undefined)
-        .forEach((item) => {
-          this[`${item.name}_assets`] = [item.file];
-        });
-    }
+    return;
   }
 
   setup(firstInit) {
@@ -67,7 +36,6 @@ export class Model extends Group {
       this.add(this.group);
       this.engine.scene.add(this);
       this.name = 'Scene parent';
-      this.engine.meshes = [];
     }
 
     if (firstInit) {
@@ -78,44 +46,7 @@ export class Model extends Group {
       );
       this.group.rotation.y = params.models.samara.rotation;
     }
-
-    let assets = this.getAssets();
-    if (!firstInit) {
-      const restAssets = params.models.samara.assetsArray.filter(
-        (asset) => asset.name !== this.engine.assets.initialAsset
-      );
-      assets = restAssets.flatMap((asset) => this.getAssets(asset.name));
-    }
-
-    assets.forEach((asset) => {
-      if (asset && asset.scene)
-        asset.scene.children.forEach((child) => {
-          child.children.forEach((object) => {
-            if (object.material) {
-              object.material.transparent = true;
-              object.material.opacity = 0.5;
-              object.visible = false;
-              object.renderOrder = 10;
-            }
-            if (object.material && object.material.name === 'Tables') {
-              object.renderOrder = 20;
-            }
-            this.group.add(object.clone());
-          });
-        });
-    });
-    // this.centerModels(this.group);
-
-    this.group.box = this.computeBoundingBox(this.group);
-
-    this.engine.scene.traverse((object) => {
-      if (
-        object instanceof Mesh &&
-        object.material
-        // && object.material.name !== 'Tables'
-      )
-        this.engine.meshes.push(object);
-    });
+    return;
   }
 
   getAssets(name = appState.complectation.value.layout) {

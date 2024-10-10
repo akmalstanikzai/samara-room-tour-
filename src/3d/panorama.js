@@ -14,6 +14,7 @@ import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../services/app-state';
 import { CursorPin } from './cursor';
 import { Hotspots } from './hotspots';
+import { loadGltf } from './model-loader';
 const EPS = 0.000011177461712 * 0.0001;
 
 export class Panorama {
@@ -65,12 +66,14 @@ export class Panorama {
       );
       const data = await response.json();
 
-      this.panoItems = data.map(({ name, textureMap, visible }) =>
+      console.log(data);
+
+      this.panoItems = data['1B'].pano.map(({ name, textureMap, visible }) =>
         this.createPanoItem(name, textureMap, visible)
       );
 
       // Create texture objects in a new array
-      const newTextureObjects = data.map(({ textureMap }) =>
+      const newTextureObjects = data['1B'].pano.map(({ textureMap }) =>
         this.createTextureObject(textureMap)
       );
 
@@ -83,6 +86,43 @@ export class Panorama {
 
       // Push loaded textures to params.textures
       params.textures.push(...newTextureObjects);
+      this.engine.meshes = [];
+
+      const model = await loadGltf(
+        `${params.paths.assets_path + data['1B'].model}`,
+        params.paths.decoders_path
+      );
+
+      console.log(model);
+
+      model.scene.children.forEach((child) => {
+        child.children.forEach((object) => {
+          if (object.material) {
+            object.material.transparent = true;
+            object.material.opacity = 0.5;
+            object.visible = false;
+            object.renderOrder = 10;
+          }
+          if (object.material && object.material.name === 'Tables') {
+            object.renderOrder = 20;
+          }
+          this.engine.models.group.add(object.clone());
+        });
+      });
+      // this.centerModels(this.group);
+
+      this.engine.models.group.box = this.engine.models.computeBoundingBox(
+        this.engine.models.group
+      );
+
+      this.engine.scene.traverse((object) => {
+        if (
+          object instanceof Mesh &&
+          object.material
+          // && object.material.name !== 'Tables'
+        )
+          this.engine.meshes.push(object);
+      });
     } catch (error) {
       console.error('Error loading panoItems.json:', error);
     }

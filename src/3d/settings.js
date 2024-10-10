@@ -2,7 +2,6 @@ import { SRGBColorSpace, NoToneMapping, Vector3 } from 'three';
 import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
-import { createPanoItem, createTextureObject, panoItems } from './panorama';
 
 function setPixelRatio() {
   return Math.max(1, window.devicePixelRatio);
@@ -424,7 +423,6 @@ const params = {
         {
           name: 'studio',
           totalAssetsCount: 11,
-          path: '1B_roomtour_new.glb',
           textures: [],
         },
       ],
