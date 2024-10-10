@@ -1,4 +1,3 @@
-import { params } from './settings';
 import { Mesh, ShaderMaterial, PlaneGeometry, MeshBasicMaterial } from 'three';
 
 export class Hotspots {
