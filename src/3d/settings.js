@@ -14,52 +14,6 @@ const params = {
     enabled: true,
     antialias: {
       multisampling: 4,
-      taa: {
-        enabled: true,
-      },
-    },
-    ao: {
-      get preset() {
-        return params.integration ? 'preset1' : 'preset2';
-      },
-      presets: [
-        {
-          name: 'preset1',
-          settings: {
-            distanceFalloff: 1.8,
-            intensity: 2,
-          },
-        },
-        {
-          name: 'preset2',
-          settings: {
-            distanceFalloff: 3.3,
-            intensity: 2.85,
-          },
-        },
-        {
-          name: 'preset3',
-          settings: {
-            distanceFalloff: 2.95,
-            intensity: 2.5,
-          },
-        },
-      ],
-      enabled: false,
-      gammaCorrection: false,
-      aoRadius: 1,
-      halfRes: false,
-      aoSamples: 15,
-      denoiseSamples: 25,
-      denoiseRadius: 18,
-      screenSpaceRadius: false,
-      depthAwareUpsampling: true,
-      transparencyAware: false,
-    },
-    bloom: {
-      enabled: true,
-      mipmapBlur: true,
-      levels: 9,
     },
   },
   animation: {
