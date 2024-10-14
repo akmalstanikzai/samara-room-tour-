@@ -3,10 +3,6 @@ import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
 
-function setPixelRatio() {
-  return Math.max(1, window.devicePixelRatio);
-}
-
 const params = {
   postProcessing: {
     enabled: true,
@@ -15,26 +11,10 @@ const params = {
     },
   },
   animation: {
-    blur: {
-      intensity: 3,
-    },
     move: {
       duration: 1,
       ease: Power4.easeOut,
       easeName: 'Power4.easeOut',
-    },
-    fadeIn: {
-      ease: Linear,
-      easeName: 'Linear',
-      duration: 0.2,
-    },
-    fadeOut: {
-      easeName: 'Linear',
-      ease: Linear,
-      duration: 0.4,
-    },
-    transitionDelay: {
-      percentage: 0.5,
     },
   },
   container: null,
@@ -55,7 +35,9 @@ const params = {
   renderer: {
     renderOnDemand: { enabled: true },
     outputEncoding: SRGBColorSpace,
-    pixelRatio: setPixelRatio(),
+    get pixelRatio() {
+      return Math.max(1, window.devicePixelRatio);
+    },
     exposure: 1,
     toneMapping: NoToneMapping,
     defaultRenderer: {

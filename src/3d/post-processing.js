@@ -63,7 +63,7 @@ class PostProcessing {
 
     // Motion blur
     this.motionBlur = new MotionBlurEffect(this.velocityPass);
-    this.motionBlur.intensity = params.animation.blur.intensity;
+    this.motionBlur.intensity = 5;
     this.motionBlur.jitter = 0.1;
     // this.motionBlur.samples = 4;
 
@@ -90,8 +90,8 @@ class PostProcessing {
 
     // Effect pass combining motion blur, tone mapping, and warm color overlay
     this.effectPass = new EffectPass(
-      this.engine.camera,
-      this.motionBlur
+      this.engine.camera
+      // this.motionBlur
       // this.toneMappingEffect,
       // this.warmColorEffect
       // this.tiltShiftEffect
