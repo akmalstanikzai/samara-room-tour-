@@ -22,6 +22,7 @@ import {
   Circ,
   Linear,
 } from 'gsap';
+import { postProcessing } from '../3d/post-processing';
 
 export class ButtonComponent extends LitElement {
   constructor() {
@@ -255,6 +256,7 @@ export class GuiComponent extends LitElement {
   constructor() {
     super();
     this.engine = window.engine;
+    this.debugMode = 0; // Initialize debug mode to 0 (Normal)
   }
 
   connectedCallback() {
@@ -976,6 +978,32 @@ export class GuiComponent extends LitElement {
       .name('Duration');
 
     _panoMeshFolder.close();
+
+    // Debug folder
+    const _debugFolder = this.gui.addFolder('Debug').close();
+
+    const debugModes = {
+      Normal: 0,
+      'Show Depth': 1,
+      'Show Hotspot Areas': 2,
+    };
+
+    const debugProxy = {
+      get mode() {
+        return this.debugMode;
+      },
+      set mode(value) {
+        this.debugMode = value;
+        window.engine.postprocessing.setDebugMode(value);
+      },
+    };
+
+    _debugFolder
+      .add(debugProxy, 'mode', debugModes)
+      .name('Debug Mode')
+      .onChange(() => {
+        this.engine.update();
+      });
   }
 }
 

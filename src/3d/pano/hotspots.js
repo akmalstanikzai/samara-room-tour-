@@ -11,6 +11,7 @@ export class Hotspots {
       const hotspot = new Mesh(
         new PlaneGeometry(0.1, 0.1),
         new MeshBasicMaterial({
+          name: 'Hotspot',
           map: this.engine.textures.getTexture('pin'),
           transparent: true,
           // depthTest: false,

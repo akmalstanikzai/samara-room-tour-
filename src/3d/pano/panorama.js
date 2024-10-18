@@ -9,6 +9,7 @@ import {
   SphereGeometry,
   Color,
   Vector3,
+  Layers,
 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../../services/app-state';
@@ -57,6 +58,8 @@ export class Panorama {
         },
       },
     ];
+    this.tableLayers = new Layers();
+    this.tableLayers.set(1); // Use layer 1 for tables
   }
 
   async setup() {
@@ -95,13 +98,14 @@ export class Panorama {
       model.scene.children.forEach((child) => {
         child.children.forEach((object) => {
           if (object.material) {
-            object.material.transparent = true;
-            object.material.opacity = 0.5;
-            object.visible = false;
-            object.renderOrder = 10;
-          }
-          if (object.material && object.material.name === 'Tables') {
-            object.renderOrder = 20;
+            if (object.material.name === 'Tables') {
+              object.visible = false;
+
+              object.renderOrder = 1000; // Render tables last
+            } else {
+              object.visible = false;
+              object.renderOrder = 10;
+            }
           }
           this.engine.models.group.add(object.clone());
         });

@@ -129,7 +129,7 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.pano.change('360_Entry_01', true);
+      this.pano.change('360_Living_02', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -498,7 +498,7 @@ export class CreateScene {
     this.controls && this.controls.update(delta);
 
     if (params.postProcessing.enabled) {
-      this.postprocessing.composer.render();
+      this.postprocessing.render();
     } else {
       this.renderer.render(this.scene, this.camera);
     }
