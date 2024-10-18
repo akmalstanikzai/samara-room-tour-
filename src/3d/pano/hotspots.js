@@ -19,7 +19,6 @@ export class Hotspots {
       );
 
       hotspot.rotation.x = -Math.PI / 2;
-      hotspot.visible = false;
       hotspot.position.copy(pano.position);
       hotspot.position.y = this.engine.models.group.box.min.y + 0.6;
       hotspot.scale.setScalar(3.25);
