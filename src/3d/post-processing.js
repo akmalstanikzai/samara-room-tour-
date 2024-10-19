@@ -110,7 +110,9 @@ class PostProcessing {
 
   init() {
     const size = this.engine.renderer.getSize(new Vector2());
-    this.depthRenderTarget = new WebGLRenderTarget(size.width, size.height, {
+
+    // Create render targets
+    this.sceneRenderTarget = new WebGLRenderTarget(size.width, size.height, {
       minFilter: NearestFilter,
       magFilter: NearestFilter,
       format: RGBAFormat,
@@ -118,41 +120,112 @@ class PostProcessing {
       depthBuffer: true,
       stencilBuffer: false,
     });
-    this.depthRenderTarget.depthTexture = new DepthTexture(
-      size.width,
-      size.height
-    );
-    this.depthRenderTarget.depthTexture.format = DepthFormat;
-    this.depthRenderTarget.depthTexture.type = UnsignedShortType;
 
+    this.tableRenderTarget = new WebGLRenderTarget(size.width, size.height, {
+      minFilter: NearestFilter,
+      magFilter: NearestFilter,
+      format: RGBAFormat,
+      type: HalfFloatType,
+      depthBuffer: true,
+      stencilBuffer: false,
+    });
+
+    this.hotspotRenderTarget = new WebGLRenderTarget(size.width, size.height, {
+      minFilter: NearestFilter,
+      magFilter: NearestFilter,
+      format: RGBAFormat,
+      type: HalfFloatType,
+      depthBuffer: true,
+      stencilBuffer: false,
+    });
+
+    // Add depth texture to sceneRenderTarget
+    this.sceneRenderTarget.depthTexture = new DepthTexture();
+    this.sceneRenderTarget.depthTexture.type = UnsignedShortType;
+
+    // Create effect composer
     this.composer = new EffectComposer(this.engine.renderer, {
       frameBufferType: HalfFloatType,
       multisampling: params.postProcessing.antialias.multisampling,
     });
 
-    // Render pass
+    // Create render pass
     this.renderPass = new RenderPass(this.engine.scene, this.engine.camera);
 
-    // Hotspot mask effect
-    this.hotspotMaskEffect = new HotspotMaskEffect(
-      this.engine.scene,
-      this.engine.camera
+    // Create custom effect for combining layers
+    this.combineEffect = new Effect(
+      'CombineEffect',
+      `
+      uniform sampler2D tScene;
+      uniform sampler2D tTables;
+      uniform sampler2D tHotspots;
+      uniform sampler2D tDepth;
+      uniform int debugMode;
+      uniform float cameraNear;
+      uniform float cameraFar;
+
+      float readDepth(sampler2D depthSampler, vec2 coord) {
+        float fragCoordZ = texture2D(depthSampler, coord).x;
+        float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+        return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+      }
+
+      void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+        vec4 sceneColor = texture2D(tScene, uv);
+        vec4 tableColor = texture2D(tTables, uv);
+        vec4 hotspotColor = texture2D(tHotspots, uv);
+        float depth = readDepth(tDepth, uv);
+
+        if (debugMode == 1) {
+          // Debug mode 1: Show depth
+          outputColor = vec4(vec3(depth), 1.0);
+        } else if (debugMode == 2) {
+          // Debug mode 2: Show hotspot and table areas
+          if (hotspotColor.a > 0.0) {
+            outputColor = vec4(1.0, 0.0, 0.0, 1.0); // Red for hotspots
+          } else if (tableColor.a > 0.0) {
+            outputColor = vec4(0.0, 1.0, 0.0, 1.0); // Green for tables
+          } else {
+            outputColor = sceneColor;
+          }
+        } else {
+          // Normal mode
+          if (tableColor.a > 0.0) {
+            // If there is a table, it should mask the hotspots
+            outputColor = mix(sceneColor, tableColor, 0.0); // Make tables invisible
+          } else if (hotspotColor.a > 0.0) {
+            float hotspotDepth = hotspotColor.a;
+            if (hotspotDepth <= depth) {
+              outputColor = mix(sceneColor, hotspotColor, 0.5);
+            } else {
+              outputColor = sceneColor;
+            }
+          } else {
+            outputColor = sceneColor;
+          }
+        }
+      }
+    `,
+      {
+        uniforms: new Map([
+          ['tScene', new Uniform(null)],
+          ['tTables', new Uniform(null)],
+          ['tHotspots', new Uniform(null)],
+          ['tDepth', new Uniform(null)],
+          ['debugMode', new Uniform(0)],
+          ['cameraNear', new Uniform(0.1)],
+          ['cameraFar', new Uniform(1000)],
+        ]),
+        blendFunction: BlendFunction.NORMAL,
+      }
     );
-    this.hotspotMaskEffect.uniforms.get('tDepth').value =
-      this.depthRenderTarget.depthTexture;
 
-    // Effect pass
-    this.effectPass = new EffectPass(
-      this.engine.camera,
-      this.hotspotMaskEffect
-    );
+    // Create effect pass
+    this.effectPass = new EffectPass(this.engine.camera, this.combineEffect);
 
-    // All passes
-    this.allPasses = [this.renderPass, this.effectPass];
-
-    this.allPasses.forEach((pass) => {
-      this.composer.addPass(pass);
-    });
+    // Add passes to composer
+    this.composer.addPass(this.renderPass);
+    this.composer.addPass(this.effectPass);
 
     // Set up resize handler
     window.addEventListener('resize', this.onWindowResize.bind(this));
@@ -160,31 +233,81 @@ class PostProcessing {
 
   onWindowResize() {
     const size = this.engine.renderer.getSize(new Vector2());
-    this.depthRenderTarget.setSize(size.width, size.height);
+    this.sceneRenderTarget.setSize(size.width, size.height);
+    this.tableRenderTarget.setSize(size.width, size.height);
+    this.hotspotRenderTarget.setSize(size.width, size.height);
     this.composer.setSize(size.width, size.height);
   }
 
   render() {
-    // Clear depth buffer before rendering
-    this.engine.renderer.setRenderTarget(this.depthRenderTarget);
-    this.engine.renderer.clear(true, true, true);
+    // Render scene including hotspots for depth
+    this.renderScene(this.sceneRenderTarget);
 
-    // Render depth
-    this.engine.renderer.setRenderTarget(this.depthRenderTarget);
-    this.engine.renderer.render(this.engine.scene, this.engine.camera);
+    // Render only tables
+    this.renderTables(this.tableRenderTarget);
 
-    // Clear main render target
-    this.engine.renderer.setRenderTarget(null);
-    this.engine.renderer.clear(true, true, true);
+    // Render only hotspots
+    this.renderHotspots(this.hotspotRenderTarget);
 
-    // Render scene with effects
+    // Combine all layers
+    this.combineEffect.uniforms.get('tScene').value =
+      this.sceneRenderTarget.texture;
+    this.combineEffect.uniforms.get('tTables').value =
+      this.tableRenderTarget.texture;
+    this.combineEffect.uniforms.get('tHotspots').value =
+      this.hotspotRenderTarget.texture;
+    this.combineEffect.uniforms.get('tDepth').value =
+      this.sceneRenderTarget.depthTexture;
+    this.combineEffect.uniforms.get('cameraNear').value =
+      this.engine.camera.near;
+    this.combineEffect.uniforms.get('cameraFar').value = this.engine.camera.far;
+
+    // Render final scene with effects
     this.composer.render();
   }
 
+  renderScene(target) {
+    this.engine.renderer.setRenderTarget(target);
+    this.engine.renderer.clear();
+
+    this.engine.scene.traverse((object) => {
+      if (object.isMesh) {
+        // Render all objects including hotspots for depth
+        object.visible = object.material.name !== 'Tables'; // Exclude tables
+      }
+    });
+
+    this.engine.renderer.render(this.engine.scene, this.engine.camera);
+  }
+
+  renderTables(target) {
+    this.engine.renderer.setRenderTarget(target);
+    this.engine.renderer.clear();
+
+    this.engine.scene.traverse((object) => {
+      if (object.isMesh) {
+        object.visible = object.material.name === 'Tables';
+      }
+    });
+
+    this.engine.renderer.render(this.engine.scene, this.engine.camera);
+  }
+
+  renderHotspots(target) {
+    this.engine.renderer.setRenderTarget(target);
+    this.engine.renderer.clear();
+
+    this.engine.scene.traverse((object) => {
+      if (object.isMesh) {
+        object.visible = object.material.name === 'Hotspot';
+      }
+    });
+
+    this.engine.renderer.render(this.engine.scene, this.engine.camera);
+  }
+
   setDebugMode(mode) {
-    if (this.hotspotMaskEffect) {
-      this.hotspotMaskEffect.setDebugMode(mode);
-    }
+    this.combineEffect.uniforms.get('debugMode').value = mode;
   }
 }
 
