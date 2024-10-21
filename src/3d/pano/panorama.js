@@ -58,8 +58,6 @@ export class Panorama {
         },
       },
     ];
-    this.tableLayers = new Layers();
-    this.tableLayers.set(1); // Use layer 1 for tables
   }
 
   async setup() {
@@ -99,8 +97,8 @@ export class Panorama {
         child.children.forEach((object) => {
           if (object.material) {
             if (object.material.name === 'Tables') {
-              object.visible = false;
-
+              // object.visible = false;
+              object.material.colorWrite = false;
               object.renderOrder = 1000; // Render tables last
             } else {
               object.visible = false;
