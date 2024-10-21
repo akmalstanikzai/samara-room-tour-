@@ -112,6 +112,10 @@ class PostProcessing {
   render() {
     this.composer.render();
   }
+
+  setDebugMode(mode) {
+    console.log(mode);
+  }
 }
 
 export { PostProcessing };

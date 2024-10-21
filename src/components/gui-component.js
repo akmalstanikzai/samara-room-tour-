@@ -985,7 +985,6 @@ export class GuiComponent extends LitElement {
     const debugModes = {
       Normal: 0,
       'Show Depth': 1,
-      'Show Hotspot Areas': 2,
     };
 
     const debugProxy = {

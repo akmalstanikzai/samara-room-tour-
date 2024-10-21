@@ -100,6 +100,9 @@ export class Panorama {
               // object.visible = false;
               object.material.colorWrite = false;
               object.renderOrder = 1000; // Render tables last
+            } else if (object.material.name === 'Interior') {
+              object.material.colorWrite = false;
+              object.renderOrder = 1000; // Render tables last
             } else {
               object.visible = false;
               object.renderOrder = 10;
