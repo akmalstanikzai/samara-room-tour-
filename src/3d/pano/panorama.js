@@ -68,14 +68,21 @@ export class Panorama {
       console.log(data);
 
       this.panoItems = data['1B'].hotspots.map(
-        ({ name, textureMap, visible }) =>
-          this.createPanoItem(name, textureMap, visible)
+        ({ name, textureMap, visible, depthMap }) =>
+          this.createPanoItem(name, textureMap, visible, depthMap)
       );
 
       // Create texture objects in a new array
-      const newTextureObjects = this.panoItems.map(({ textureMap }) =>
-        this.createTextureObject(textureMap)
-      );
+      const newTextureObjects = this.panoItems
+        .flatMap(({ textureMap, depthMap }) => [
+          this.createTextureObject(textureMap),
+          depthMap ? this.createTextureObject(depthMap, '.png') : null,
+        ])
+        .filter(Boolean);
+
+      this.panoItems.forEach((el) => {
+        if (el.depthMap) console.log(el);
+      });
 
       // Load textures and wait for all to complete
       await Promise.all(
@@ -255,10 +262,11 @@ export class Panorama {
     this.hotspots && this.hotspots.update();
   }
 
-  createPanoItem(name, textureMap, visible) {
+  createPanoItem(name, textureMap, visible, depthMap) {
     return {
       name,
       textureMap,
+      depthMap,
       get position() {
         return window.engine.scene
           .getObjectByName(name)
@@ -276,9 +284,9 @@ export class Panorama {
     };
   }
 
-  createTextureObject(textureMap) {
+  createTextureObject(textureMap, extension = '.webp') {
     return {
-      path: `${textureMap}.webp`,
+      path: textureMap + extension,
       name: textureMap,
       anisotropy: true,
       filter: true,
