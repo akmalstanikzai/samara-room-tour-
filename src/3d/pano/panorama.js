@@ -233,64 +233,68 @@ export class Panorama {
       blend: 0,
     };
 
-    this.moveGsap.to(obj, {
-      duration: firstInit ? 0.01 : params.animation.move.duration,
-      ease: params.animation.move.ease,
-      blend: 1,
-      x: positionB.x,
-      y: positionB.y,
-      z: positionB.z,
-      onStart: () => {
-        const nextPano = this.panoItems.find((pano) => pano.name === name);
-        const nextTextureMap = this.engine.textures.getTexture(
-          nextPano.textureMap
-        );
-        const nextDepthMap = nextPano.depthMap
-          ? this.engine.textures.getTexture(nextPano.depthMap)
-          : null;
+    this.moveGsap
+      .to(obj, {
+        duration: firstInit ? 0.005 : params.animation.move.duration / 2,
+        blend: 0.5,
+        x: (positionA.x + positionB.x) / 2,
+        y: (positionA.y + positionB.y) / 2,
+        z: (positionA.z + positionB.z) / 2,
+        onStart: () => {
+          this.engine.panoMesh.position.copy(positionB);
 
-        material.uniforms.texture2.value = nextTextureMap;
-        material.uniforms.displacementMap.value = nextDepthMap;
-        material.uniforms.displacementScale.value = nextDepthMap ? 5.0 : 0.0; // Adjust scale as needed
+          this.engine.scene.traverse((object) => {
+            if (object.name.includes('Hotspot')) {
+              object.visible = false;
+            }
+          });
+          this.panoItems.forEach((pano) => {
+            if (pano.name === name) {
+              pano.visible.forEach((item) => {
+                const object = this.engine.scene.getObjectByName(
+                  `Hotspot_${item}`
+                );
+                object.visible = true;
+              });
+            }
+          });
 
-        this.engine.panoMesh.position.copy(positionB);
+          const nextPano = this.panoItems.find((pano) => pano.name === name);
+          const nextTextureMap = this.engine.textures.getTexture(
+            nextPano.textureMap
+          );
+          const nextDepthMap = nextPano.depthMap
+            ? this.engine.textures.getTexture(nextPano.depthMap)
+            : null;
 
-        this.engine.scene.traverse((object) => {
-          if (object.name.includes('Hotspot')) {
-            object.visible = false;
-          }
-        });
-        this.panoItems.forEach((pano) => {
-          if (pano.name === name) {
-            pano.visible.forEach((item) => {
-              const object = this.engine.scene.getObjectByName(
-                `Hotspot_${item}`
-              );
-              object.visible = true;
-            });
-          }
-        });
-      },
-      onComplete: () => {
-        appState.renderingStatus.next(false);
-        material.uniforms.texture1.value = material.uniforms.texture2.value;
-        material.uniforms.mixRatio.value = 0;
-      },
-      onUpdate: () => {
-        // this.engine.cursor.pin.visible = false;
-        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
-
-        // console.log(material.uniforms.mixRatio.value);
-
-        const progress = this.moveGsap.progress();
-
-        if (progress >= 0.5) {
-          // Start updating blend from 0.5 to 1 progress
-          const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
-          material.uniforms.mixRatio.value = blendProgress;
-        }
-      },
-    });
+          material.uniforms.texture2.value = nextTextureMap;
+          material.uniforms.displacementMap.value = nextDepthMap;
+          material.uniforms.displacementScale.value = nextDepthMap ? 15.0 : 0.0; // Adjust scale as needed
+        },
+        onUpdate: () => {
+          this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
+          const progress = this.moveGsap.progress() * 2; // Adjust progress for first half
+          material.uniforms.mixRatio.value = progress;
+        },
+      })
+      .to(obj, {
+        duration: firstInit ? 0.005 : params.animation.move.duration / 2,
+        blend: 1,
+        x: positionB.x,
+        y: positionB.y,
+        z: positionB.z,
+        onStart: () => {},
+        onUpdate: () => {
+          this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
+          const progress = (this.moveGsap.progress() - 0.5) * 2; // Adjust progress for second half
+          material.uniforms.mixRatio.value = 0.5 + progress * 0.5;
+        },
+        onComplete: () => {
+          appState.renderingStatus.next(false);
+          material.uniforms.texture1.value = material.uniforms.texture2.value;
+          material.uniforms.mixRatio.value = 0;
+        },
+      });
 
     return this.moveGsap;
   }
