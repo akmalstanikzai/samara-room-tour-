@@ -269,11 +269,13 @@ void main() {
 
         const progress = this.moveGsap.progress();
 
-        if (progress >= 0.5) {
-          // Start updating blend from 0.5 to 1 progress
-          const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
-          material.uniforms.mixRatio.value = blendProgress;
-        }
+        // if (progress >= 0.5) {
+        //   // Start updating blend from 0.5 to 1 progress
+        //   const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
+        //   material.uniforms.mixRatio.value = blendProgress;
+        // }
+
+        material.uniforms.mixRatio.value = progress;
       },
     });
 
