@@ -4,7 +4,7 @@
     "hotspots": [
       {
         "name": "360_Living_01",
-        "textureMap": "241002_samara_360 Living 01",
+        "textureMap": "241030_Samara ADU_interior_360 Living 01_Post",
         "depthMap": "living-depth",
         "visible": [
           "360_Living_01",
@@ -15,12 +15,12 @@
       },
       {
         "name": "360_Living_02",
-        "textureMap": "241002_samara_360 Living 02",
+        "textureMap": "241030_Samara ADU_interior_360 Living 02_Post",
         "visible": ["360_Living_02", "360_Living_03", "360_Living_01"]
       },
       {
         "name": "360_Living_03",
-        "textureMap": "241002_samara_360 Living 03",
+        "textureMap": "241030_Samara ADU_interior_360 Living 03_Post",
         "visible": [
           "360_Living_03",
           "360_Living_02",
@@ -30,7 +30,7 @@
       },
       {
         "name": "360_Entry_01",
-        "textureMap": "241002_samara_360 Entry 01",
+        "textureMap": "241030_Samara ADU_interior_360 Entry 01_Post",
         "depthMap": "entry-depth",
         "visible": [
           "360_Entry_01",
@@ -41,13 +41,13 @@
       },
       {
         "name": "360_Bedroom_01",
-        "textureMap": "241002_samara_360 Bedroom 01",
+        "textureMap": "241030_Samara ADU_interior_360 Bedroom 01_Post",
         "depthMap": "bedroom-depth",
         "visible": ["360_Bedroom_01", "360_Entry_01"]
       },
       {
         "name": "360_Bathroom_01",
-        "textureMap": "241002_samara_360 Bathroom 01",
+        "textureMap": "241030_Samara ADU_interior_360 Bathroom 01_Post",
         "depthMap": "bath-depth",
         "visible": ["360_Bathroom_01", "360_Entry_01"]
       }

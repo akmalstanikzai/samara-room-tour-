@@ -4,8 +4,9 @@ import lerpVert from './shaders/lerp/lerp.vert';
 import {
   Mesh,
   ShaderMaterial,
-  BoxGeometry,
+  PlaneGeometry,
   MeshBasicMaterial,
+  SphereGeometry,
   Color,
   Vector3,
   Layers,
@@ -135,9 +136,8 @@ export class Panorama {
       console.error('Error loading panoItems.json:', error);
     }
 
-    // Create a skybox instead of sphere
-    const geometry = new BoxGeometry(32, 32, 32, 200, 200, 200);
-    // Invert the geometry so textures render on inside faces
+    const geometry = new SphereGeometry(6, 200, 200);
+    // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
     const material = new ShaderMaterial({
@@ -149,51 +149,35 @@ export class Panorama {
         ambientLightIntensity: { value: 1.0 },
       },
       vertexShader: `
-      varying vec3 vWorldPosition;
-      
-      void main() {
-        vec4 worldPos = modelMatrix * vec4(position, 1.0);
-        vWorldPosition = worldPos.xyz;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-      `,
-      fragmentShader: `
-      uniform sampler2D texture1;
-      uniform sampler2D texture2;
-      uniform float mixRatio;
-      uniform vec3 ambientLightColor;
-      uniform float ambientLightIntensity;
-      
-      varying vec3 vWorldPosition;
-      
-      const float PI = 3.1415926535897932384626433832795;
-      
-      vec2 getEquirectangularUV(vec3 dir) {
-        dir = normalize(dir);
-        float phi = atan(dir.z, dir.x);
-        float theta = acos(dir.y);
-        float u = phi / (2.0 * PI) + 0.5;
-        float v = theta / PI;
-        return vec2(u, v);
-      }
-      
-      void main() {
-        vec2 uv = getEquirectangularUV(vWorldPosition);
-        vec4 tex1 = texture2D(texture1, uv);
-        vec4 tex2 = texture2D(texture2, uv);
-        vec4 mixedColor = mix(tex1, tex2, mixRatio);
-        
-        vec3 ambient = ambientLightColor * ambientLightIntensity;
-        vec3 finalColor = mixedColor.rgb * ambient;
-        
-        gl_FragColor = vec4(finalColor, mixedColor.a);
-      }
-      `,
+      varying vec2 vUv;
+void main() {
+  vUv = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`,
+      fragmentShader: `uniform sampler2D texture1;
+uniform sampler2D texture2;
+uniform float mixRatio;
+uniform vec3 ambientLightColor;
+uniform float ambientLightIntensity;
+varying vec2 vUv;
+void main() {
+  vec4 tex1 = texture2D(texture1, vUv);
+  vec4 tex2 = texture2D(texture2, vUv);
+  vec4 mixedColor = mix(tex1, tex2, mixRatio);
+
+  // Apply ambient light
+  vec3 ambient = ambientLightColor * ambientLightIntensity;
+  vec3 finalColor = mixedColor.rgb * ambient;
+
+  gl_FragColor = vec4(finalColor, mixedColor.a);
+}
+`,
     });
 
     const mesh = new Mesh(geometry, material);
     mesh.scale.setScalar(1);
-    mesh.rotation.y = Math.PI;
+    mesh.rotation.y = 3.14;
     mesh.name = 'pano';
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
@@ -331,7 +315,7 @@ export class Panorama {
       name: textureMap,
       anisotropy: true,
       filter: true,
-      // flip: true,
+      flip: true,
     };
   }
 }

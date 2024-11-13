@@ -13,8 +13,8 @@ const params = {
   animation: {
     move: {
       duration: 1,
-      ease: Linear,
-      easeName: 'Linear',
+      ease: Power4.easeOut,
+      easeName: 'Power4.easeOut',
     },
   },
   container: null,
