@@ -119,7 +119,6 @@ export class CreateScene {
       this.postprocessing.init();
 
       this.initListeners();
-      this.setupPerspectiveView();
       this.onResize();
       this.addSubs();
       this.startRendering();
@@ -342,17 +341,6 @@ export class CreateScene {
     }
 
     objectToAnimate.length > 0 && gsap.timeline().to(objectToAnimate, tlObj);
-  }
-
-  setupPerspectiveView() {
-    const scaleInt =
-      params.camera.fov / params.models.samara.modelScaleAspectValue;
-
-    this.scene.scale.set(scaleInt * 3.33, scaleInt * 3.33, scaleInt * 3.33);
-
-    this.camera.fov = params.camera.fov;
-    this.camera.updateProjectionMatrix();
-    this.update();
   }
 
   onResize() {

@@ -51,7 +51,7 @@ const params = {
     landscapeAspect: 4 / 3.5,
     near: 5,
     far: 50,
-    fov: 45,
+    fov: 55,
     initPos: {
       x: -10.873648212948423,
       y: 0.4188578127354573,
