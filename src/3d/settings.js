@@ -12,7 +12,7 @@ const params = {
   },
   animation: {
     move: {
-      duration: 1,
+      duration: 2,
       ease: Power4.easeOut,
       easeName: 'Power4.easeOut',
     },
