@@ -1,4 +1,7 @@
+import { Vector2, Raycaster, MathUtils } from 'three';
 import { Mesh, ShaderMaterial, PlaneGeometry, MeshBasicMaterial } from 'three';
+import { params } from '../settings';
+import { Vector3 } from 'three';
 
 export class Hotspots {
   constructor(engine) {
@@ -7,6 +10,8 @@ export class Hotspots {
   }
 
   async setup() {
+    this.popup = this.createPopup(); // Create the popup element
+    this.vector = new Vector3();
     this.engine.pano.panoItems.forEach((pano) => {
       const hotspot = new Mesh(
         new PlaneGeometry(0.4, 0.4),
@@ -28,6 +33,67 @@ export class Hotspots {
       this.engine.scene.add(hotspot);
       this.engine.meshes.push(hotspot);
     });
+
+    [
+      { name: 'Empty_oven', info: 'Integrated drawer dishwasher' },
+      { name: 'Empty_tv', info: 'Tv' },
+    ].forEach((item) => {
+      const object3d = this.engine.scene.getObjectByName(item.name);
+
+      const infoHotspot = new Mesh(
+        new PlaneGeometry(0.4, 0.4),
+        new MeshBasicMaterial({
+          map: this.engine.textures.getTexture('i'),
+          transparent: true,
+          opacity: 1,
+        })
+      );
+
+      object3d.getWorldPosition(infoHotspot.position);
+
+      infoHotspot.name = 'Info' + MathUtils.generateUUID();
+      infoHotspot._info = item.info;
+      infoHotspot.rotation.z = -Math.PI;
+      infoHotspot.scale.setScalar(1.25);
+      infoHotspot.position.z += 0.01;
+      this.engine.scene.add(infoHotspot);
+      this.engine.meshes.push(infoHotspot);
+    });
+  }
+
+  createPopup() {
+    const popup = document.createElement('div');
+    popup.id = 'popup';
+    popup.style.display = 'none';
+    popup.style.position = 'absolute';
+    popup.style.background = 'white';
+    popup.style.color = 'black';
+    popup.style.borderRadius = '8px';
+    popup.style.padding = '10px';
+    popup.style.backdropFilter = 'blur(5px)';
+    popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    params.container.appendChild(popup);
+    return popup;
+  }
+
+  showPopup(object, text) {
+    // object.updateWorldMatrix(true, false);
+    // object.getWorldPosition(this.vector);
+    // this.vector.project(this.engine.camera);
+
+    // const x = (this.vector.x * 0.5 + 0.5) * params.container.clientWidth;
+    // const y = -(this.vector.y * 0.5 + 0.5) * params.container.clientHeight;
+
+    // this.popup.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${
+    //   y + this.popup.clientHeight
+    // }px, 0)`;
+
+    this.popup.innerText = text;
+    this.popup.style.display = 'block';
+  }
+
+  hidePopup() {
+    this.popup.style.display = 'none';
   }
 
   update() {}

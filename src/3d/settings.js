@@ -171,6 +171,7 @@ const params = {
   textures: [
     { path: 'Hotspot.png', name: 'pin', anisotropy: true },
     { path: 'Cursor.png', name: 'cursor', anisotropy: true },
+    { path: 'i.png', name: 'i', anisotropy: true },
   ],
 
   models: {

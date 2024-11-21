@@ -113,6 +113,7 @@ export class Panorama {
       model.scene.children.forEach((child) => {
         child.children.forEach((object) => {
           if (object.material) {
+            object.material.isDepthMap = true;
             if (object.material.name === 'Tables') {
               // object.visible = false;
               object.material.colorWrite = false;

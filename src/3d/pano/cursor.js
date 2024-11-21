@@ -80,6 +80,18 @@ export class CursorPin {
     this.raycaster.intersectObjects(visibleObjects, false, this.intersects);
 
     if (this.intersects.length > 0) {
+      if (this.intersects[0].object.name.includes('Info')) {
+        params.container.classList.add('cursor-pointer');
+
+        this.engine.pano.hotspots.showPopup(
+          this.intersects[0].object,
+          this.intersects[0].object._info
+        );
+      } else {
+        this.engine.pano.hotspots.hidePopup();
+        params.container.classList.remove('cursor-pointer');
+      }
+
       // Sort intersects to prioritize Hotspots
       this.intersects.sort((a, b) => {
         if (
