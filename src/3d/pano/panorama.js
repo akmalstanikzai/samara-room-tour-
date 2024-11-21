@@ -325,6 +325,7 @@ void main() {
       path: textureMap + extension,
       name: textureMap,
       anisotropy: true,
+      nonSrgb: true,
       filter: true,
       flip: true,
     };

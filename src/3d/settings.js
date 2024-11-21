@@ -5,7 +5,7 @@ import { Power3, Linear, Power4 } from 'gsap';
 
 const params = {
   postProcessing: {
-    enabled: true,
+    enabled: false,
     antialias: {
       multisampling: 4,
     },
