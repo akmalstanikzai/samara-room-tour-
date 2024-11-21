@@ -21,6 +21,7 @@ export class SceneComponent extends LitElement {
 
     this.isModalOpen = false;
     this.currentZoom = '1x';
+    this.showGui = this.shouldShowGui();
   }
 
   static get styles() {
@@ -273,6 +274,11 @@ export class SceneComponent extends LitElement {
 
   onRef(div) {
     params.container = div;
+  }
+
+  shouldShowGui() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('gui');
   }
 
   connectedCallback() {
