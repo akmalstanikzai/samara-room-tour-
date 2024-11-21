@@ -90,11 +90,10 @@ export class Hotspots {
     this.vector.project(this.engine.camera);
 
     const x = (this.vector.x * 0.5 + 0.5) * width;
-    const y = (this.vector.y * 0.5 + 0.5) * height;
+    const y = (this.vector.y * -0.5 + 0.5) * height; // Invert y for correct positioning
 
-    this.popup.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${
-      y + this.popup.clientHeight
-    }px, 0)`;
+    this.popup.style.left = `${x}px`;
+    this.popup.style.top = `${y - 40}px`;
   }
 
   hidePopup() {
