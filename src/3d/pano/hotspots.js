@@ -66,30 +66,35 @@ export class Hotspots {
     popup.id = 'popup';
     popup.style.display = 'none';
     popup.style.position = 'absolute';
-    popup.style.background = 'white';
+    popup.style.background = 'rgba(255, 255, 255, 0.6)';
     popup.style.color = 'black';
     popup.style.borderRadius = '8px';
     popup.style.padding = '10px';
-    popup.style.backdropFilter = 'blur(5px)';
+    popup.style.backdropFilter = 'blur(1em)';
     popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    popup.style.pointerEvents = 'none';
     params.container.appendChild(popup);
     return popup;
   }
 
   showPopup(object, text) {
-    // object.updateWorldMatrix(true, false);
-    // object.getWorldPosition(this.vector);
-    // this.vector.project(this.engine.camera);
-
-    // const x = (this.vector.x * 0.5 + 0.5) * params.container.clientWidth;
-    // const y = -(this.vector.y * 0.5 + 0.5) * params.container.clientHeight;
-
-    // this.popup.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${
-    //   y + this.popup.clientHeight
-    // }px, 0)`;
-
     this.popup.innerText = text;
     this.popup.style.display = 'block';
+
+    const width = params.container.clientWidth;
+    const height = params.container.clientHeight;
+
+    object.updateWorldMatrix(true, false);
+    object.getWorldPosition(this.vector);
+
+    this.vector.project(this.engine.camera);
+
+    const x = (this.vector.x * 0.5 + 0.5) * width;
+    const y = (this.vector.y * 0.5 + 0.5) * height;
+
+    this.popup.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${
+      y + this.popup.clientHeight
+    }px, 0)`;
   }
 
   hidePopup() {
