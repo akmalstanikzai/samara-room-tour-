@@ -9,7 +9,7 @@ export class Hotspots {
   async setup() {
     this.engine.pano.panoItems.forEach((pano) => {
       const hotspot = new Mesh(
-        new PlaneGeometry(0.1, 0.1),
+        new PlaneGeometry(0.4, 0.4),
         new MeshBasicMaterial({
           name: 'Hotspot',
           map: this.engine.textures.getTexture('pin'),

@@ -26,7 +26,7 @@ export class CursorPin {
   }
 
   init() {
-    const geometry = new PlaneGeometry(0.1, 0.1);
+    const geometry = new PlaneGeometry(0.4, 0.4);
 
     const material = new MeshBasicMaterial({
       color: new Color(0xcccccc),

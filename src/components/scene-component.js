@@ -219,7 +219,6 @@ export class SceneComponent extends LitElement {
         position: absolute;
         bottom: 1em;
         right: 1em;
-        z-index: 999;
         display: flex;
         gap: 0.5em;
       }
@@ -237,7 +236,7 @@ export class SceneComponent extends LitElement {
       .button {
         margin-right: 1em;
         border-radius: 2em;
-        padding: 0.5em 1em;
+        padding: 0.1em 1em;
         color: white;
       }
 
@@ -328,6 +327,20 @@ export class SceneComponent extends LitElement {
 
   changeZoom(zoom) {
     this.currentZoom = zoom;
+    if (zoom === '1x') {
+      window.engine.controls.zoomTo(
+        params.controls.firstPerson.defaultZoom,
+        true
+      );
+    }
+
+    if (zoom === '2x') {
+      window.engine.controls.zoomTo(params.controls.firstPerson.maxZoom, true);
+    }
+
+    if (zoom === '0.5x') {
+      window.engine.controls.zoomTo(params.controls.firstPerson.minZoom, true);
+    }
     this.requestUpdate();
   }
 

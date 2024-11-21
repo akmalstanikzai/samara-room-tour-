@@ -121,7 +121,7 @@ const params = {
         z: 0,
       },
       minZoom: 0.35,
-      maxZoom: 0.8,
+      maxZoom: 0.65,
       defaultZoom: 0.5,
       near: 0.01,
       polarRotateSpeed: -1,
@@ -169,8 +169,8 @@ const params = {
     opacity: 0.8,
   },
   textures: [
-    { path: 'pin.png', name: 'pin', anisotropy: true },
-    { path: 'cursor.png', name: 'cursor', anisotropy: true },
+    { path: 'Hotspot.png', name: 'pin', anisotropy: true },
+    { path: 'Cursor.png', name: 'cursor', anisotropy: true },
   ],
 
   models: {
