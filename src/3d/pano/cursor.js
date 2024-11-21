@@ -102,7 +102,7 @@ export class CursorPin {
       ) {
         this.pin.visible = false;
         if (!userDevice.isMobile) {
-          params.container.style.cursor = 'pointer';
+          params.container.classList.add('cursor-pointer');
           this.engine.controls.enabled = false;
         }
 
@@ -118,6 +118,7 @@ export class CursorPin {
         if (!userDevice.isMobile) {
           this.pin.visible = true;
           params.container.style.cursor = 'auto';
+          params.container.classList.remove('cursor-pointer');
           this.engine.controls.enabled = true;
         }
 

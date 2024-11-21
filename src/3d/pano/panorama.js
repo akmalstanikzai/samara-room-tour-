@@ -44,6 +44,7 @@ export class Panorama {
         eventTarget: params.container,
         eventName: 'mousedown',
         eventFunction: (e) => {
+          params.container.classList.add('cursor-dragging');
           this.mouseDownPosition = { x: e.clientX, y: e.clientY };
         },
       },
@@ -51,6 +52,8 @@ export class Panorama {
         eventTarget: params.container,
         eventName: 'mouseup',
         eventFunction: (e) => {
+          params.container.classList.remove('cursor-dragging');
+          params.container.classList.add('cursor-grab');
           if (this.mouseDownPosition) {
             this.cursor.onClick(e);
           }
