@@ -87,7 +87,12 @@ export class CursorPin {
           this.intersects[0].object,
           this.intersects[0].object._info
         );
+        this.pin.visible = false;
+
+        return;
       } else {
+        this.pin.visible = true;
+
         this.engine.pano.hotspots.hidePopup();
         params.container.classList.remove('cursor-pointer');
       }
