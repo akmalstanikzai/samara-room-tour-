@@ -183,8 +183,8 @@ export class SceneComponent extends LitElement {
       }
 
       #pano {
-        width: 80%;
-        height: 80%;
+        width: 100%;
+        height: 100%;
         border-radius: 1em;
         overflow: hidden;
         position: relative;
@@ -204,8 +204,8 @@ export class SceneComponent extends LitElement {
         justify-content: center;
         align-items: center;
         display: flex;
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 80%;
       }
 
       #modal-overlay {
@@ -213,6 +213,9 @@ export class SceneComponent extends LitElement {
         height: 100%;
         backdrop-filter: blur(1em);
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .button-container {
@@ -347,8 +350,13 @@ export class SceneComponent extends LitElement {
   render() {
     return html`
       <div id="modal" style="display: ${this.isModalOpen ? 'block' : 'none'};">
-        <div id="modal-overlay">
-          <div id="modal-content">
+        <div
+          id="modal-overlay"
+          @click="${() => {
+            this.closeModal();
+          }}"
+        >
+          <div id="modal-content" @click="${(e) => e.stopPropagation()}">
             <div id="pano">
               <div class="scene-wrapper">
                 <div class="scene" ${ref(this.onRef)}></div>
