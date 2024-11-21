@@ -34,10 +34,7 @@ export class Hotspots {
       this.engine.meshes.push(hotspot);
     });
 
-    [
-      { name: 'Empty_oven', info: 'Integrated drawer dishwasher' },
-      { name: 'Empty_tv', info: 'Tv' },
-    ].forEach((item) => {
+    this.engine.pano.infospots.forEach((item) => {
       const object3d = this.engine.scene.getObjectByName(item.name);
 
       const infoHotspot = new Mesh(

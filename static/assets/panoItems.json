@@ -1,6 +1,10 @@
 {
   "1B": {
     "model": "1B_roomtour.glb",
+    "infospots": [
+      { "name": "Empty_oven", "info": "Integrated drawer dishwasher" },
+      { "name": "Empty_tv", "info": "Tv" }
+    ],
     "hotspots": [
       {
         "name": "360_Living_01",

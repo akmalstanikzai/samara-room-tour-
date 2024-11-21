@@ -82,6 +82,8 @@ export class Panorama {
           this.createPanoItem(name, textureMap, visible, depthMap)
       );
 
+      this.infospots = data['1B'].infospots;
+
       // Create texture objects in a new array
       const newTextureObjects = this.panoItems
         .flatMap(({ textureMap, depthMap }) => [
