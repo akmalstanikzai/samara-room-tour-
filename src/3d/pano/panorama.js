@@ -60,6 +60,13 @@ export class Panorama {
           this.mouseDownPosition = null;
         },
       },
+      {
+        eventTarget: params.container,
+        eventName: 'dblclick',
+        eventFunction: (e) => {
+          this.cursor.onDoubleClick(e);
+        },
+      },
     ];
   }
 

@@ -193,31 +193,41 @@ export class CursorPin {
           hotspotIntersect.object.name.includes(pano.name)
         );
         this.engine.pano.change(cameraMap.name);
-      } else {
-        // If no Hotspot found, find the closest visible Hotspot
-        const clickPoint = this.intersects[0].point;
-        let closestHotspot = null;
-        let closestDistance = Infinity;
-
-        const visibleHotspots = this.engine.meshes.filter(
-          (mesh) => mesh.name.includes('Hotspot') && mesh.visible
-        );
-
-        visibleHotspots.forEach((hostpot) => {
-          const distance = clickPoint.distanceTo(hostpot.position);
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestHotspot = hostpot;
-          }
-        });
-
-        if (closestHotspot) {
-          const cameraMap = this.engine.pano.panoItems.find((pano) =>
-            closestHotspot.name.includes(pano.name)
-          );
-          this.engine.pano.change(cameraMap.name);
-        }
       }
+    }
+  }
+
+  findClosestHotspot(clickPoint) {
+    // If no Hotspot found, find the closest visible Hotspot
+    let closestHotspot = null;
+    let closestDistance = Infinity;
+
+    const visibleHotspots = this.engine.meshes.filter(
+      (mesh) => mesh.name.includes('Hotspot') && mesh.visible
+    );
+
+    visibleHotspots.forEach((hostpot) => {
+      const distance = clickPoint.distanceTo(hostpot.position);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestHotspot = hostpot;
+      }
+    });
+
+    if (closestHotspot) {
+      const cameraMap = this.engine.pano.panoItems.find((pano) =>
+        closestHotspot.name.includes(pano.name)
+      );
+      this.engine.pano.change(cameraMap.name);
+    }
+  }
+
+  onDoubleClick(e) {
+    this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
+
+    if (this.intersects.length > 0) {
+      // Call the findClosestHotspot method with the intersection point
+      this.findClosestHotspot(this.intersects[0].point);
     }
   }
 }
