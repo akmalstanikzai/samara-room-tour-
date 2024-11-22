@@ -80,23 +80,6 @@ export class CursorPin {
     this.raycaster.intersectObjects(visibleObjects, false, this.intersects);
 
     if (this.intersects.length > 0) {
-      if (this.intersects[0].object.name.includes('Info')) {
-        params.container.classList.add('cursor-pointer');
-
-        this.engine.pano.hotspots.showPopup(
-          this.intersects[0].object,
-          this.intersects[0].object._info
-        );
-        this.pin.visible = false;
-
-        return;
-      } else {
-        this.pin.visible = true;
-
-        this.engine.pano.hotspots.hidePopup();
-        params.container.classList.remove('cursor-pointer');
-      }
-
       // Sort intersects to prioritize Hotspots
       this.intersects.sort((a, b) => {
         if (
@@ -131,7 +114,19 @@ export class CursorPin {
           this.hoveredHotspot = firstIntersect.object;
           this.animateHotspotOpacity(this.hoveredHotspot, 1);
         }
+      } else if (
+        firstIntersect.object.visible &&
+        firstIntersect.object.name.includes('Info')
+      ) {
+        this.pin.visible = false;
+
+        if (!userDevice.isMobile) {
+          params.container.classList.add('cursor-pointer');
+          this.engine.controls.enabled = false;
+        }
+        this.engine.pano.hotspots.showPopup(firstIntersect.object);
       } else {
+        this.engine.pano.hotspots.hidePopup();
         if (!userDevice.isMobile) {
           this.pin.visible = true;
           params.container.style.cursor = 'auto';

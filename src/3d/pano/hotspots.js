@@ -77,8 +77,8 @@ export class Hotspots {
     return popup;
   }
 
-  showPopup(object, text) {
-    this.popup.innerText = text;
+  showPopup(object) {
+    this.popup.innerText = object._info;
     this.popup.style.display = 'block';
 
     const width = params.container.clientWidth;
