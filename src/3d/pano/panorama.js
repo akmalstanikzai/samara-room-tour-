@@ -149,7 +149,7 @@ export class Panorama {
       console.error('Error loading panoItems.json:', error);
     }
 
-    const geometry = new SphereGeometry(6, 200, 200);
+    const geometry = new SphereGeometry(30, 200, 200);
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 

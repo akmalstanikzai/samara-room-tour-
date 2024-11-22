@@ -20,7 +20,7 @@ export class Hotspots {
           map: this.engine.textures.getTexture('pin'),
           transparent: true,
           // depthTest: false,
-          opacity: 0.3,
+          opacity: 0.5,
         })
       );
 

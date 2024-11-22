@@ -157,7 +157,7 @@ export class CursorPin {
 
         // Animate previously hovered hotspot opacity back to 0.5
         if (this.hoveredHotspot) {
-          this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+          this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
           this.hoveredHotspot = null;
         }
       }
@@ -171,7 +171,7 @@ export class CursorPin {
 
       // Animate previously hovered hotspot opacity back to 0.5
       if (this.hoveredHotspot) {
-        this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+        this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
         this.hoveredHotspot = null;
       }
     }
