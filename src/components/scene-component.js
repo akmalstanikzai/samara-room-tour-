@@ -445,7 +445,7 @@ export class SceneComponent extends LitElement {
                       : 'default'}"
                     @click="${() => this.changeZoom('0.5x')}"
                   >
-                    0.5x
+                    0.5 x
                   </button>
                   <button
                     class="button ${this.currentZoom === '1x'
@@ -453,7 +453,7 @@ export class SceneComponent extends LitElement {
                       : 'default'}"
                     @click="${() => this.changeZoom('1x')}"
                   >
-                    1x
+                    1 x
                   </button>
                   <button
                     class="button ${this.currentZoom === '2x'
@@ -461,7 +461,7 @@ export class SceneComponent extends LitElement {
                       : 'default'}"
                     @click="${() => this.changeZoom('2x')}"
                   >
-                    2x
+                    2 x
                   </button>
                 </div>
               </div>
