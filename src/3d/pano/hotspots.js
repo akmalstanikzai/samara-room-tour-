@@ -1,4 +1,4 @@
-import { Vector2, Raycaster, MathUtils } from 'three';
+import { Vector2, Raycaster, MathUtils, DoubleSide } from 'three';
 import { Mesh, ShaderMaterial, PlaneGeometry, MeshBasicMaterial } from 'three';
 import { params } from '../settings';
 import { Vector3 } from 'three';
@@ -43,6 +43,7 @@ export class Hotspots {
           map: this.engine.textures.getTexture('i'),
           transparent: true,
           opacity: 1,
+          side: DoubleSide,
         })
       );
 
@@ -50,7 +51,9 @@ export class Hotspots {
 
       infoHotspot.name = 'Info' + MathUtils.generateUUID();
       infoHotspot._info = item.info;
-      infoHotspot.rotation.z = -Math.PI;
+
+      // infoHotspot.rotation.z = -Math.PI;
+      infoHotspot.material.map.flipY = true;
       infoHotspot.scale.setScalar(1.25);
       infoHotspot.position.z += 0.01;
       this.engine.scene.add(infoHotspot);

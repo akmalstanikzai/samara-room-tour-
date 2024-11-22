@@ -12,9 +12,9 @@ const params = {
   },
   animation: {
     move: {
-      duration: 2,
-      ease: Power4.easeOut,
-      easeName: 'Power4.easeOut',
+      duration: 0.15,
+      ease: Linear,
+      easeName: 'Linear',
     },
   },
   container: null,
@@ -51,7 +51,7 @@ const params = {
     landscapeAspect: 4 / 3.5,
     near: 5,
     far: 50,
-    fov: 55,
+    fov: 40,
     initPos: {
       x: -10.873648212948423,
       y: 0.4188578127354573,
@@ -128,8 +128,8 @@ const params = {
       azimuthRotateSpeed: -1,
       smoothTime: 0.1,
       draggingSmoothTime: 0.1,
-      maxPolarAngle: MathUtils.degToRad(120),
-      minPolarAngle: MathUtils.degToRad(50),
+      maxPolarAngle: Math.PI,
+      minPolarAngle: 0,
       minAzimuthAngle: -Infinity,
       maxAzimuthAngle: Infinity,
     },
