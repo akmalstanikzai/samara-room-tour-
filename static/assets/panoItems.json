@@ -20,7 +20,12 @@
       {
         "name": "360_Living_02",
         "textureMap": "241030_Samara ADU_interior_360 Living 02_Post",
-        "visible": ["360_Living_02", "360_Living_03", "360_Living_01"]
+        "visible": [
+          "360_Living_02",
+          "360_Living_03",
+          "360_Living_01",
+          "360_Entry_01"
+        ]
       },
       {
         "name": "360_Living_03",
@@ -29,7 +34,8 @@
           "360_Living_03",
           "360_Living_02",
           "360_Living_01",
-          "360_Entry_01"
+          "360_Entry_01",
+          "360_Bedroom_01"
         ]
       },
       {
@@ -47,7 +53,7 @@
         "name": "360_Bedroom_01",
         "textureMap": "241030_Samara ADU_interior_360 Bedroom 01_Post",
         "depthMap": "bedroom-depth",
-        "visible": ["360_Bedroom_01", "360_Entry_01"]
+        "visible": ["360_Bedroom_01", "360_Entry_01", "360_Living_01"]
       },
       {
         "name": "360_Bathroom_01",
