@@ -405,7 +405,7 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 11,
+          totalAssetsCount: 12,
           textures: [],
         },
       ],
