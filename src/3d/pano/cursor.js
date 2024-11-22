@@ -103,7 +103,6 @@ export class CursorPin {
         this.pin.visible = false;
         if (!userDevice.isMobile) {
           params.container.classList.add('cursor-pointer');
-          this.engine.controls.enabled = false;
         }
 
         // Animate hotspot opacity to 1
@@ -122,7 +121,6 @@ export class CursorPin {
 
         if (!userDevice.isMobile) {
           params.container.classList.add('cursor-pointer');
-          this.engine.controls.enabled = false;
         }
         this.engine.pano.hotspots.showPopup(firstIntersect.object);
       } else {
@@ -131,7 +129,6 @@ export class CursorPin {
           this.pin.visible = true;
           params.container.style.cursor = 'auto';
           params.container.classList.remove('cursor-pointer');
-          this.engine.controls.enabled = true;
         }
 
         const point = firstIntersect.point;

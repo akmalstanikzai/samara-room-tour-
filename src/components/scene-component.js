@@ -350,6 +350,7 @@ export class SceneComponent extends LitElement {
     if (zoom === '0.5x') {
       window.engine.controls.zoomTo(params.controls.firstPerson.minZoom, true);
     }
+    window.engine.update();
     this.requestUpdate();
   }
 
