@@ -89,7 +89,9 @@ export class Hotspots {
       const x = (this.vector.x * 0.5 + 0.5) * width;
       const y = (this.vector.y * -0.5 + 0.5) * height; // Invert y for correct positioning
 
-      this.vector.z < 0.9
+      console.log(this.vector.z);
+
+      this.vector.z < 0.995
         ? (this.popup.style.display = 'block')
         : (this.popup.style.display = 'none');
 
