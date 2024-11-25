@@ -77,27 +77,34 @@ export class Hotspots {
     return popup;
   }
 
+  updatePopupPosition() {
+    if (this.object) {
+      const width = params.container.clientWidth;
+      const height = params.container.clientHeight;
+      this.object.updateWorldMatrix(true, false);
+      this.object.getWorldPosition(this.vector);
+
+      this.vector.project(this.engine.camera);
+
+      const x = (this.vector.x * 0.5 + 0.5) * width;
+      const y = (this.vector.y * -0.5 + 0.5) * height; // Invert y for correct positioning
+
+      this.popup.style.left = `${x - this.popup.clientWidth / 2}px`;
+      this.popup.style.top = `${y - this.popup.clientHeight - 10}px`;
+    }
+  }
+
   showPopup(object) {
     this.popup.innerText = object._info;
     this.popup.style.display = 'block';
 
-    const width = params.container.clientWidth;
-    const height = params.container.clientHeight;
-
-    object.updateWorldMatrix(true, false);
-    object.getWorldPosition(this.vector);
-
-    this.vector.project(this.engine.camera);
-
-    const x = (this.vector.x * 0.5 + 0.5) * width;
-    const y = (this.vector.y * -0.5 + 0.5) * height; // Invert y for correct positioning
-
-    this.popup.style.left = `${x - this.popup.clientWidth / 2}px`;
-    this.popup.style.top = `${y - this.popup.clientHeight - 10}px`;
+    this.object = object;
+    this.updatePopupPosition();
   }
 
   hidePopup() {
     this.popup.style.display = 'none';
+    this.object = null;
   }
 
   update() {}

@@ -32,6 +32,7 @@ import { Assets } from './assets';
 import { Options } from '../services/options';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './pano/panorama';
+import { userDevice } from '../utils/browser-detection';
 
 /** Main class for 3d scene */
 export class CreateScene {
@@ -278,6 +279,7 @@ export class CreateScene {
   onControlsUpdate() {
     // console.log(this.controls.getPosition());
     // console.log(this.controls.getTarget());
+    userDevice.isMobile && this.pano.hotspots.updatePopupPosition();
   }
 
   onControlsEnd() {
