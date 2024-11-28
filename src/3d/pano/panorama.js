@@ -87,7 +87,6 @@ export class Panorama {
 
       this.infospots = data['1B'].infospots;
 
-      // Create texture objects in a new array
       const newTextureObjects = this.panoItems
         .flatMap(({ textureMap, depthMap }) => [
           this.createTextureObject(textureMap),
@@ -99,14 +98,12 @@ export class Panorama {
         if (el.depthMap) console.log(el);
       });
 
-      // Load textures and wait for all to complete
       await Promise.all(
         newTextureObjects.map(async (texture) => {
           await this.engine.textures.loadTexture(texture, 'map');
         })
       );
 
-      // Push loaded textures to params.textures
       params.textures.push(...newTextureObjects);
       this.engine.meshes = [];
 
@@ -139,11 +136,7 @@ export class Panorama {
       );
 
       this.engine.scene.traverse((object) => {
-        if (
-          object instanceof Mesh &&
-          object.material
-          // && object.material.name !== 'Tables'
-        )
+        if (object instanceof Mesh && object.material)
           this.engine.meshes.push(object);
       });
     } catch (error) {
@@ -163,13 +156,14 @@ export class Panorama {
         ambientLightIntensity: { value: 1.0 },
       },
       vertexShader: `
-      varying vec2 vUv;
+varying vec2 vUv;
 void main() {
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `,
-      fragmentShader: `uniform sampler2D texture1;
+      fragmentShader: `
+uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform float mixRatio;
 uniform vec3 ambientLightColor;
@@ -196,7 +190,6 @@ void main() {
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
     this.engine.scene.add(mesh);
-    // this.engine.models.centerModels(mesh);
 
     this.hotspots = new Hotspots(this.engine);
     this.cursor = new CursorPin(this.engine);
@@ -220,7 +213,6 @@ void main() {
 
     const { position: positionB, target: targetB } = this.cameraPositions[name];
     const positionA = this.engine.controls.getPosition();
-    // const targetA = this.engine.controls.getTarget();
 
     if (firstInit) {
       this.engine.controls.setLookAt(
@@ -276,19 +268,8 @@ void main() {
         material.uniforms.mixRatio.value = 0;
       },
       onUpdate: () => {
-        // this.engine.cursor.pin.visible = false;
         this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
-
-        // console.log(material.uniforms.mixRatio.value);
-
         const progress = this.moveGsap.progress();
-
-        // if (progress >= 0.5) {
-        //   // Start updating blend from 0.5 to 1 progress
-        //   const blendProgress = (progress - 0.5) * 2; // Map 0.5-1 to 0-1
-        //   material.uniforms.mixRatio.value = blendProgress;
-        // }
-
         material.uniforms.mixRatio.value = progress;
       },
     });
