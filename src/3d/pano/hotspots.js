@@ -10,7 +10,6 @@ export class Hotspots {
   }
 
   async setup() {
-    this.popup = this.createPopup(); // Create the popup element
     this.vector = new Vector3();
     this.engine.pano.panoItems.forEach((pano) => {
       const hotspot = new Mesh(
@@ -61,24 +60,10 @@ export class Hotspots {
     });
   }
 
-  createPopup() {
-    const popup = document.createElement('div');
-    popup.id = 'popup';
-    popup.style.display = 'none';
-    popup.style.position = 'absolute';
-    popup.style.background = 'rgba(255, 255, 255, 0.6)';
-    popup.style.color = 'black';
-    popup.style.borderRadius = '8px';
-    popup.style.padding = '10px';
-    popup.style.backdropFilter = 'blur(1em)';
-    popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-    popup.style.pointerEvents = 'none';
-    params.container.appendChild(popup);
-    return popup;
-  }
-
   updatePopupPosition() {
-    if (this.object) {
+    this.popup = document.getElementById('popup');
+
+    if (this.object && this.popup) {
       const width = params.container.clientWidth;
       const height = params.container.clientHeight;
       this.object.updateWorldMatrix(true, false);
@@ -99,15 +84,21 @@ export class Hotspots {
   }
 
   showPopup(object) {
-    this.popup.innerText = object._info;
-    this.popup.style.display = 'block';
+    this.popup = document.getElementById('popup');
+    if (this.popup) {
+      this.popup.innerText = object._info;
+      this.popup.style.display = 'block';
+    }
 
     this.object = object;
     this.updatePopupPosition();
   }
 
   hidePopup() {
-    this.popup.style.display = 'none';
+    this.popup = document.getElementById('popup');
+    if (this.popup) {
+      this.popup.style.display = 'none';
+    }
     this.object = null;
   }
 

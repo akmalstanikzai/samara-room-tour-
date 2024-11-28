@@ -25,7 +25,10 @@ export class Panorama {
 
     this.mouseDownPosition = null;
     this.mouseMoveThreshold = 5; // pixels
-    this.listeners = [
+  }
+
+  get listeners() {
+    return [
       {
         eventTarget: params.container,
         eventName: 'mousemove',

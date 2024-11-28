@@ -46,14 +46,18 @@ export class CreateScene {
    * Initialize scene and start rendering
    */
 
-  async init(reInit) {
+  async init(reInit, preload) {
     if (reInit || this.renderer) {
+      if (this.assets.preInitPromises) {
+        await this.assets.preInitPromises;
+      }
       params.container.appendChild(this.renderer.domElement);
       this.cameraControls.initControls(true);
       this.onResize();
       this.initListeners();
       this.addSubs();
       this.startRendering();
+      this.pano.change('360_Entry_01', true);
     } else {
       this.textures = new Textures();
       this.options = new Options();
@@ -79,7 +83,9 @@ export class CreateScene {
 
       this.camera = new PerspectiveCamera(
         params.camera.fov,
-        params.container.clientWidth / params.container.clientHeight,
+        params.container?.clientWidth ||
+          1 / params.container?.clientHeight ||
+          1,
         params.camera.near,
         params.camera.far
       );
@@ -94,7 +100,7 @@ export class CreateScene {
 
       this.cameraControls = new cameraControls(this);
 
-      params.container.appendChild(this.renderer.domElement);
+      !preload && params.container.appendChild(this.renderer.domElement);
       this.cameraControls.initControls();
 
       this.ambientLight = new AmbientLight(0xffffff, params.light.intensity);
@@ -104,8 +110,12 @@ export class CreateScene {
       this.textures.init(this);
 
       this.assets = new Assets(this);
+      this.postprocessing = new PostProcessing(this);
+      this.postprocessing.init();
+
       // Load and setup assets asynchronously.
       await this.assets.loadAndSetup();
+
       this.pano = new Panorama(this);
       await this.pano.setup();
       params.loadOnDemand.loadingManager.enabled = false;
@@ -116,13 +126,14 @@ export class CreateScene {
       this.renderer.compile(this.scene, this.camera);
 
       this.CameraGsap = new CameraGsap();
-      this.postprocessing = new PostProcessing(this);
-      this.postprocessing.init();
 
-      this.initListeners();
-      this.onResize();
-      this.addSubs();
-      this.startRendering();
+      if (!preload) {
+        this.initListeners();
+        this.onResize();
+        this.addSubs();
+        this.startRendering();
+      }
+
       this.tests = new Tests(this);
 
       // this.tests.testContextLoss(5);
@@ -346,6 +357,7 @@ export class CreateScene {
   }
 
   onResize() {
+    if (!params.container) return;
     const width = params.container.clientWidth;
     const height = params.container.clientHeight;
 
