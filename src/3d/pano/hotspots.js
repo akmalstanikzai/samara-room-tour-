@@ -59,7 +59,7 @@ export class Hotspots {
       // infoHotspot.rotation.z = -Math.PI;
       infoHotspot.material.map.flipY = true;
       infoHotspot.scale.setScalar(0.5);
-      infoHotspot.position.z += 0.1;
+      infoHotspot.position.z += 0.05;
       this.engine.scene.add(infoHotspot);
       this.engine.meshes.push(infoHotspot);
     });

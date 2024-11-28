@@ -2,7 +2,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const HashOutput = require('webpack-plugin-hash-output');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 //dev
@@ -55,7 +54,6 @@ if (process.env.NODE_ENV === 'prod') {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new HashOutput(),
       new HtmlWebpackPlugin({
         filename: 'index.html', // name of html file to be created
         template: './src/index.html', // source from which html file would be created
@@ -71,12 +69,16 @@ if (process.env.NODE_ENV === 'prod') {
     module: {
       rules: [
         {
-          test: /\.html$/i,
-          loader: 'html-loader',
-          options: {
-            minimize: true,
-            interpolation: false,
-          },
+          test: /\.html$/,
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                sources: true, // If you need to handle assets in HTML
+                minimize: false, // If you want to minimize HTML
+              },
+            },
+          ],
         },
         {
           test: /\.js$/,
