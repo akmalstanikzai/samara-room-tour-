@@ -2,7 +2,6 @@ import { html, LitElement, nothing, css } from 'lit';
 import { appState } from '../services/app-state';
 import { ref } from 'lit/directives/ref.js';
 import { params } from '../3d/settings';
-import { BehaviorSubject } from 'rxjs';
 import { CreateScene } from '../3d/scene';
 
 export class SceneComponent extends LitElement {

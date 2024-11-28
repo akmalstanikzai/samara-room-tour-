@@ -7,6 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 //dev
 module.exports = {
+  mode: 'development',
   entry: `${__dirname}/src/app.js`,
   output: {
     path: __dirname + '/build',
@@ -14,7 +15,9 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'build'),
+    static: {
+      directory: path.join(__dirname, 'build'),
+    },
     port: 9000,
   },
   plugins: [
@@ -22,11 +25,13 @@ module.exports = {
       filename: 'index.html', // name of html file to be created
       template: './src/index.html', // source from which html file would be created
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'static',
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'static',
+        },
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -41,6 +46,7 @@ module.exports = {
 //prod
 if (process.env.NODE_ENV === 'prod') {
   module.exports = {
+    mode: 'production',
     entry: `${__dirname}/src/app.js`,
     output: {
       path: __dirname + '/build',
@@ -54,11 +60,13 @@ if (process.env.NODE_ENV === 'prod') {
         filename: 'index.html', // name of html file to be created
         template: './src/index.html', // source from which html file would be created
       }),
-      new CopyWebpackPlugin([
-        {
-          from: 'static',
-        },
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: 'static',
+          },
+        ],
+      }),
     ],
     module: {
       rules: [
