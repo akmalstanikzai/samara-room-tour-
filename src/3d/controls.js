@@ -76,7 +76,7 @@ export class cameraControls {
     this.dKey = new holdEvent.KeyboardKeyHold(KEYCODE.D, 10);
     this.upArrowKey = new holdEvent.KeyboardKeyHold(KEYCODE.ARROW_UP, 10);
     this.downArrowKey = new holdEvent.KeyboardKeyHold(KEYCODE.ARROW_DOWN, 10);
-    this.addListeners();
+    // this.addListeners();
   }
 
   addListeners() {
