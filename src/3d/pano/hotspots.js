@@ -61,9 +61,7 @@ export class Hotspots {
   }
 
   updatePopupPosition() {
-    this.popup = document.getElementById('popup');
-
-    if (this.object && this.popup) {
+    if (this.object && params.popup) {
       const width = params.container.clientWidth;
       const height = params.container.clientHeight;
       this.object.updateWorldMatrix(true, false);
@@ -75,19 +73,18 @@ export class Hotspots {
       const y = (this.vector.y * -0.5 + 0.5) * height; // Invert y for correct positioning
 
       this.vector.z < 0.995
-        ? (this.popup.style.display = 'block')
-        : (this.popup.style.display = 'none');
+        ? (params.popup.style.display = 'block')
+        : (params.popup.style.display = 'none');
 
-      this.popup.style.left = `${x - this.popup.clientWidth / 2}px`;
-      this.popup.style.top = `${y - this.popup.clientHeight - 10}px`;
+      params.popup.style.left = `${x - params.popup.clientWidth / 2}px`;
+      params.popup.style.top = `${y - params.popup.clientHeight - 10}px`;
     }
   }
 
   showPopup(object) {
-    this.popup = document.getElementById('popup');
-    if (this.popup) {
-      this.popup.innerText = object._info;
-      this.popup.style.display = 'block';
+    if (params.popup) {
+      params.popup.innerText = object._info;
+      params.popup.style.display = 'block';
     }
 
     this.object = object;
@@ -95,9 +92,8 @@ export class Hotspots {
   }
 
   hidePopup() {
-    this.popup = document.getElementById('popup');
-    if (this.popup) {
-      this.popup.style.display = 'none';
+    if (params.popup) {
+      params.popup.style.display = 'none';
     }
     this.object = null;
   }

@@ -260,7 +260,7 @@ export class SceneComponent extends LitElement {
 
       #popup {
         display: none;
-        posution: absolute;
+        position: absolute;
         background: rgba(255, 255, 255, 0.6);
         color: black;
         border-radius: 8px;
@@ -286,6 +286,10 @@ export class SceneComponent extends LitElement {
 
   onRef(div) {
     params.container = div;
+  }
+
+  onRefPopup(div) {
+    params.popup = div;
   }
 
   shouldShowGui() {
@@ -387,7 +391,7 @@ export class SceneComponent extends LitElement {
                   <div id="pano">
                     <div class="scene-wrapper">
                       <div class="scene" ${ref(this.onRef)}>
-                        <div id="popup"></div>
+                        <div id="popup" ${ref(this.onRefPopup)}></div>
                       </div>
 
                       ${this.loading.isLoading

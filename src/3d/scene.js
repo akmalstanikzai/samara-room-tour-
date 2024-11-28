@@ -48,17 +48,21 @@ export class CreateScene {
 
   async init(reInit, preload) {
     if (reInit || this.renderer) {
-      if (this.assets.preInitPromises) {
-        await this.assets.preInitPromises;
-      }
+      await this.initPromise;
+
       params.container.appendChild(this.renderer.domElement);
       this.cameraControls.initControls(true);
       this.onResize();
       this.initListeners();
       this.addSubs();
       this.startRendering();
-      this.pano.change('360_Entry_01', true);
+      this.pano?.change('360_Entry_01', true);
     } else {
+      let resolveInit;
+      this.initPromise = new Promise((resolve) => {
+        resolveInit = resolve;
+      });
+
       this.textures = new Textures();
       this.options = new Options();
       this.render = (time, deltaTime, frame) =>
@@ -144,6 +148,8 @@ export class CreateScene {
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
+
+      resolveInit();
     }
   }
 
@@ -290,7 +296,7 @@ export class CreateScene {
   onControlsUpdate() {
     // console.log(this.controls.getPosition());
     // console.log(this.controls.getTarget());
-    userDevice.isMobile && this.pano.hotspots.updatePopupPosition();
+    userDevice.isMobile && this.pano?.hotspots?.updatePopupPosition();
   }
 
   onControlsEnd() {
