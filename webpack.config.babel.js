@@ -82,14 +82,20 @@ if (process.env.NODE_ENV === 'prod') {
           test: /\.js$/,
           loader: 'babel-loader',
           exclude: /node_modules/,
-          query: {
+          options: {
             plugins: ['@babel/transform-arrow-functions'],
           },
         },
         {
           test: /\.(glsl|vs|fs|vert|frag)$/,
           exclude: /node_modules/,
-          use: ['raw-loader', 'glslify-loader'],
+          use: [
+            'raw-loader',
+            {
+              loader: 'glslify-loader',
+              options: {},
+            },
+          ],
         },
       ],
     },
