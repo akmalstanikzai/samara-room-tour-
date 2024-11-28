@@ -115,14 +115,12 @@ export class Panorama {
       model.scene.children.forEach((child) => {
         child.children.forEach((object) => {
           if (object.material) {
-            object.material.isDepthMap = true;
             if (object.material.name === 'Tables') {
-              // object.visible = false;
               object.material.colorWrite = false;
-              object.renderOrder = 1000; // Render tables last
+              object.renderOrder = 1000;
             } else if (object.material.name === 'Interior') {
               object.material.colorWrite = false;
-              object.renderOrder = 1000; // Render tables last
+              object.renderOrder = 1000;
             } else {
               object.visible = false;
               object.renderOrder = 10;
