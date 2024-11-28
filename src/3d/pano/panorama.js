@@ -196,7 +196,7 @@ void main() {
   }
 
   async change(name, firstInit) {
-    if (this.moveGsap.isActive()) return;
+    if (this.moveGsap.isActive()) await this.moveGsap;
 
     if (!this.cameraPositions) {
       this.cameraPositions = {};
@@ -268,7 +268,7 @@ void main() {
         material.uniforms.mixRatio.value = 0;
       },
       onUpdate: () => {
-        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
+        if (!firstInit) this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
         const progress = this.moveGsap.progress();
         material.uniforms.mixRatio.value = progress;
       },
