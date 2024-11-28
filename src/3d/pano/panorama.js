@@ -215,6 +215,25 @@ void main() {
     const positionA = this.engine.controls.getPosition();
 
     if (firstInit) {
+      const nextTextureMap = this.engine.textures.getTexture(
+        this.panoItems.find((pano) => pano.name === name).textureMap
+      );
+      material.uniforms.texture2.value = nextTextureMap;
+      this.engine.panoMesh.position.copy(positionB);
+
+      this.engine.scene.traverse((object) => {
+        if (object.name.includes('Hotspot')) {
+          object.visible = false;
+        }
+      });
+      this.panoItems.forEach((pano) => {
+        if (pano.name === name) {
+          pano.visible.forEach((item) => {
+            const object = this.engine.scene.getObjectByName(`Hotspot_${item}`);
+            object.visible = true;
+          });
+        }
+      });
       this.engine.controls.setLookAt(
         positionB.x,
         positionB.y,
@@ -223,6 +242,11 @@ void main() {
         targetB.y,
         targetB.z
       );
+
+      material.uniforms.texture1.value = material.uniforms.texture2.value;
+      material.uniforms.mixRatio.value = 0;
+
+      return;
     }
 
     const obj = {
@@ -233,7 +257,7 @@ void main() {
     };
 
     this.moveGsap.to(obj, {
-      duration: firstInit ? 0.01 : params.animation.move.duration,
+      duration: firstInit ? 0 : params.animation.move.duration,
       ease: params.animation.move.ease,
       blend: 1,
       x: positionB.x,
@@ -268,7 +292,7 @@ void main() {
         material.uniforms.mixRatio.value = 0;
       },
       onUpdate: () => {
-        if (!firstInit) this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
+        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
         const progress = this.moveGsap.progress();
         material.uniforms.mixRatio.value = progress;
       },

@@ -56,7 +56,7 @@ export class CreateScene {
       this.initListeners();
       this.addSubs();
       this.startRendering();
-      await this.pano?.change('360_Entry_01', true);
+      this.pano?.change('360_Entry_01', true);
     } else {
       let resolveInit;
       this.initPromise = new Promise((resolve) => {
@@ -144,7 +144,7 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      await this.pano.change('360_Entry_01', true);
+      this.pano.change('360_Entry_01', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
