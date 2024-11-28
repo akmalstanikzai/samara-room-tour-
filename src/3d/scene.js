@@ -146,7 +146,7 @@ export class CreateScene {
       // this.tests.testLayoutChange(50);
       this.pano.change('360_Entry_01', true);
 
-      await delayMs(1);
+      await delayMs(10);
       appState.loading.next({ isLoading: false });
 
       resolveInit();

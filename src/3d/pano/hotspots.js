@@ -1,7 +1,14 @@
-import { Vector2, Raycaster, MathUtils, DoubleSide } from 'three';
+import {
+  Vector2,
+  Raycaster,
+  MathUtils,
+  DoubleSide,
+  SpriteMaterial,
+} from 'three';
 import { Mesh, ShaderMaterial, PlaneGeometry, MeshBasicMaterial } from 'three';
 import { params } from '../settings';
 import { Vector3 } from 'three';
+import { Sprite } from 'three';
 
 export class Hotspots {
   constructor(engine) {
@@ -36,13 +43,11 @@ export class Hotspots {
     this.engine.pano.infospots.forEach((item) => {
       const object3d = this.engine.scene.getObjectByName(item.name);
 
-      const infoHotspot = new Mesh(
-        new PlaneGeometry(0.4, 0.4),
-        new MeshBasicMaterial({
+      const infoHotspot = new Sprite(
+        new SpriteMaterial({
           map: this.engine.textures.getTexture('i'),
           transparent: true,
           opacity: 1,
-          side: DoubleSide,
         })
       );
 
@@ -53,8 +58,8 @@ export class Hotspots {
 
       // infoHotspot.rotation.z = -Math.PI;
       infoHotspot.material.map.flipY = true;
-      infoHotspot.scale.setScalar(1.25);
-      infoHotspot.position.z += 0.01;
+      infoHotspot.scale.setScalar(0.5);
+      infoHotspot.position.z += 0.1;
       this.engine.scene.add(infoHotspot);
       this.engine.meshes.push(infoHotspot);
     });
