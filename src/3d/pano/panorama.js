@@ -200,6 +200,7 @@ void main() {
 
   async change(name, firstInit) {
     if (this.moveGsap.isActive()) await this.moveGsap;
+    this.currentPano = name;
 
     if (!this.cameraPositions) {
       this.cameraPositions = {};
@@ -336,7 +337,7 @@ void main() {
       path: textureMap + extension,
       name: textureMap,
       anisotropy: true,
-      nonSrgb: true,
+      nonSrgb: extension === '.webp',
       filter: true,
       flip: true,
     };

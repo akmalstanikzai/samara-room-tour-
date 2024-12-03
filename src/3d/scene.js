@@ -56,7 +56,16 @@ export class CreateScene {
       this.initListeners();
       this.addSubs();
       this.startRendering();
-      this.pano?.change('360_Entry_01', true);
+      this.pano?.change(this.pano?.currentPano, true);
+      this.lastCamCoords &&
+        this.controls.setLookAt(
+          this.lastCamCoords.position.x,
+          this.lastCamCoords.position.y,
+          this.lastCamCoords.position.z,
+          this.lastCamCoords.target.x,
+          this.lastCamCoords.target.y,
+          this.lastCamCoords.target.z
+        );
     } else {
       let resolveInit;
       this.initPromise = new Promise((resolve) => {
@@ -179,6 +188,10 @@ export class CreateScene {
     this.sub.unsubscribe();
     this.removeListeners();
     this.pauseRendering();
+    this.lastCamCoords = {
+      position: this.controls.getPosition(),
+      target: this.controls.getTarget(),
+    };
   }
 
   addSubs() {
