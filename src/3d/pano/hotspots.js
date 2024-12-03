@@ -23,7 +23,7 @@ export class Hotspots {
         new PlaneGeometry(0.4, 0.4),
         new MeshBasicMaterial({
           name: 'Hotspot',
-          map: this.engine.textures.getTexture('pin'),
+          map: this.engine.textures.getTexture('Hotspot'),
           transparent: true,
           // depthTest: false,
           opacity: 0.5,
@@ -51,15 +51,16 @@ export class Hotspots {
         })
       );
 
-      object3d.getWorldPosition(infoHotspot.position);
+      // object3d.getWorldPosition(infoHotspot.position);
+      infoHotspot.position.copy(item.position);
 
       infoHotspot.name = 'Info' + MathUtils.generateUUID();
-      infoHotspot._info = item.info;
+      infoHotspot._bubbleText = item.bubbleText;
 
       // infoHotspot.rotation.z = -Math.PI;
       infoHotspot.material.map.flipY = true;
       infoHotspot.scale.setScalar(0.5);
-      infoHotspot.position.z += 0.05;
+      infoHotspot.position.z += 0.01;
       this.engine.scene.add(infoHotspot);
       this.engine.meshes.push(infoHotspot);
     });
@@ -88,7 +89,7 @@ export class Hotspots {
 
   showPopup(object) {
     if (params.popup) {
-      params.popup.innerText = object._info;
+      params.popup.innerText = object._bubbleText;
       params.popup.style.display = 'block';
     }
 

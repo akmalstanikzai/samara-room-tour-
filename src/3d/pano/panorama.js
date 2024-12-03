@@ -87,12 +87,15 @@ export class Panorama {
 
       this.infospots = data['1B'].infospots;
 
-      const newTextureObjects = this.panoItems
-        .flatMap(({ textureMap, depthMap }) => [
+      const newTextureObjects = [
+        ...this.panoItems.flatMap(({ textureMap, depthMap }) => [
           this.createTextureObject(textureMap),
           depthMap ? this.createTextureObject(depthMap, '.png') : null,
-        ])
-        .filter(Boolean);
+        ]),
+        ...(data.textures || []).map(({ textureMap }) =>
+          this.createTextureObject(textureMap, '.png')
+        ),
+      ].filter(Boolean);
 
       this.panoItems.forEach((el) => {
         if (el.depthMap) console.log(el);

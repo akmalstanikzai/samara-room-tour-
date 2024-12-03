@@ -31,7 +31,7 @@ export class CursorPin {
     const material = new MeshBasicMaterial({
       color: new Color(0xcccccc),
       side: DoubleSide,
-      map: this.engine.textures.getTexture('cursor'),
+      map: this.engine.textures.getTexture('Cursor'),
       transparent: true,
       // opacity: 0.8,
       depthWrite: false,

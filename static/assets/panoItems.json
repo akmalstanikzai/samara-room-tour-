@@ -1,9 +1,31 @@
 {
+  "textures": [
+    { "textureMap": "Hotspot" },
+    { "textureMap": "Cursor" },
+    { "textureMap": "i" }
+  ],
+
   "1B": {
     "model": "1B_roomtour.glb",
     "infospots": [
-      { "name": "Empty_oven", "info": "Integrated drawer dishwasher" },
-      { "name": "Empty_tv", "info": "Tv" }
+      {
+        "name": "Empty_oven",
+        "bubbleText": "Integrated drawer dishwasher",
+        "position": {
+          "x": -1.8146861791610716,
+          "y": 0.5659506916999817,
+          "z": -1.2531022548675539
+        }
+      },
+      {
+        "name": "Empty_tv",
+        "bubbleText": "Tv",
+        "position": {
+          "x": -4.508408069610596,
+          "y": 0.4166361689567566,
+          "z": -1.5866806030273441
+        }
+      }
     ],
     "hotspots": [
       {
