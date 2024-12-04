@@ -10,6 +10,7 @@ import { params } from '../settings';
 import { Vector3 } from 'three';
 import { Sprite } from 'three';
 
+/** Hotspots */
 export class Hotspots {
   constructor(engine) {
     this.engine = engine;
@@ -112,6 +113,8 @@ export class Hotspots {
       const y = (this.vector.y * -0.5 + 0.5) * height;
 
       return new Vector2(x, y);
+    } else {
+      return 'Object should be hovered to display popup';
     }
   }
 

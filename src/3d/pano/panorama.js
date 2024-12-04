@@ -13,7 +13,7 @@ import {
 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../../services/app-state';
-import { CursorPin } from './cursor';
+import { Cursor } from './cursor';
 import { Hotspots } from './hotspots';
 import { loadGltf } from '../model-loader';
 const EPSILON = 1.1177461712e-10;
@@ -39,6 +39,7 @@ const EPSILON = 1.1177461712e-10;
  * @property {Array<{ textureMap: string }>} textures - An array of texture objects.
  */
 
+/** Panorama */
 export class Panorama {
   constructor(engine) {
     this.engine = engine;
@@ -192,7 +193,7 @@ export class Panorama {
     this.engine.scene.add(mesh);
 
     this.hotspots = new Hotspots(this.engine);
-    this.cursor = new CursorPin(this.engine);
+    this.cursor = new Cursor(this.engine);
   }
 
   async change(name, firstInit) {

@@ -17,7 +17,8 @@ import { gsap } from 'gsap';
 import { userDevice } from '../../utils/browser-detection';
 import { Vector2 } from 'three';
 
-export class CursorPin {
+/** Cursor */
+export class Cursor {
   constructor(engine) {
     this.engine = engine;
     this.init();
@@ -70,7 +71,7 @@ export class CursorPin {
    */
 
   get cursorPosition() {
-    new Vector2(this.mouse.x, this.mouse.y);
+    return new Vector2(this.mouse.x, this.mouse.y);
   }
 
   onMove(e) {
