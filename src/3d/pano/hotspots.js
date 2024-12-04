@@ -87,6 +87,34 @@ export class Hotspots {
     }
   }
 
+  /**
+   * Gets the position of the hotspot in screen coordinates.
+   * This method calculates the position based on the current
+   * object's world position and the camera's projection.
+   * The resulting coordinates will be used for positioning
+   * the bubble text associated with the hotspot.
+   *
+   * @param {Object} object - The object for which to show the popup.
+   *                          This should be the hovered object marked 'i'.
+   *
+   * @returns {Vector2} The screen coordinates of the hotspot.
+   */
+  get hotspotPosition() {
+    if (this.object) {
+      const width = params.container.clientWidth;
+      const height = params.container.clientHeight;
+      this.object.updateWorldMatrix(true, false);
+      this.object.getWorldPosition(this.vector);
+
+      this.vector.project(this.engine.camera);
+
+      const x = (this.vector.x * 0.5 + 0.5) * width;
+      const y = (this.vector.y * -0.5 + 0.5) * height;
+
+      return new Vector2(x, y);
+    }
+  }
+
   showPopup(object) {
     if (params.popup) {
       params.popup.innerText = object._bubbleText;

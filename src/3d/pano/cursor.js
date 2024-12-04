@@ -15,6 +15,7 @@ import {
 import { params } from '../settings';
 import { gsap } from 'gsap';
 import { userDevice } from '../../utils/browser-detection';
+import { Vector2 } from 'three';
 
 export class CursorPin {
   constructor(engine) {
@@ -61,6 +62,15 @@ export class CursorPin {
     this.intersects2 = [];
 
     this.mouse = new Vector3();
+  }
+
+  /**
+   * Gets the current cursor position as a Vector2.
+   * @returns {Vector2} The cursor position in normalized device coordinates.
+   */
+
+  get cursorPosition() {
+    new Vector2(this.mouse.x, this.mouse.y);
   }
 
   onMove(e) {

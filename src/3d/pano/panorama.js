@@ -18,6 +18,27 @@ import { Hotspots } from './hotspots';
 import { loadGltf } from '../model-loader';
 const EPSILON = 1.1177461712e-10;
 
+/**
+ * @typedef {Object} Hotspot
+ * @property {string} name - The name of the hotspot.
+ * @property {string} textureMap - The path to the texture map for the hotspot.
+ * @property {Array<string>} visible - An array of names of visible items associated with the hotspot.
+ * @property {string} [depthMap] - The path to the depth map for the hotspot (optional).
+ */
+
+/**
+ * @typedef {Object} PanoData
+ * @property {Hotspot[]} hotspots - An array of hotspots for the panorama.
+ * @property {Array} infospots - An array of infospots associated with the panorama.
+ * @property {string} model - The path to the model associated with the panorama.
+ */
+
+/**
+ * @typedef {Object} PanoItems
+ * @property {PanoData} "1B" - The panorama data for the identifier "1B".
+ * @property {Array<{ textureMap: string }>} textures - An array of texture objects.
+ */
+
 export class Panorama {
   constructor(engine) {
     this.engine = engine;
@@ -75,7 +96,9 @@ export class Panorama {
 
   async setup() {
     try {
+      // Fetching panoItems.json which contains information about panoramas and their associated assets
       const response = await fetch(`${params.paths.assets_path}panoItems.json`);
+      /** @type {PanoItems} */
       const data = await response.json();
 
       console.log(data);
