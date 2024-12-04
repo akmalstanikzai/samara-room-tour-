@@ -132,7 +132,6 @@ export class Panorama {
           this.engine.models.group.add(object.clone());
         });
       });
-      // this.centerModels(this.group);
 
       this.engine.models.group.box = this.engine.models.computeBoundingBox(
         this.engine.models.group
@@ -147,7 +146,6 @@ export class Panorama {
     }
 
     const geometry = new SphereGeometry(30, 200, 200);
-    // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
 
     const material = new ShaderMaterial({

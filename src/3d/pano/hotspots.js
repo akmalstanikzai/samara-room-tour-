@@ -43,7 +43,7 @@ export class Hotspots {
     this.engine.pano.infospots.forEach((item) => {
       const object3d = this.engine.scene.getObjectByName(item.name);
 
-      const infoHotspot = new Sprite(
+      const infoSpot = new Sprite(
         new SpriteMaterial({
           map: this.engine.textures.getTexture('i'),
           transparent: true,
@@ -51,18 +51,18 @@ export class Hotspots {
         })
       );
 
-      // object3d.getWorldPosition(infoHotspot.position);
-      infoHotspot.position.copy(item.position);
+      // object3d.getWorldPosition(infoSpot.position);
+      infoSpot.position.copy(item.position);
 
-      infoHotspot.name = 'Info' + MathUtils.generateUUID();
-      infoHotspot._bubbleText = item.bubbleText;
+      infoSpot.name = 'Info' + MathUtils.generateUUID();
+      infoSpot._bubbleText = item.bubbleText;
 
-      // infoHotspot.rotation.z = -Math.PI;
-      infoHotspot.material.map.flipY = true;
-      infoHotspot.scale.setScalar(0.5);
-      infoHotspot.position.z += 0.01;
-      this.engine.scene.add(infoHotspot);
-      this.engine.meshes.push(infoHotspot);
+      // infoSpot.rotation.z = -Math.PI;
+      infoSpot.material.map.flipY = true;
+      infoSpot.scale.setScalar(0.5);
+      infoSpot.position.z += 0.01;
+      this.engine.scene.add(infoSpot);
+      this.engine.meshes.push(infoSpot);
     });
   }
 
