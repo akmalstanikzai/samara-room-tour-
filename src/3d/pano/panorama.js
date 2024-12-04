@@ -16,7 +16,7 @@ import { appState } from '../../services/app-state';
 import { CursorPin } from './cursor';
 import { Hotspots } from './hotspots';
 import { loadGltf } from '../model-loader';
-const EPS = 0.000011177461712 * 0.0001;
+const EPSILON = 1.1177461712e-10;
 
 export class Panorama {
   constructor(engine) {
@@ -158,37 +158,13 @@ export class Panorama {
         ambientLightColor: { value: new Color(0xffffff) },
         ambientLightIntensity: { value: 1.0 },
       },
-      vertexShader: `
-varying vec2 vUv;
-void main() {
-  vUv = uv;
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-}
-`,
-      fragmentShader: `
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform float mixRatio;
-uniform vec3 ambientLightColor;
-uniform float ambientLightIntensity;
-varying vec2 vUv;
-void main() {
-  vec4 tex1 = texture2D(texture1, vUv);
-  vec4 tex2 = texture2D(texture2, vUv);
-  vec4 mixedColor = mix(tex1, tex2, mixRatio);
-
-  // Apply ambient light
-  vec3 ambient = ambientLightColor * ambientLightIntensity;
-  vec3 finalColor = mixedColor.rgb * ambient;
-
-  gl_FragColor = vec4(finalColor, mixedColor.a);
-}
-`,
+      vertexShader: lerpVert,
+      fragmentShader: lerpFrag,
     });
 
     const mesh = new Mesh(geometry, material);
     mesh.scale.setScalar(1);
-    mesh.rotation.y = 3.14;
+    mesh.rotation.y = Math.PI;
     mesh.name = 'pano';
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
@@ -323,9 +299,9 @@ void main() {
       get target() {
         const { x, y, z } = this.position;
         return {
-          x: x + EPS * 15,
-          y: y + EPS * 0.0001,
-          z: z - EPS,
+          x: x + EPSILON * 15,
+          y: y + EPSILON * 0.0001,
+          z: z - EPSILON,
         };
       },
       visible,
