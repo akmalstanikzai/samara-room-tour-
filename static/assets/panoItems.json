@@ -1,10 +1,4 @@
 {
-  "textures": [
-    { "textureMap": "Hotspot.png" },
-    { "textureMap": "Cursor.png" },
-    { "textureMap": "i.png" }
-  ],
-
   "1B": {
     "model": "1B_roomtour.glb",
     "infospots": [

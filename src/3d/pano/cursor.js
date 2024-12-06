@@ -24,14 +24,13 @@ export class Cursor {
     this.init();
     this.hoveredHotspot = null;
     this.targetQuaternion = new Quaternion();
-    this.lerpFactor = 0.1; // Adjust this value to control the smoothness (0.1 = smooth, 1 = instant)
   }
 
   init() {
-    const geometry = new PlaneGeometry(0.4, 0.4);
+    const geometry = new PlaneGeometry(params.cursor.size, params.cursor.size);
 
     const material = new MeshBasicMaterial({
-      color: new Color(0xcccccc),
+      color: new Color(Number(`0x${params.cursor.color}`)),
       side: DoubleSide,
       map: this.engine.textures.getTexture('Cursor.png'),
       transparent: true,
@@ -60,8 +59,6 @@ export class Cursor {
     };
 
     this.intersects = [];
-    this.intersects2 = [];
-
     this.mouse = new Vector3();
   }
 
@@ -119,10 +116,16 @@ export class Cursor {
         // Animate hotspot opacity to 1
         if (this.hoveredHotspot !== firstIntersect.object) {
           if (this.hoveredHotspot) {
-            this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
+            this.animateHotspotOpacity(
+              this.hoveredHotspot,
+              params.hostpot.opacity
+            );
           }
           this.hoveredHotspot = firstIntersect.object;
-          this.animateHotspotOpacity(this.hoveredHotspot, 1);
+          this.animateHotspotOpacity(
+            this.hoveredHotspot,
+            params.hotspot.hoverOpacity
+          );
         }
       } else if (
         firstIntersect.object.visible &&
@@ -165,9 +168,11 @@ export class Cursor {
 
         this.intersection.intersects = true;
 
-        // Animate previously hovered hotspot opacity back to 0.5
         if (this.hoveredHotspot) {
-          this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
+          this.animateHotspotOpacity(
+            this.hoveredHotspot,
+            params.hotspot.opacity
+          );
           this.hoveredHotspot = null;
         }
       }
@@ -179,9 +184,8 @@ export class Cursor {
       // Enable camera rotation when not intersecting with any object
       this.engine.controls.enabled = true;
 
-      // Animate previously hovered hotspot opacity back to 0.5
       if (this.hoveredHotspot) {
-        this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
+        this.animateHotspotOpacity(this.hoveredHotspot, params.hotspot.opacity);
         this.hoveredHotspot = null;
       }
     }
@@ -190,14 +194,14 @@ export class Cursor {
   animateHotspotOpacity(hotspot, targetOpacity) {
     gsap.to(hotspot.material, {
       opacity: targetOpacity,
-      duration: 1,
+      duration: params.hotspot.hoverTransitionTime,
       ease: 'power2.out',
     });
   }
 
   update(deltaTime) {
     // Smoothly interpolate the rotation
-    this.pin.quaternion.slerp(this.targetQuaternion, this.lerpFactor);
+    this.pin.quaternion.slerp(this.targetQuaternion, params.cursor.lerpFactor);
   }
 
   onClick(e) {

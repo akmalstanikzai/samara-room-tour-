@@ -21,13 +21,13 @@ export class Hotspots {
     this.vector = new Vector3();
     this.engine.pano.panoItems.forEach((pano) => {
       const hotspot = new Mesh(
-        new PlaneGeometry(0.4, 0.4),
+        new PlaneGeometry(params.hotspot.size, params.hotspot.size),
         new MeshBasicMaterial({
           name: 'Hotspot',
           map: this.engine.textures.getTexture('Hotspot.png'),
           transparent: true,
           // depthTest: false,
-          opacity: 0.5,
+          opacity: params.hotspot.opacity,
         })
       );
 

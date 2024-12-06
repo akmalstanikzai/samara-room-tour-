@@ -1,0 +1,29 @@
+{
+  "textures": [
+    { "textureMap": "Hotspot.png" },
+    { "textureMap": "Cursor.png" },
+    { "textureMap": "i.png" }
+  ],
+  "controls": {
+    "firstPerson": {
+      "minZoom": 0.35,
+      "maxZoom": 0.65,
+      "defaultZoom": 0.5,
+      "polarRotateSpeed": -1,
+      "azimuthRotateSpeed": -1,
+      "smoothTime": 0.1,
+      "draggingSmoothTime": 0.1
+    }
+  },
+  "hotspot": {
+    "hoverOpacity": 1,
+    "opacity": 0.5,
+    "hoverTransitionTime": 1,
+    "size": 0.4
+  },
+  "cursor": {
+    "color": "cccccc",
+    "lerpFactor": 0.1,
+    "size": 0.4
+  }
+}

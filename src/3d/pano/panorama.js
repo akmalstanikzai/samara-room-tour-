@@ -98,13 +98,17 @@ export class Panorama {
   async setup() {
     try {
       // Fetching panoItems.json which contains information about panoramas and their associated assets
-      const response = await fetch(`${params.paths.assets_path}panoItems.json`);
       /** @type {PanoItems} */
-      const data = await response.json();
+      const [panoItems, config] = await Promise.all([
+        fetch(`${params.paths.assets_path}panoItems.json`).then((r) =>
+          r.json()
+        ),
+        fetch(`${params.paths.assets_path}config.json`).then((r) => r.json()),
+      ]);
 
-      console.log(data);
+      this.applyConfig(config);
 
-      this.panoItems = data['1B'].hotspots.map(
+      this.panoItems = panoItems['1B'].hotspots.map(
         ({
           name,
           textureMap,
@@ -123,14 +127,14 @@ export class Panorama {
           )
       );
 
-      this.infospots = data['1B'].infospots;
+      this.infospots = panoItems['1B'].infospots;
 
       const newTextureObjects = [
         ...this.panoItems.flatMap(({ textureMap, depthMap }) => [
           this.createTextureObject(textureMap),
           depthMap ? this.createTextureObject(depthMap) : null,
         ]),
-        ...(data.textures || []).map(({ textureMap }) =>
+        ...(config.textures || []).map(({ textureMap }) =>
           this.createTextureObject(textureMap)
         ),
       ].filter(Boolean);
@@ -145,7 +149,7 @@ export class Panorama {
       this.engine.meshes = [];
 
       const model = await loadGltf(
-        `${params.paths.assets_path + data['1B'].model}`,
+        `${params.paths.assets_path + panoItems['1B'].model}`,
         params.paths.decoders_path
       );
 
@@ -231,6 +235,27 @@ export class Panorama {
         });
       }
     });
+  }
+
+  /**
+   * Applies configuration settings from the config file
+   * @param {Object} config - The configuration object
+   */
+  applyConfig(config) {
+    const { controls, hotspot, cursor } = config;
+
+    if (controls?.firstPerson) {
+      Object.assign(params.controls.firstPerson, controls.firstPerson);
+      this.engine.cameraControls.setFirstPersonParams();
+    }
+
+    if (hotspot) {
+      params.hotspot = hotspot;
+    }
+
+    if (cursor) {
+      params.cursor = cursor;
+    }
   }
 
   async change(name, firstInit) {
