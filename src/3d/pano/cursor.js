@@ -33,7 +33,7 @@ export class Cursor {
     const material = new MeshBasicMaterial({
       color: new Color(0xcccccc),
       side: DoubleSide,
-      map: this.engine.textures.getTexture('Cursor'),
+      map: this.engine.textures.getTexture('Cursor.png'),
       transparent: true,
       // opacity: 0.8,
       depthWrite: false,

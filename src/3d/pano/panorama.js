@@ -114,10 +114,10 @@ export class Panorama {
       const newTextureObjects = [
         ...this.panoItems.flatMap(({ textureMap, depthMap }) => [
           this.createTextureObject(textureMap),
-          depthMap ? this.createTextureObject(depthMap, '.png') : null,
+          depthMap ? this.createTextureObject(depthMap) : null,
         ]),
         ...(data.textures || []).map(({ textureMap }) =>
-          this.createTextureObject(textureMap, '.png')
+          this.createTextureObject(textureMap)
         ),
       ].filter(Boolean);
 
@@ -269,6 +269,7 @@ export class Panorama {
         const nextTextureMap = this.engine.textures.getTexture(
           this.panoItems.find((pano) => pano.name === name).textureMap
         );
+
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);
 
@@ -330,12 +331,12 @@ export class Panorama {
     };
   }
 
-  createTextureObject(textureMap, extension = '.webp') {
+  createTextureObject(textureMap) {
+    console.log(textureMap.replace(/\.[^/.]+$/, ''));
     return {
-      path: textureMap + extension,
+      path: textureMap,
       name: textureMap,
       anisotropy: true,
-      nonSrgb: extension === '.webp',
       filter: true,
       flip: true,
     };

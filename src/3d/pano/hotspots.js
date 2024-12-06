@@ -24,7 +24,7 @@ export class Hotspots {
         new PlaneGeometry(0.4, 0.4),
         new MeshBasicMaterial({
           name: 'Hotspot',
-          map: this.engine.textures.getTexture('Hotspot'),
+          map: this.engine.textures.getTexture('Hotspot.png'),
           transparent: true,
           // depthTest: false,
           opacity: 0.5,
@@ -46,7 +46,7 @@ export class Hotspots {
 
       const infoSpot = new Sprite(
         new SpriteMaterial({
-          map: this.engine.textures.getTexture('i'),
+          map: this.engine.textures.getTexture('i.png'),
           transparent: true,
           opacity: 1,
         })
