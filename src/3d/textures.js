@@ -94,8 +94,6 @@ export class Textures {
   }
 
   getTexture(textName) {
-    console.log(textName);
-
     let texture = params.textures.find((texture) => texture.name === textName);
     if (!texture) {
       params.models.samara.assetsArray.filter((el) =>

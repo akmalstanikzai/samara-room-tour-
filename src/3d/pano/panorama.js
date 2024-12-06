@@ -105,13 +105,21 @@ export class Panorama {
       console.log(data);
 
       this.panoItems = data['1B'].hotspots.map(
-        ({ name, textureMap, depthMap, visibleHotspots, visibleInfospots }) =>
+        ({
+          name,
+          textureMap,
+          depthMap,
+          visibleHotspots,
+          visibleInfospots,
+          position,
+        }) =>
           this.createPanoItem(
             name,
             textureMap,
             depthMap,
             visibleHotspots,
-            visibleInfospots
+            visibleInfospots,
+            position
           )
       );
 
@@ -126,10 +134,6 @@ export class Panorama {
           this.createTextureObject(textureMap)
         ),
       ].filter(Boolean);
-
-      this.panoItems.forEach((el) => {
-        if (el.depthMap) console.log(el);
-      });
 
       await Promise.all(
         newTextureObjects.map(async (texture) => {
@@ -214,7 +218,6 @@ export class Panorama {
 
     this.panoItems.forEach((pano) => {
       if (pano.name === name) {
-        console.log(pano);
         pano.visibleHotspots?.forEach((item) => {
           const object = this.engine.scene.getObjectByName(`Hotspot_${item}`);
           object.visible = true;
@@ -319,24 +322,35 @@ export class Panorama {
     textureMap,
     depthMap,
     visibleHotspots,
-    visibleInfospots
+    visibleInfospots,
+    position
   ) {
     return {
       name,
       textureMap,
       depthMap,
+      /**
+       * Gets the world position of the panorama
+       * @returns {Vector3} The world position, either from the provided position override
+       * or calculated from the scene object with matching name
+       */
       get position() {
-        return window.engine.scene
-          .getObjectByName(name)
-          .getWorldPosition(new Vector3());
+        let p;
+
+        // p = window.engine.scene
+        //   .getObjectByName(name)
+        //   .getWorldPosition(new Vector3());
+
+        return position ? new Vector3(position.x, position.y, position.z) : p;
       },
       get target() {
         const { x, y, z } = this.position;
-        return {
-          x: x + EPSILON * 15,
-          y: y + EPSILON * 0.0001,
-          z: z - EPSILON,
-        };
+        const t = new Vector3(
+          x + EPSILON * 15,
+          y + EPSILON * 0.0001,
+          z - EPSILON
+        );
+        return t;
       },
       visibleHotspots,
       visibleInfospots,
@@ -344,10 +358,9 @@ export class Panorama {
   }
 
   createTextureObject(textureMap) {
-    console.log(textureMap.replace(/\.[^/.]+$/, ''));
     return {
       path: textureMap,
-      name: textureMap,
+      name: textureMap, // textureMap.replace(/\.[^/.]+$/, '')
       anisotropy: true,
       nonSrgb: true,
       filter: true,

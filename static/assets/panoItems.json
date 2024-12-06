@@ -32,6 +32,11 @@
         "name": "360_Living_01",
         "textureMap": "241030_Samara ADU_interior_360 Living 01_Post.webp",
         "depthMap": "living01-depth.webp",
+        "position": {
+          "x": -3.054314136505127,
+          "y": 1.5779738426208496,
+          "z": 0.8374505043029782
+        },
         "visibleHotspots": [
           "360_Living_01",
           "360_Living_03",
@@ -43,6 +48,11 @@
       {
         "name": "360_Living_02",
         "textureMap": "241030_Samara ADU_interior_360 Living 02_Post.webp",
+        "position": {
+          "x": -2.1336007118225098,
+          "y": 1.5779738426208496,
+          "z": -0.5381617546081545
+        },
         "visibleHotspots": [
           "360_Living_02",
           "360_Living_03",
@@ -54,6 +64,11 @@
       {
         "name": "360_Living_03",
         "textureMap": "241030_Samara ADU_interior_360 Living 03_Post.webp",
+        "position": {
+          "x": -4.510206699371338,
+          "y": 1.5779738426208496,
+          "z": -0.5381617546081549
+        },
         "visibleHotspots": [
           "360_Living_03",
           "360_Living_02",
@@ -66,6 +81,12 @@
         "name": "360_Entry_01",
         "textureMap": "241030_Samara ADU_interior_360 Entry 01_Post.webp",
         "depthMap": "entry-depth.webp",
+        "position": {
+          "x": 0.914399743080139,
+          "y": 1.5779738426208496,
+          "z": 0.8374505043029786
+        },
+
         "visibleHotspots": [
           "360_Entry_01",
           "360_Bathroom_01",
@@ -77,12 +98,24 @@
         "name": "360_Bedroom_01",
         "textureMap": "241030_Samara ADU_interior_360 Bedroom 01_Post.webp",
         "depthMap": "bedroom-depth.webp",
+        "position": {
+          "x": 3.9858148097991943,
+          "y": 1.5779738426208496,
+          "z": 0.8382000923156743
+        },
+
         "visibleHotspots": ["360_Bedroom_01", "360_Entry_01", "360_Living_01"]
       },
       {
         "name": "360_Bathroom_01",
         "textureMap": "241030_Samara ADU_interior_360 Bathroom 01_Post.webp",
         "depthMap": "bath-depth.webp",
+        "position": {
+          "x": 0.9143997430801393,
+          "y": 1.5779738426208496,
+          "z": -0.47942495346069325
+        },
+
         "visibleHotspots": ["360_Bathroom_01", "360_Entry_01"]
       }
     ]
