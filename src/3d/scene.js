@@ -32,6 +32,7 @@ import { Assets } from './assets';
 import { Options } from '../services/options';
 import { PostProcessing } from './post-processing';
 import { Panorama } from './pano/panorama';
+import { userDevice } from '../utils/browser-detection';
 
 /** Main class for 3d scene */
 export class CreateScene {
@@ -45,15 +46,32 @@ export class CreateScene {
    * Initialize scene and start rendering
    */
 
-  async init(reInit) {
+  async init(reInit, preload) {
     if (reInit || this.renderer) {
+      await this.initPromise;
+
       params.container.appendChild(this.renderer.domElement);
       this.cameraControls.initControls(true);
       this.onResize();
       this.initListeners();
       this.addSubs();
       this.startRendering();
+      this.pano?.change(this.pano?.currentPano, true);
+      this.lastCamCoords &&
+        this.controls.setLookAt(
+          this.lastCamCoords.position.x,
+          this.lastCamCoords.position.y,
+          this.lastCamCoords.position.z,
+          this.lastCamCoords.target.x,
+          this.lastCamCoords.target.y,
+          this.lastCamCoords.target.z
+        );
     } else {
+      let resolveInit;
+      this.initPromise = new Promise((resolve) => {
+        resolveInit = resolve;
+      });
+
       this.textures = new Textures();
       this.options = new Options();
       this.render = (time, deltaTime, frame) =>
@@ -78,7 +96,9 @@ export class CreateScene {
 
       this.camera = new PerspectiveCamera(
         params.camera.fov,
-        params.container.clientWidth / params.container.clientHeight,
+        params.container?.clientWidth ||
+          1 / params.container?.clientHeight ||
+          1,
         params.camera.near,
         params.camera.far
       );
@@ -93,7 +113,7 @@ export class CreateScene {
 
       this.cameraControls = new cameraControls(this);
 
-      params.container.appendChild(this.renderer.domElement);
+      !preload && params.container.appendChild(this.renderer.domElement);
       this.cameraControls.initControls();
 
       this.ambientLight = new AmbientLight(0xffffff, params.light.intensity);
@@ -103,8 +123,12 @@ export class CreateScene {
       this.textures.init(this);
 
       this.assets = new Assets(this);
+      this.postprocessing = new PostProcessing(this);
+      this.postprocessing.init();
+
       // Load and setup assets asynchronously.
       await this.assets.loadAndSetup();
+
       this.pano = new Panorama(this);
       await this.pano.setup();
       params.loadOnDemand.loadingManager.enabled = false;
@@ -115,14 +139,14 @@ export class CreateScene {
       this.renderer.compile(this.scene, this.camera);
 
       this.CameraGsap = new CameraGsap();
-      this.postprocessing = new PostProcessing(this);
-      this.postprocessing.init();
 
-      this.initListeners();
-      this.setupPerspectiveView();
-      this.onResize();
-      this.addSubs();
-      this.startRendering();
+      if (!preload) {
+        this.initListeners();
+        this.onResize();
+        this.addSubs();
+        this.startRendering();
+      }
+
       this.tests = new Tests(this);
 
       // this.tests.testContextLoss(5);
@@ -133,6 +157,8 @@ export class CreateScene {
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
+
+      resolveInit();
     }
   }
 
@@ -162,6 +188,10 @@ export class CreateScene {
     this.sub.unsubscribe();
     this.removeListeners();
     this.pauseRendering();
+    this.lastCamCoords = {
+      position: this.controls.getPosition(),
+      target: this.controls.getTarget(),
+    };
   }
 
   addSubs() {
@@ -279,6 +309,7 @@ export class CreateScene {
   onControlsUpdate() {
     // console.log(this.controls.getPosition());
     // console.log(this.controls.getTarget());
+    userDevice.isMobile && this.pano?.hotspots?.updatePopupPosition();
   }
 
   onControlsEnd() {
@@ -344,18 +375,8 @@ export class CreateScene {
     objectToAnimate.length > 0 && gsap.timeline().to(objectToAnimate, tlObj);
   }
 
-  setupPerspectiveView() {
-    const scaleInt =
-      params.camera.fov / params.models.samara.modelScaleAspectValue;
-
-    this.scene.scale.set(scaleInt * 3.33, scaleInt * 3.33, scaleInt * 3.33);
-
-    this.camera.fov = params.camera.fov;
-    this.camera.updateProjectionMatrix();
-    this.update();
-  }
-
   onResize() {
+    if (!params.container) return;
     const width = params.container.clientWidth;
     const height = params.container.clientHeight;
 

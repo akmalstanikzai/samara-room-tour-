@@ -21,6 +21,7 @@ export const appState = {
   renderingStatus: new BehaviorSubject(false),
   modelLoadingIndicator: new BehaviorSubject({ isLoading: false, name: '' }),
   cam: new BehaviorSubject('bath'),
+  complectation: new BehaviorSubject({ layout: 'studio' }),
 };
 
 setBreakpoints();

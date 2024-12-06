@@ -881,30 +881,6 @@ export class GuiComponent extends LitElement {
     // _statsFolder.$children.appendChild(this.engine.stats.dom);
     // _statsFolder.close();
 
-    // Pano mesh
-
-    const _panoMeshFolder = this.gui.addFolder('Pano');
-
-    _panoMeshFolder
-      .add(this.engine.panoMesh.rotation, 'y', -10, 10)
-      .name('rotation')
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.update();
-      });
-
-    _panoMeshFolder
-      .add(this.engine.camera, 'fov', 10, 60)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.camera.updateProjectionMatrix();
-        this.engine.update();
-      });
-
-    _panoMeshFolder.add(this.engine.panoMesh, 'visible').onChange((value) => {
-      this.engine.update();
-    });
-
     // Animation
     const _animationFolder = this.gui.addFolder('Animation').close();
 
@@ -976,33 +952,6 @@ export class GuiComponent extends LitElement {
       .add(params.animation.move, 'duration', 0, 5)
       .onChange((value) => {})
       .name('Duration');
-
-    _panoMeshFolder.close();
-
-    // Debug folder
-    const _debugFolder = this.gui.addFolder('Debug').close();
-
-    const debugModes = {
-      Normal: 0,
-      'Show Depth': 1,
-    };
-
-    const debugProxy = {
-      get mode() {
-        return this.debugMode;
-      },
-      set mode(value) {
-        this.debugMode = value;
-        window.engine.postprocessing.setDebugMode(value);
-      },
-    };
-
-    _debugFolder
-      .add(debugProxy, 'mode', debugModes)
-      .name('Debug Mode')
-      .onChange(() => {
-        this.engine.update();
-      });
   }
 }
 

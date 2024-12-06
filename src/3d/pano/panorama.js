@@ -13,11 +13,33 @@ import {
 } from 'three';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../../services/app-state';
-import { CursorPin } from './cursor';
+import { Cursor } from './cursor';
 import { Hotspots } from './hotspots';
 import { loadGltf } from '../model-loader';
-const EPS = 0.000011177461712 * 0.0001;
+const EPSILON = 1.1177461712e-10;
 
+/**
+ * @typedef {Object} Hotspot
+ * @property {string} name - The name of the hotspot.
+ * @property {string} textureMap - The path to the texture map for the hotspot.
+ * @property {Array<string>} visible - An array of names of visible items associated with the hotspot.
+ * @property {string} [depthMap] - The path to the depth map for the hotspot (optional).
+ */
+
+/**
+ * @typedef {Object} PanoData
+ * @property {Hotspot[]} hotspots - An array of hotspots for the panorama.
+ * @property {Array} infospots - An array of infospots associated with the panorama.
+ * @property {string} model - The path to the model associated with the panorama.
+ */
+
+/**
+ * @typedef {Object} PanoItems
+ * @property {PanoData} "1B" - The panorama data for the identifier "1B".
+ * @property {Array<{ textureMap: string }>} textures - An array of texture objects.
+ */
+
+/** Panorama */
 export class Panorama {
   constructor(engine) {
     this.engine = engine;
@@ -25,7 +47,10 @@ export class Panorama {
 
     this.mouseDownPosition = null;
     this.mouseMoveThreshold = 5; // pixels
-    this.listeners = [
+  }
+
+  get listeners() {
+    return [
       {
         eventTarget: params.container,
         eventName: 'mousemove',
@@ -44,6 +69,7 @@ export class Panorama {
         eventTarget: params.container,
         eventName: 'mousedown',
         eventFunction: (e) => {
+          params.container.classList.add('cursor-dragging');
           this.mouseDownPosition = { x: e.clientX, y: e.clientY };
         },
       },
@@ -51,10 +77,19 @@ export class Panorama {
         eventTarget: params.container,
         eventName: 'mouseup',
         eventFunction: (e) => {
+          params.container.classList.remove('cursor-dragging');
+          params.container.classList.add('cursor-grab');
           if (this.mouseDownPosition) {
             this.cursor.onClick(e);
           }
           this.mouseDownPosition = null;
+        },
+      },
+      {
+        eventTarget: params.container,
+        eventName: 'dblclick',
+        eventFunction: (e) => {
+          this.cursor.onDoubleClick(e);
         },
       },
     ];
@@ -62,36 +97,50 @@ export class Panorama {
 
   async setup() {
     try {
+      // Fetching panoItems.json which contains information about panoramas and their associated assets
       const response = await fetch(`${params.paths.assets_path}panoItems.json`);
+      /** @type {PanoItems} */
       const data = await response.json();
 
       console.log(data);
 
       this.panoItems = data['1B'].hotspots.map(
-        ({ name, textureMap, visible, depthMap }) =>
-          this.createPanoItem(name, textureMap, visible, depthMap)
+        ({
+          name,
+          textureMap,
+          depthMap,
+          visibleHotspots,
+          visibleInfospots,
+          position,
+        }) =>
+          this.createPanoItem(
+            name,
+            textureMap,
+            depthMap,
+            visibleHotspots,
+            visibleInfospots,
+            position
+          )
       );
 
-      // Create texture objects in a new array
-      const newTextureObjects = this.panoItems
-        .flatMap(({ textureMap, depthMap }) => [
+      this.infospots = data['1B'].infospots;
+
+      const newTextureObjects = [
+        ...this.panoItems.flatMap(({ textureMap, depthMap }) => [
           this.createTextureObject(textureMap),
-          depthMap ? this.createTextureObject(depthMap, '.png') : null,
-        ])
-        .filter(Boolean);
+          depthMap ? this.createTextureObject(depthMap) : null,
+        ]),
+        ...(data.textures || []).map(({ textureMap }) =>
+          this.createTextureObject(textureMap)
+        ),
+      ].filter(Boolean);
 
-      this.panoItems.forEach((el) => {
-        if (el.depthMap) console.log(el);
-      });
-
-      // Load textures and wait for all to complete
       await Promise.all(
         newTextureObjects.map(async (texture) => {
           await this.engine.textures.loadTexture(texture, 'map');
         })
       );
 
-      // Push loaded textures to params.textures
       params.textures.push(...newTextureObjects);
       this.engine.meshes = [];
 
@@ -104,12 +153,11 @@ export class Panorama {
         child.children.forEach((object) => {
           if (object.material) {
             if (object.material.name === 'Tables') {
-              // object.visible = false;
               object.material.colorWrite = false;
-              object.renderOrder = 1000; // Render tables last
+              object.renderOrder = 1000;
             } else if (object.material.name === 'Interior') {
               object.material.colorWrite = false;
-              object.renderOrder = 1000; // Render tables last
+              object.renderOrder = 1000;
             } else {
               object.visible = false;
               object.renderOrder = 10;
@@ -118,26 +166,20 @@ export class Panorama {
           this.engine.models.group.add(object.clone());
         });
       });
-      // this.centerModels(this.group);
 
       this.engine.models.group.box = this.engine.models.computeBoundingBox(
         this.engine.models.group
       );
 
       this.engine.scene.traverse((object) => {
-        if (
-          object instanceof Mesh &&
-          object.material
-          // && object.material.name !== 'Tables'
-        )
+        if (object instanceof Mesh && object.material)
           this.engine.meshes.push(object);
       });
     } catch (error) {
       console.error('Error loading panoItems.json:', error);
     }
 
-    const geometry = new SphereGeometry(6, 200, 200);
-    // invert the geometry on the x-axis so that all of the faces point inward
+    const geometry = new SphereGeometry(30, 200, 200);
     geometry.scale(-1, 1, 1);
 
     const material = new ShaderMaterial({
@@ -150,53 +192,50 @@ export class Panorama {
         displacementMap: { value: null },
         displacementScale: { value: 1.0 },
       },
-      vertexShader: `
-      uniform sampler2D displacementMap;
-      uniform float displacementScale;
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        vec4 displacement = texture2D(displacementMap, uv);
-        vec3 newPosition = position + normal * displacement.r * displacementScale;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-      }
-      `,
-      fragmentShader: `
-      uniform sampler2D texture1;
-      uniform sampler2D texture2;
-      uniform float mixRatio;
-      uniform vec3 ambientLightColor;
-      uniform float ambientLightIntensity;
-      varying vec2 vUv;
-      void main() {
-        vec4 tex1 = texture2D(texture1, vUv);
-        vec4 tex2 = texture2D(texture2, vUv);
-        vec4 mixedColor = mix(tex1, tex2, mixRatio);
-
-        // Apply ambient light
-        vec3 ambient = ambientLightColor * ambientLightIntensity;
-        vec3 finalColor = mixedColor.rgb * ambient;
-
-        gl_FragColor = vec4(finalColor, mixedColor.a);
-      }
-      `,
+      vertexShader: lerpVert,
+      fragmentShader: lerpFrag,
     });
 
     const mesh = new Mesh(geometry, material);
     mesh.scale.setScalar(1);
-    mesh.rotation.y = 3.14;
+    mesh.rotation.y = Math.PI;
     mesh.name = 'pano';
     mesh.renderOrder = 10;
     this.engine.panoMesh = mesh;
     this.engine.scene.add(mesh);
-    // this.engine.models.centerModels(mesh);
 
     this.hotspots = new Hotspots(this.engine);
-    this.cursor = new CursorPin(this.engine);
+    this.cursor = new Cursor(this.engine);
+  }
+
+  handleHotspotsVisibility(name) {
+    this.engine.scene.traverse((object) => {
+      if (object.name.includes('Hotspot')) {
+        object.visible = false;
+      }
+      if (object.name.includes('Infospot')) {
+        object.visible = false;
+      }
+    });
+
+    this.panoItems.forEach((pano) => {
+      if (pano.name === name) {
+        pano.visibleHotspots?.forEach((item) => {
+          const object = this.engine.scene.getObjectByName(`Hotspot_${item}`);
+          object.visible = true;
+        });
+
+        pano.visibleInfospots?.forEach((item) => {
+          const object = this.engine.scene.getObjectByName(`Infospot_${item}`);
+          object.visible = true;
+        });
+      }
+    });
   }
 
   async change(name, firstInit) {
-    if (this.moveGsap.isActive()) return;
+    if (this.moveGsap.isActive()) await this.moveGsap;
+    this.currentPano = name;
 
     if (!this.cameraPositions) {
       this.cameraPositions = {};
@@ -213,9 +252,15 @@ export class Panorama {
 
     const { position: positionB, target: targetB } = this.cameraPositions[name];
     const positionA = this.engine.controls.getPosition();
-    // const targetA = this.engine.controls.getTarget();
 
     if (firstInit) {
+      const nextTextureMap = this.engine.textures.getTexture(
+        this.panoItems.find((pano) => pano.name === name).textureMap
+      );
+      material.uniforms.texture2.value = nextTextureMap;
+      this.engine.panoMesh.position.copy(positionB);
+
+      this.handleHotspotsVisibility(name);
       this.engine.controls.setLookAt(
         positionB.x,
         positionB.y,
@@ -224,6 +269,11 @@ export class Panorama {
         targetB.y,
         targetB.z
       );
+
+      material.uniforms.texture1.value = material.uniforms.texture2.value;
+      material.uniforms.mixRatio.value = 0;
+
+      return;
     }
 
     const obj = {
@@ -233,68 +283,33 @@ export class Panorama {
       blend: 0,
     };
 
-    this.moveGsap
-      .to(obj, {
-        duration: firstInit ? 0.005 : params.animation.move.duration / 2,
-        blend: 0.5,
-        x: (positionA.x + positionB.x) / 2,
-        y: (positionA.y + positionB.y) / 2,
-        z: (positionA.z + positionB.z) / 2,
-        onStart: () => {
-          this.engine.panoMesh.position.copy(positionB);
+    this.moveGsap.to(obj, {
+      duration: firstInit ? 0 : params.animation.move.duration,
+      ease: params.animation.move.ease,
+      blend: 1,
+      x: positionB.x,
+      y: positionB.y,
+      z: positionB.z,
+      onStart: () => {
+        const nextTextureMap = this.engine.textures.getTexture(
+          this.panoItems.find((pano) => pano.name === name).textureMap
+        );
+        this.handleHotspotsVisibility(name);
 
-          this.engine.scene.traverse((object) => {
-            if (object.name.includes('Hotspot')) {
-              object.visible = false;
-            }
-          });
-          this.panoItems.forEach((pano) => {
-            if (pano.name === name) {
-              pano.visible.forEach((item) => {
-                const object = this.engine.scene.getObjectByName(
-                  `Hotspot_${item}`
-                );
-                object.visible = true;
-              });
-            }
-          });
-
-          const nextPano = this.panoItems.find((pano) => pano.name === name);
-          const nextTextureMap = this.engine.textures.getTexture(
-            nextPano.textureMap
-          );
-          const nextDepthMap = nextPano.depthMap
-            ? this.engine.textures.getTexture(nextPano.depthMap)
-            : null;
-
-          material.uniforms.texture2.value = nextTextureMap;
-          material.uniforms.displacementMap.value = nextDepthMap;
-          material.uniforms.displacementScale.value = nextDepthMap ? 15.0 : 0.0; // Adjust scale as needed
-        },
-        onUpdate: () => {
-          this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
-          const progress = this.moveGsap.progress() * 2; // Adjust progress for first half
-          material.uniforms.mixRatio.value = progress;
-        },
-      })
-      .to(obj, {
-        duration: firstInit ? 0.005 : params.animation.move.duration / 2,
-        blend: 1,
-        x: positionB.x,
-        y: positionB.y,
-        z: positionB.z,
-        onStart: () => {},
-        onUpdate: () => {
-          this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
-          const progress = (this.moveGsap.progress() - 0.5) * 2; // Adjust progress for second half
-          material.uniforms.mixRatio.value = 0.5 + progress * 0.5;
-        },
-        onComplete: () => {
-          appState.renderingStatus.next(false);
-          material.uniforms.texture1.value = material.uniforms.texture2.value;
-          material.uniforms.mixRatio.value = 0;
-        },
-      });
+        material.uniforms.texture2.value = nextTextureMap;
+        this.engine.panoMesh.position.copy(positionB);
+      },
+      onComplete: () => {
+        appState.renderingStatus.next(false);
+        material.uniforms.texture1.value = material.uniforms.texture2.value;
+        material.uniforms.mixRatio.value = 0;
+      },
+      onUpdate: () => {
+        this.engine.controls.moveTo(obj.x, obj.y, obj.z, true);
+        const progress = this.moveGsap.progress();
+        material.uniforms.mixRatio.value = progress;
+      },
+    });
 
     return this.moveGsap;
   }
@@ -304,33 +319,52 @@ export class Panorama {
     this.hotspots && this.hotspots.update();
   }
 
-  createPanoItem(name, textureMap, visible, depthMap) {
+  createPanoItem(
+    name,
+    textureMap,
+    depthMap,
+    visibleHotspots,
+    visibleInfospots,
+    position
+  ) {
     return {
       name,
       textureMap,
       depthMap,
+      /**
+       * Gets the world position of the panorama
+       * @returns {Vector3} The world position, either from the provided position override
+       * or calculated from the scene object with matching name
+       */
       get position() {
-        return window.engine.scene
-          .getObjectByName(name)
-          .getWorldPosition(new Vector3());
+        let p;
+
+        // p = window.engine.scene
+        //   .getObjectByName(name)
+        //   .getWorldPosition(new Vector3());
+
+        return position ? new Vector3(position.x, position.y, position.z) : p;
       },
       get target() {
         const { x, y, z } = this.position;
-        return {
-          x: x + EPS * 15,
-          y: y + EPS * 0.0001,
-          z: z - EPS,
-        };
+        const t = new Vector3(
+          x + EPSILON * 15,
+          y + EPSILON * 0.0001,
+          z - EPSILON
+        );
+        return t;
       },
-      visible,
+      visibleHotspots,
+      visibleInfospots,
     };
   }
 
-  createTextureObject(textureMap, extension = '.webp') {
+  createTextureObject(textureMap) {
     return {
-      path: textureMap + extension,
-      name: textureMap,
+      path: textureMap,
+      name: textureMap, // textureMap.replace(/\.[^/.]+$/, '')
       anisotropy: true,
+      nonSrgb: true,
       filter: true,
       flip: true,
     };

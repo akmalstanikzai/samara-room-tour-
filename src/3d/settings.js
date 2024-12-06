@@ -5,16 +5,16 @@ import { Power3, Linear, Power4 } from 'gsap';
 
 const params = {
   postProcessing: {
-    enabled: true,
+    enabled: false,
     antialias: {
       multisampling: 4,
     },
   },
   animation: {
     move: {
-      duration: 1,
-      ease: Power4.easeOut,
-      easeName: 'Power4.easeOut',
+      duration: 0.15,
+      ease: Linear,
+      easeName: 'Linear',
     },
   },
   container: null,
@@ -51,7 +51,7 @@ const params = {
     landscapeAspect: 4 / 3.5,
     near: 5,
     far: 50,
-    fov: 45,
+    fov: 40,
     initPos: {
       x: -10.873648212948423,
       y: 0.4188578127354573,
@@ -121,15 +121,15 @@ const params = {
         z: 0,
       },
       minZoom: 0.35,
-      maxZoom: 0.8,
+      maxZoom: 0.65,
       defaultZoom: 0.5,
       near: 0.01,
       polarRotateSpeed: -1,
       azimuthRotateSpeed: -1,
       smoothTime: 0.1,
       draggingSmoothTime: 0.1,
-      maxPolarAngle: MathUtils.degToRad(120),
-      minPolarAngle: MathUtils.degToRad(50),
+      maxPolarAngle: Math.PI,
+      minPolarAngle: 0,
       minAzimuthAngle: -Infinity,
       maxAzimuthAngle: Infinity,
     },
@@ -168,243 +168,14 @@ const params = {
   shadowMesh: {
     opacity: 0.8,
   },
-  textures: [
-    { path: 'pin.png', name: 'pin', anisotropy: true },
-    { path: 'cursor.png', name: 'cursor', anisotropy: true },
-  ],
+  textures: [],
 
   models: {
     samara: {
-      complectationVars: {
-        Trim: {
-          variants: [
-            {
-              id: MathUtils.generateUUID(),
-              name: 'wood',
-            },
-            {
-              id: MathUtils.generateUUID(),
-              name: 'metal',
-            },
-          ],
-        },
-        Support: {
-          variants: [
-            {
-              id: 1,
-              name: 'Bone white base',
-              hex: 0xfcfdfd,
-            },
-            {
-              id: 2,
-              name: 'Parchment base',
-              hex: 0xe0ddd3,
-            },
-            {
-              id: 5,
-              name: 'Dark bronze base',
-              hex: 0x423e38,
-            },
-          ],
-        },
-        Color: {
-          variants: [
-            {
-              id: 1,
-              name: 'Bone white base',
-              hex: 0xfcfdfd,
-            },
-
-            {
-              id: 2,
-              name: 'Parchment base',
-              hex: 0xe0ddd3,
-            },
-
-            {
-              id: 3,
-              name: 'Driftwood base',
-              hex: 0xdcdfdf,
-            },
-
-            {
-              id: 4,
-              name: 'Evergreen base',
-              hex: 0x344739,
-            },
-
-            {
-              id: 5,
-              name: 'Dark bronze base',
-              hex: 0x423e38,
-            },
-          ],
-        },
-
-        Roof: {
-          get camera() {
-            return appState.complectation.value.layout === 'XL 8'
-              ? 'roof-XL 8'
-              : 'roof';
-          },
-          variants: [
-            {
-              id: 8,
-              name: 'Dark Bronze Roof',
-              hex: 0x2f2d2b,
-            },
-            {
-              id: 7,
-              name: 'Metallic Silver Roof',
-              hex: 0xcdcdcd,
-            },
-          ],
-        },
-
-        Layout: {
-          variants: [
-            {
-              camera: 'front',
-              name: 'onebed',
-            },
-            {
-              camera: 'front',
-              name: 'studio',
-            },
-            {
-              camera: 'front',
-              name: 'twobed',
-            },
-            {
-              camera: 'right',
-              name: 'XL 8',
-            },
-          ],
-        },
-
-        Front: {
-          get camera() {
-            return appState.complectation.value.layout === 'XL 8'
-              ? 'right'
-              : 'front';
-          },
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['studio', 'onebed', 'twobed', 'XL 8'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['studio', 'onebed', 'twobed', 'XL 8'] },
-            },
-          ],
-        },
-
-        'Primary bedroom': {
-          camera: 'front',
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['XL 8'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['XL 8'] },
-            },
-          ],
-        },
-
-        Left: {
-          camera: 'left',
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['studio', 'onebed', 'twobed'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['studio', 'onebed', 'twobed'] },
-            },
-          ],
-        },
-
-        Right: {
-          camera: 'right',
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['studio'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['studio'] },
-            },
-          ],
-        },
-
-        'Living room': {
-          camera: 'rear',
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['XL 8'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['XL 8'] },
-            },
-          ],
-        },
-
-        'Secondary bedroom': {
-          camera: 'rear',
-          variants: [
-            {
-              name: 'window',
-              include: { layouts: ['XL 8'] },
-            },
-            {
-              name: 'double doors',
-              include: { layouts: ['XL 8'] },
-            },
-          ],
-        },
-
-        Solar: {
-          get camera() {
-            return appState.complectation.value.layout === 'XL 8'
-              ? 'roof-XL 8'
-              : 'roof';
-          },
-          variants: [
-            {
-              name: 'no-solar',
-            },
-            {
-              name: 'solar-full',
-            },
-            {
-              name: 'solar-half',
-            },
-          ],
-        },
-
-        Cables: {
-          variants: [
-            {
-              name: 'cables-full',
-            },
-            {
-              name: 'no-cables',
-            },
-          ],
-        },
-      },
-      modelScaleAspectValue: 150,
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 11,
+          totalAssetsCount: 16,
           textures: [],
         },
       ],

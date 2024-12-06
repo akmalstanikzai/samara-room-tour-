@@ -15,8 +15,10 @@ import {
 import { params } from '../settings';
 import { gsap } from 'gsap';
 import { userDevice } from '../../utils/browser-detection';
+import { Vector2 } from 'three';
 
-export class CursorPin {
+/** Cursor */
+export class Cursor {
   constructor(engine) {
     this.engine = engine;
     this.init();
@@ -26,12 +28,12 @@ export class CursorPin {
   }
 
   init() {
-    const geometry = new PlaneGeometry(0.1, 0.1);
+    const geometry = new PlaneGeometry(0.4, 0.4);
 
     const material = new MeshBasicMaterial({
       color: new Color(0xcccccc),
       side: DoubleSide,
-      map: this.engine.textures.getTexture('cursor'),
+      map: this.engine.textures.getTexture('Cursor.png'),
       transparent: true,
       // opacity: 0.8,
       depthWrite: false,
@@ -61,6 +63,15 @@ export class CursorPin {
     this.intersects2 = [];
 
     this.mouse = new Vector3();
+  }
+
+  /**
+   * Gets the current cursor position as a Vector2.
+   * @returns {Vector2} The cursor position in normalized device coordinates.
+   */
+
+  get cursorPosition() {
+    return new Vector2(this.mouse.x, this.mouse.y);
   }
 
   onMove(e) {
@@ -102,8 +113,7 @@ export class CursorPin {
       ) {
         this.pin.visible = false;
         if (!userDevice.isMobile) {
-          params.container.style.cursor = 'pointer';
-          this.engine.controls.enabled = false;
+          params.container.classList.add('cursor-pointer');
         }
 
         // Animate hotspot opacity to 1
@@ -114,23 +124,36 @@ export class CursorPin {
           this.hoveredHotspot = firstIntersect.object;
           this.animateHotspotOpacity(this.hoveredHotspot, 1);
         }
+      } else if (
+        firstIntersect.object.visible &&
+        firstIntersect.object.name.includes('Info')
+      ) {
+        this.pin.visible = false;
+
+        if (!userDevice.isMobile) {
+          params.container.classList.add('cursor-pointer');
+        }
+        this.engine.pano.hotspots.showPopup(firstIntersect.object);
       } else {
+        this.engine.pano.hotspots.hidePopup();
         if (!userDevice.isMobile) {
           this.pin.visible = true;
           params.container.style.cursor = 'auto';
-          this.engine.controls.enabled = true;
+          params.container.classList.remove('cursor-pointer');
         }
 
         const point = firstIntersect.point;
         this.mouseHelper.position.copy(point);
         this.intersection.point.copy(point);
 
-        const normal = firstIntersect.face.normal.clone();
-        normal.transformDirection(firstIntersect.object.matrixWorld);
-        normal.add(firstIntersect.point);
+        if (firstIntersect.face) {
+          const normal = firstIntersect.face.normal.clone();
+          normal.transformDirection(firstIntersect.object.matrixWorld);
+          normal.add(firstIntersect.point);
 
-        this.intersection.normal.copy(firstIntersect.face.normal);
-        this.mouseHelper.lookAt(normal);
+          this.intersection.normal.copy(firstIntersect.face.normal);
+          this.mouseHelper.lookAt(normal);
+        }
 
         this.pin.position.copy(this.intersection.point);
 
@@ -144,7 +167,7 @@ export class CursorPin {
 
         // Animate previously hovered hotspot opacity back to 0.5
         if (this.hoveredHotspot) {
-          this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+          this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
           this.hoveredHotspot = null;
         }
       }
@@ -158,7 +181,7 @@ export class CursorPin {
 
       // Animate previously hovered hotspot opacity back to 0.5
       if (this.hoveredHotspot) {
-        this.animateHotspotOpacity(this.hoveredHotspot, 0.3);
+        this.animateHotspotOpacity(this.hoveredHotspot, 0.5);
         this.hoveredHotspot = null;
       }
     }
@@ -192,31 +215,41 @@ export class CursorPin {
           hotspotIntersect.object.name.includes(pano.name)
         );
         this.engine.pano.change(cameraMap.name);
-      } else {
-        // If no Hotspot found, find the closest visible Hotspot
-        const clickPoint = this.intersects[0].point;
-        let closestHotspot = null;
-        let closestDistance = Infinity;
-
-        const visibleHotspots = this.engine.meshes.filter(
-          (mesh) => mesh.name.includes('Hotspot') && mesh.visible
-        );
-
-        visibleHotspots.forEach((hostpot) => {
-          const distance = clickPoint.distanceTo(hostpot.position);
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestHotspot = hostpot;
-          }
-        });
-
-        if (closestHotspot) {
-          const cameraMap = this.engine.pano.panoItems.find((pano) =>
-            closestHotspot.name.includes(pano.name)
-          );
-          this.engine.pano.change(cameraMap.name);
-        }
       }
+    }
+  }
+
+  findClosestHotspot(clickPoint) {
+    // If no Hotspot found, find the closest visible Hotspot
+    let closestHotspot = null;
+    let closestDistance = Infinity;
+
+    const visibleHotspots = this.engine.meshes.filter(
+      (mesh) => mesh.name.includes('Hotspot') && mesh.visible
+    );
+
+    visibleHotspots.forEach((hostpot) => {
+      const distance = clickPoint.distanceTo(hostpot.position);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestHotspot = hostpot;
+      }
+    });
+
+    if (closestHotspot) {
+      const cameraMap = this.engine.pano.panoItems.find((pano) =>
+        closestHotspot.name.includes(pano.name)
+      );
+      this.engine.pano.change(cameraMap.name);
+    }
+  }
+
+  onDoubleClick(e) {
+    this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
+
+    if (this.intersects.length > 0) {
+      // Call the findClosestHotspot method with the intersection point
+      this.findClosestHotspot(this.intersects[0].point);
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": ["src"],
+    "include": ["src/3d/pano"],
     "includePattern": ".js$",
     "excludePattern": "(node_modules/|docs|three-libs)"
   },
@@ -14,6 +14,6 @@
   },
   "opts": {
     "recurse": true,
-    "destination": "./documentation/"
+    "destination": "./build/documentation/"
   }
 }

@@ -2,11 +2,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const HashOutput = require('webpack-plugin-hash-output');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 //dev
 module.exports = {
+  mode: 'development',
   entry: `${__dirname}/src/app.js`,
   output: {
     path: __dirname + '/build',
@@ -14,7 +14,9 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'build'),
+    static: {
+      directory: path.join(__dirname, 'build'),
+    },
     port: 9000,
   },
   plugins: [
@@ -22,11 +24,13 @@ module.exports = {
       filename: 'index.html', // name of html file to be created
       template: './src/index.html', // source from which html file would be created
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'static',
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'static',
+        },
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -41,6 +45,7 @@ module.exports = {
 //prod
 if (process.env.NODE_ENV === 'prod') {
   module.exports = {
+    mode: 'production',
     entry: `${__dirname}/src/app.js`,
     output: {
       path: __dirname + '/build',
@@ -49,39 +54,50 @@ if (process.env.NODE_ENV === 'prod') {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new HashOutput(),
       new HtmlWebpackPlugin({
         filename: 'index.html', // name of html file to be created
         template: './src/index.html', // source from which html file would be created
       }),
-      new CopyWebpackPlugin([
-        {
-          from: 'static',
-        },
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: 'static',
+          },
+        ],
+      }),
     ],
     module: {
       rules: [
         {
-          test: /\.html$/i,
-          loader: 'html-loader',
-          options: {
-            minimize: true,
-            interpolation: false,
-          },
+          test: /\.html$/,
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                sources: true, // If you need to handle assets in HTML
+                minimize: false, // If you want to minimize HTML
+              },
+            },
+          ],
         },
         {
           test: /\.js$/,
           loader: 'babel-loader',
           exclude: /node_modules/,
-          query: {
+          options: {
             plugins: ['@babel/transform-arrow-functions'],
           },
         },
         {
           test: /\.(glsl|vs|fs|vert|frag)$/,
           exclude: /node_modules/,
-          use: ['raw-loader', 'glslify-loader'],
+          use: [
+            'raw-loader',
+            {
+              loader: 'glslify-loader',
+              options: {},
+            },
+          ],
         },
       ],
     },
