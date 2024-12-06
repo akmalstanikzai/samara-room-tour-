@@ -146,12 +146,14 @@ export class Cursor {
         this.mouseHelper.position.copy(point);
         this.intersection.point.copy(point);
 
-        const normal = firstIntersect.face.normal.clone();
-        normal.transformDirection(firstIntersect.object.matrixWorld);
-        normal.add(firstIntersect.point);
+        if (firstIntersect.face) {
+          const normal = firstIntersect.face.normal.clone();
+          normal.transformDirection(firstIntersect.object.matrixWorld);
+          normal.add(firstIntersect.point);
 
-        this.intersection.normal.copy(firstIntersect.face.normal);
-        this.mouseHelper.lookAt(normal);
+          this.intersection.normal.copy(firstIntersect.face.normal);
+          this.mouseHelper.lookAt(normal);
+        }
 
         this.pin.position.copy(this.intersection.point);
 

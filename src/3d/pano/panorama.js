@@ -105,8 +105,14 @@ export class Panorama {
       console.log(data);
 
       this.panoItems = data['1B'].hotspots.map(
-        ({ name, textureMap, visible, depthMap }) =>
-          this.createPanoItem(name, textureMap, visible, depthMap)
+        ({ name, textureMap, depthMap, visibleHotspots, visibleInfospots }) =>
+          this.createPanoItem(
+            name,
+            textureMap,
+            depthMap,
+            visibleHotspots,
+            visibleInfospots
+          )
       );
 
       this.infospots = data['1B'].infospots;
@@ -196,6 +202,32 @@ export class Panorama {
     this.cursor = new Cursor(this.engine);
   }
 
+  handleHotspotsVisibility(name) {
+    this.engine.scene.traverse((object) => {
+      if (object.name.includes('Hotspot')) {
+        object.visible = false;
+      }
+      if (object.name.includes('Infospot')) {
+        object.visible = false;
+      }
+    });
+
+    this.panoItems.forEach((pano) => {
+      if (pano.name === name) {
+        console.log(pano);
+        pano.visibleHotspots?.forEach((item) => {
+          const object = this.engine.scene.getObjectByName(`Hotspot_${item}`);
+          object.visible = true;
+        });
+
+        pano.visibleInfospots?.forEach((item) => {
+          const object = this.engine.scene.getObjectByName(`Infospot_${item}`);
+          object.visible = true;
+        });
+      }
+    });
+  }
+
   async change(name, firstInit) {
     if (this.moveGsap.isActive()) await this.moveGsap;
     this.currentPano = name;
@@ -223,19 +255,7 @@ export class Panorama {
       material.uniforms.texture2.value = nextTextureMap;
       this.engine.panoMesh.position.copy(positionB);
 
-      this.engine.scene.traverse((object) => {
-        if (object.name.includes('Hotspot')) {
-          object.visible = false;
-        }
-      });
-      this.panoItems.forEach((pano) => {
-        if (pano.name === name) {
-          pano.visible.forEach((item) => {
-            const object = this.engine.scene.getObjectByName(`Hotspot_${item}`);
-            object.visible = true;
-          });
-        }
-      });
+      this.handleHotspotsVisibility(name);
       this.engine.controls.setLookAt(
         positionB.x,
         positionB.y,
@@ -269,25 +289,10 @@ export class Panorama {
         const nextTextureMap = this.engine.textures.getTexture(
           this.panoItems.find((pano) => pano.name === name).textureMap
         );
+        this.handleHotspotsVisibility(name);
 
         material.uniforms.texture2.value = nextTextureMap;
         this.engine.panoMesh.position.copy(positionB);
-
-        this.engine.scene.traverse((object) => {
-          if (object.name.includes('Hotspot')) {
-            object.visible = false;
-          }
-        });
-        this.panoItems.forEach((pano) => {
-          if (pano.name === name) {
-            pano.visible.forEach((item) => {
-              const object = this.engine.scene.getObjectByName(
-                `Hotspot_${item}`
-              );
-              object.visible = true;
-            });
-          }
-        });
       },
       onComplete: () => {
         appState.renderingStatus.next(false);
@@ -309,7 +314,13 @@ export class Panorama {
     this.hotspots && this.hotspots.update();
   }
 
-  createPanoItem(name, textureMap, visible, depthMap) {
+  createPanoItem(
+    name,
+    textureMap,
+    depthMap,
+    visibleHotspots,
+    visibleInfospots
+  ) {
     return {
       name,
       textureMap,
@@ -327,7 +338,8 @@ export class Panorama {
           z: z - EPSILON,
         };
       },
-      visible,
+      visibleHotspots,
+      visibleInfospots,
     };
   }
 
@@ -337,6 +349,7 @@ export class Panorama {
       path: textureMap,
       name: textureMap,
       anisotropy: true,
+      nonSrgb: true,
       filter: true,
       flip: true,
     };

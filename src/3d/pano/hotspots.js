@@ -55,7 +55,7 @@ export class Hotspots {
       // object3d.getWorldPosition(infoSpot.position);
       infoSpot.position.copy(item.position);
 
-      infoSpot.name = 'Info' + MathUtils.generateUUID();
+      infoSpot.name = `Infospot_${item.name}`;
       infoSpot._bubbleText = item.bubbleText;
 
       // infoSpot.rotation.z = -Math.PI;
