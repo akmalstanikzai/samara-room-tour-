@@ -1,21 +1,20 @@
-import { params } from '../settings';
-import lerpFrag from './shaders/lerp/lerp.frag';
-import lerpVert from './shaders/lerp/lerp.vert';
 import {
   Mesh,
   ShaderMaterial,
-  PlaneGeometry,
-  MeshBasicMaterial,
   SphereGeometry,
   Color,
   Vector3,
   Layers,
 } from 'three';
+import { params } from '../settings';
+import lerpFrag from './shaders/lerp/lerp.frag';
+import lerpVert from './shaders/lerp/lerp.vert';
 import { gsap, Power0, Linear, Power4, Power3 } from 'gsap';
 import { appState } from '../../services/app-state';
 import { Cursor } from './cursor';
 import { Hotspots } from './hotspots';
 import { loadGltf } from '../model-loader';
+
 const EPSILON = 1.1177461712e-10;
 
 /**
@@ -242,7 +241,7 @@ export class Panorama {
    * @param {Object} config - The configuration object
    */
   applyConfig(config) {
-    const { controls, hotspot, cursor } = config;
+    const { controls, hotspot, cursor, infospot } = config;
 
     if (controls?.firstPerson) {
       Object.assign(params.controls.firstPerson, controls.firstPerson);
@@ -255,6 +254,10 @@ export class Panorama {
 
     if (cursor) {
       params.cursor = cursor;
+    }
+
+    if (infospot) {
+      params.infospot = infospot;
     }
   }
 

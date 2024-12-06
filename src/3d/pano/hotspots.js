@@ -1,14 +1,13 @@
 import {
   Vector2,
-  Raycaster,
-  MathUtils,
-  DoubleSide,
   SpriteMaterial,
+  Sprite,
+  Mesh,
+  PlaneGeometry,
+  MeshBasicMaterial,
+  Vector3,
 } from 'three';
-import { Mesh, ShaderMaterial, PlaneGeometry, MeshBasicMaterial } from 'three';
 import { params } from '../settings';
-import { Vector3 } from 'three';
-import { Sprite } from 'three';
 
 /** Hotspots */
 export class Hotspots {
@@ -46,9 +45,9 @@ export class Hotspots {
 
       const infoSpot = new Sprite(
         new SpriteMaterial({
-          map: this.engine.textures.getTexture('i.png'),
+          map: this.engine.textures.getTexture('Infospot.png'),
           transparent: true,
-          opacity: 1,
+          opacity: params.infospot.opacity,
         })
       );
 

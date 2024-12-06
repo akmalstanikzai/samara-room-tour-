@@ -2,7 +2,7 @@
   "textures": [
     { "textureMap": "Hotspot.png" },
     { "textureMap": "Cursor.png" },
-    { "textureMap": "i.png" }
+    { "textureMap": "Infospot.png" }
   ],
   "controls": {
     "firstPerson": {
@@ -25,5 +25,8 @@
     "color": "cccccc",
     "lerpFactor": 0.1,
     "size": 0.4
+  },
+  "infospot": {
+    "opacity": 1
   }
 }

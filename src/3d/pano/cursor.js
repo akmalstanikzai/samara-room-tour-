@@ -11,11 +11,11 @@ import {
   MeshBasicMaterial,
   MeshLambertMaterial,
   Quaternion,
+  Vector2,
 } from 'three';
 import { params } from '../settings';
 import { gsap } from 'gsap';
 import { userDevice } from '../../utils/browser-detection';
-import { Vector2 } from 'three';
 
 /** Cursor */
 export class Cursor {
