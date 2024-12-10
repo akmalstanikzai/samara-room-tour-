@@ -46,7 +46,7 @@ export class CreateScene {
    * Initialize scene and start rendering
    */
 
-  async init(reInit, preload) {
+  async init(reInit, preload, name) {
     if (reInit || this.renderer) {
       await this.initPromise;
 
@@ -56,16 +56,7 @@ export class CreateScene {
       this.initListeners();
       this.addSubs();
       this.startRendering();
-      this.pano?.change(this.pano?.currentPano, true);
-      this.lastCamCoords &&
-        this.controls.setLookAt(
-          this.lastCamCoords.position.x,
-          this.lastCamCoords.position.y,
-          this.lastCamCoords.position.z,
-          this.lastCamCoords.target.x,
-          this.lastCamCoords.target.y,
-          this.lastCamCoords.target.z
-        );
+      this.pano?.change(name || this.pano?.currentPano, true);
     } else {
       let resolveInit;
       this.initPromise = new Promise((resolve) => {
@@ -153,7 +144,6 @@ export class CreateScene {
       // this.tests.testDestroy(5);
       // this.tests.testRandomComplectation(500);
       // this.tests.testLayoutChange(50);
-      this.pano.change('360_Entry_01', true);
 
       await delayMs(1);
       appState.loading.next({ isLoading: false });
@@ -185,7 +175,7 @@ export class CreateScene {
    */
 
   destroy() {
-    this.sub.unsubscribe();
+    this.sub?.unsubscribe();
     this.removeListeners();
     this.pauseRendering();
     this.lastCamCoords = {
@@ -309,7 +299,7 @@ export class CreateScene {
   onControlsUpdate() {
     // console.log(this.controls.getPosition());
     // console.log(this.controls.getTarget());
-    userDevice.isMobile && this.pano?.hotspots?.updatePopupPosition();
+    appState.renderingStatus.next(true);
   }
 
   onControlsEnd() {

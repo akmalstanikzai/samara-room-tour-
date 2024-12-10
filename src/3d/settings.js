@@ -4,6 +4,9 @@ import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
 
 const params = {
+  pano: {
+    preload: true,
+  },
   postProcessing: {
     enabled: false,
     antialias: {
@@ -175,7 +178,7 @@ const params = {
       assetsArray: [
         {
           name: 'studio',
-          totalAssetsCount: 16,
+          totalAssetsCount: 15,
           textures: [],
         },
       ],

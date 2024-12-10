@@ -84,13 +84,6 @@ export class Panorama {
           this.mouseDownPosition = null;
         },
       },
-      {
-        eventTarget: params.container,
-        eventName: 'dblclick',
-        eventFunction: (e) => {
-          this.cursor.onDoubleClick(e);
-        },
-      },
     ];
   }
 
@@ -115,6 +108,7 @@ export class Panorama {
           visibleHotspots,
           visibleInfospots,
           position,
+          target,
         }) =>
           this.createPanoItem(
             name,
@@ -122,7 +116,8 @@ export class Panorama {
             depthMap,
             visibleHotspots,
             visibleInfospots,
-            position
+            position,
+            target
           )
       );
 
@@ -178,37 +173,39 @@ export class Panorama {
         if (object instanceof Mesh && object.material)
           this.engine.meshes.push(object);
       });
+
+      const geometry = new SphereGeometry(30, 200, 200);
+      geometry.scale(-1, 1, 1);
+
+      const material = new ShaderMaterial({
+        uniforms: {
+          texture1: { value: null },
+          texture2: { value: null },
+          mixRatio: { value: 0.0 },
+          ambientLightColor: { value: new Color(0xffffff) },
+          ambientLightIntensity: { value: 1.0 },
+          displacementMap: { value: null },
+          displacementScale: { value: 1.0 },
+        },
+        vertexShader: lerpVert,
+        fragmentShader: lerpFrag,
+      });
+
+      const mesh = new Mesh(geometry, material);
+      mesh.scale.setScalar(1);
+      mesh.rotation.y = Math.PI;
+      mesh.name = 'pano';
+      mesh.renderOrder = 10;
+      this.engine.panoMesh = mesh;
+      this.engine.scene.add(mesh);
+
+      this.hotspots = new Hotspots(this.engine);
+      this.cursor = new Cursor(this.engine);
+
+      this.change(panoItems['1B'].startPoint, true);
     } catch (error) {
       console.error('Error loading panoItems.json:', error);
     }
-
-    const geometry = new SphereGeometry(30, 200, 200);
-    geometry.scale(-1, 1, 1);
-
-    const material = new ShaderMaterial({
-      uniforms: {
-        texture1: { value: null },
-        texture2: { value: null },
-        mixRatio: { value: 0.0 },
-        ambientLightColor: { value: new Color(0xffffff) },
-        ambientLightIntensity: { value: 1.0 },
-        displacementMap: { value: null },
-        displacementScale: { value: 1.0 },
-      },
-      vertexShader: lerpVert,
-      fragmentShader: lerpFrag,
-    });
-
-    const mesh = new Mesh(geometry, material);
-    mesh.scale.setScalar(1);
-    mesh.rotation.y = Math.PI;
-    mesh.name = 'pano';
-    mesh.renderOrder = 10;
-    this.engine.panoMesh = mesh;
-    this.engine.scene.add(mesh);
-
-    this.hotspots = new Hotspots(this.engine);
-    this.cursor = new Cursor(this.engine);
   }
 
   handleHotspotsVisibility(name) {
@@ -353,7 +350,8 @@ export class Panorama {
     depthMap,
     visibleHotspots,
     visibleInfospots,
-    position
+    position,
+    target
   ) {
     return {
       name,
@@ -367,12 +365,17 @@ export class Panorama {
       get position() {
         let p;
 
-        // p = window.engine.scene
-        //   .getObjectByName(name)
-        //   .getWorldPosition(new Vector3());
+        p = window.engine.scene
+          .getObjectByName(name)
+          .getWorldPosition(new Vector3());
 
         return position ? new Vector3(position.x, position.y, position.z) : p;
       },
+      /**
+       * Gets the target position for the panorama camera
+       * @returns {Vector3} The target position, either from the provided target override
+       * or calculated as a slight offset from the panorama position using EPSILON values
+       */
       get target() {
         const { x, y, z } = this.position;
         const t = new Vector3(
@@ -380,7 +383,8 @@ export class Panorama {
           y + EPSILON * 0.0001,
           z - EPSILON
         );
-        return t;
+
+        return target ? new Vector3(target.x, target.y, target.z) : t;
       },
       visibleHotspots,
       visibleInfospots,

@@ -1,18 +1,14 @@
 {
-  "textures": [
-    { "textureMap": "Hotspot.png" },
-    { "textureMap": "Cursor.png" },
-    { "textureMap": "Infospot.png" }
-  ],
+  "textures": [{ "textureMap": "Hotspot.png" }, { "textureMap": "Cursor.png" }],
   "controls": {
     "firstPerson": {
       "minZoom": 0.35,
       "maxZoom": 0.65,
       "defaultZoom": 0.5,
-      "polarRotateSpeed": -1,
-      "azimuthRotateSpeed": -1,
-      "smoothTime": 0.1,
-      "draggingSmoothTime": 0.1
+      "polarRotateSpeed": -0.3,
+      "azimuthRotateSpeed": -0.3,
+      "smoothTime": 0.07,
+      "draggingSmoothTime": 0.07
     }
   },
   "hotspot": {
@@ -25,8 +21,5 @@
     "color": "cccccc",
     "lerpFactor": 0.1,
     "size": 0.4
-  },
-  "infospot": {
-    "opacity": 1
   }
 }

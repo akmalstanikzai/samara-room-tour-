@@ -3,7 +3,7 @@ import { GUI } from '../3d/libs/lil-gui-modified';
 import { params } from '../3d/settings';
 import { Textures } from '../3d/textures';
 import { CameraGsap } from '../3d/camera-gsap';
-import { html, LitElement, nothing, css } from 'lit';
+import { html, LitElement, nothing, css, render } from 'lit';
 import { ref } from 'lit/directives/ref.js';
 import { appState } from '../services/app-state';
 import { auditTime } from 'rxjs/operators';
@@ -22,397 +22,41 @@ import {
   Circ,
   Linear,
 } from 'gsap';
-import { postProcessing } from '../3d/post-processing';
-
-export class ButtonComponent extends LitElement {
-  constructor() {
-    super();
-  }
-
-  static get styles() {
-    return [
-      css`
-        .picker-el {
-          color: #fff;
-          cursor: pointer;
-          display: flex;
-          padding: 0.5em 1.5em 0.5em 1.5em;
-          margin: 0.875em 0 0.875em 0;
-          justify-content: center;
-          align-items: center;
-          border-radius: 0.5em;
-        }
-        .picker-el img {
-          width: 3em;
-          height: 3em;
-        }
-        .picker-el:hover {
-          opacity: 0.8;
-        }
-        .picker-el__wrapper {
-          margin-left: 0.5em;
-          margin-right: 0.5em;
-        }
-        .picker-el__active {
-          box-shadow: #00b0f0 0 0 0.5em;
-        }
-        .picker-el__disabled {
-          opacity: 0.3;
-          pointer-events: none;
-        }
-        .inline {
-          display: inline-flex;
-        }
-      `,
-    ];
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  getImagesFromMaterials(material) {
-    const images = {
-      material: material,
-    };
-    const materialProperties = [
-      'map',
-      'normalMap',
-      'aoMap',
-      'lightMap',
-      'roughnessMap',
-      'metalnessMap',
-      'emissiveMap',
-      'alphaMap',
-    ];
-
-    window.engine.scene.getObjectByName(this.parent).traverse((el) => {
-      if (el.material && el.material.name === this.material) {
-        materialProperties.forEach((prop) => {
-          if (el.material[prop]) {
-            images[prop] = el.material[prop].image;
-          }
-        });
-      }
-    });
-
-    return images;
-  }
-
-  static get properties() {
-    return {
-      material: '',
-      parent: '',
-    };
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-  }
-
-  handleClick(name) {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.png, .jpg');
-    input.addEventListener('change', async (event) => {
-      const file = event.target.files[0];
-      const fileURL = URL.createObjectURL(file);
-
-      const texture = await new TextureLoader().loadAsync(fileURL);
-      texture.colorSpace = SRGBColorSpace;
-      texture.flipY = false;
-
-      window.engine.scene.traverse((el) => {
-        if (el.material && el.material.name === this.material) {
-          if (name === 'ao') {
-            el.material.aoMap = texture;
-            el.material.aoMap.channel = 1;
-          }
-
-          if (name === 'lightMap') {
-            el.material.lightMap = texture;
-            el.material.lightMap.channel = 1;
-          }
-
-          if (name === 'map') {
-            el.material.map = texture;
-          }
-
-          if (name === 'normal') {
-            el.material.normalMap = texture;
-          }
-
-          if (name === 'roughness') {
-            el.material.roughnessMap = texture;
-          }
-
-          if (name === 'metalness') {
-            el.material.metalnessMap = texture;
-          }
-
-          if (name === 'emissive') {
-            el.material.emissiveMap = texture;
-          }
-
-          el.material.needsUpdate = true;
-        }
-      });
-      this.getImagesFromMaterials();
-      this.requestUpdate();
-      window.engine.update();
-    });
-
-    input.style.display = 'none';
-    document.body.appendChild(input);
-    input.click();
-    document.body.removeChild(input);
-  }
-
-  handleDelete(name) {
-    window.engine.scene.traverse((el) => {
-      if (el.material && el.material.name === this.material) {
-        if (name === 'ao') {
-          el.material.aoMap = null;
-        }
-
-        if (name === 'lightMap') {
-          el.material.lightMap = null;
-        }
-
-        if (name === 'map') {
-          el.material.map = null;
-        }
-
-        if (name === 'normal') {
-          el.material.normalMap = null;
-        }
-
-        if (name === 'roughness') {
-          el.material.roughnessMap = null;
-        }
-
-        if (name === 'metalness') {
-          el.material.metalnessMap = null;
-        }
-
-        if (name === 'emissive') {
-          el.material.emissiveMap = null;
-        }
-
-        el.material.needsUpdate = true;
-      }
-    });
-    this.getImagesFromMaterials();
-    this.requestUpdate();
-    window.engine.update();
-  }
-
-  firstUpdated() {}
-
-  render() {
-    this.images = this.getImagesFromMaterials(this.material);
-
-    const mapElement = (map, name) => html`
-      <div class="picker-el__wrapper inline">
-        <div
-          @click="${() => {
-            this.handleClick(name);
-          }}"
-          class="picker-el"
-        >
-          ${map && map.currentSrc && !map.currentSrc.includes('blob')
-            ? html`<img src="${map.currentSrc}" /> `
-            : html`${map}`}
-          ${name.charAt(0).toUpperCase() + name.slice(1)}
-        </div>
-
-        <div
-          @click="${() => {
-            this.handleDelete(name);
-          }}"
-          class="picker-el"
-        >
-          x
-        </div>
-      </div>
-    `;
-
-    return html`
-      ${mapElement(this.images.map, 'map')}
-      ${mapElement(this.images.aoMap, 'ao')}
-      ${mapElement(this.images.lightMap, 'lightMap')}
-      ${mapElement(this.images.normalMap, 'normal')}
-      ${mapElement(this.images.roughnessMap, 'roughness')}
-      ${mapElement(this.images.metalnessMap, 'metalness')}
-      ${mapElement(this.images.emissiveMap, 'emissive')}
-      ${mapElement(this.images.alphaMap, 'alpha')}
-    `;
-  }
-}
-
-customElements.define('button-component', ButtonComponent);
 
 export class GuiComponent extends LitElement {
   constructor() {
     super();
     this.engine = window.engine;
-    this.debugMode = 0; // Initialize debug mode to 0 (Normal)
+    this.camera = {
+      position: { x: 0, y: 0, z: 0 },
+      target: {},
+    };
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.sub = appState.complectation.pipe(auditTime(100)).subscribe((res) => {
-      if (this.lastLayout !== res.layout) {
-        // Check if the layout has changed
-        // this.createMaterialsFolder(res.layout);
-        this.lastLayout = res.layout;
-      }
+    this.sub = appState.renderingStatus.subscribe((res) => {
+      const position = this.engine.controls.getPosition();
+      const target = this.engine.controls.getTarget();
+
+      const formatCoordinates = (coord, precision) => {
+        return {
+          x: coord.x.toFixed(precision),
+          y: coord.y.toFixed(precision),
+          z: coord.z.toFixed(precision),
+        };
+      };
+
+      this.camera = {
+        position: formatCoordinates(position, 15),
+        target: formatCoordinates(target, 15),
+        zoom: this.engine.camera.zoom,
+      };
     });
   }
 
   disconnectedCallback() {
     this.sub && this.sub.unsubscribe();
-    this.cleanUpControllers();
-  }
-
-  async createMaterialsFolder(layout = appState.complectation.value.layout) {
-    if (!this.gui) return;
-    const selectedAsset = params.models.samara.assetsArray.find(
-      (asset) => asset.name === appState.complectation.value.layout
-    );
-    await Promise.resolve(selectedAsset.loadedModel);
-
-    let _materialsFolder = this.gui.folders.find(
-      (folder) => folder._title === 'Materials'
-    );
-
-    if (!_materialsFolder) {
-      _materialsFolder = this.gui.addFolder('Materials');
-    } else {
-      _materialsFolder.controllersRecursive().forEach((controller) => {
-        controller.listen(false);
-        controller.destroy();
-      });
-      _materialsFolder.destroy();
-      _materialsFolder = this.gui.addFolder('Materials');
-    }
-
-    _materialsFolder.close();
-
-    _materialsFolder
-      .addFolder('Interior aomaps')
-      .close()
-      .add(params.maps.aoMap, 'intensity')
-      .min(0.01)
-      .max(2)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.scene.traverse((mesh) => {
-          if (
-            mesh.material &&
-            this.engine.models.materials.studioMaterials[mesh.material.name]
-          ) {
-            mesh.material.aoMapIntensity = value;
-          }
-        });
-        this.engine.update();
-      });
-
-    _materialsFolder
-      .addFolder('Interior lightmaps')
-      .close()
-      .add(params.maps.lightMap, 'intensity')
-      .min(0.01)
-      .max(20)
-      .step(0.01)
-      .onChange((value) => {
-        this.engine.scene.traverse((mesh) => {
-          if (
-            mesh.material &&
-            this.engine.models.materials.studioMaterials[mesh.material.name]
-          ) {
-            mesh.material.lightMapIntensity = value;
-          }
-        });
-        this.engine.update();
-      });
-    const addedMaterialNames = new Set();
-
-    const addMaterialPropertyListener = (
-      prop,
-      material,
-      folder,
-      min = 0,
-      max = 20,
-      step = 0.01
-    ) => {
-      if (
-        material[prop] !== undefined &&
-        material.materialType !== 'MeshTransmissionMaterial'
-      )
-        // Ensure property exists on the material
-        prop === 'color'
-          ? folder
-              .addColor(material, 'color')
-              .onChange(() => {
-                this.engine.update();
-              })
-              .listen()
-          : folder
-              .add(material, prop, min, max, step)
-              .onChange(() => {
-                this.engine.update();
-              })
-              .listen();
-    };
-
-    const materialKeys = [
-      'color',
-      // 'depthWrite',
-      // 'visible',
-      // 'transmission',
-      // 'metalness',
-      // 'roughness',
-      // 'ior',
-      // 'thickness',
-      // 'reflectivity',
-      'aoMapIntensity',
-      'lightMapIntensity',
-    ];
-    const layoutObject = this.engine.scene.getObjectByName(layout);
-
-    layoutObject &&
-      layoutObject.traverse((el) => {
-        if (
-          el.material &&
-          !addedMaterialNames.has(el.material.name) &&
-          el.material.lightMap
-        ) {
-          addedMaterialNames.add(el.material.name);
-          const folder = _materialsFolder.addFolder(el.material.name).close();
-
-          folder.$children.innerHTML = `<br/> ${
-            el.material.materialType || el.material.type
-          }`;
-          materialKeys.forEach((key) => {
-            addMaterialPropertyListener(key, el.material, folder);
-          });
-
-          const texturesFolder = folder.addFolder('Textures').close();
-          texturesFolder.$children.innerHTML = `<button-component material="${el.material.name}" parent="${layoutObject.name}"></button-component>`;
-        }
-      });
-  }
-
-  cleanUpControllers() {
-    if (this.gui) {
-      const allControllers = this.gui.controllersRecursive();
-      allControllers.forEach((controller) => {
-        controller.listen(false);
-        controller.destroy();
-      });
-      this.gui.destroy();
-    }
   }
 
   onRef(div) {
@@ -952,6 +596,39 @@ export class GuiComponent extends LitElement {
       .add(params.animation.move, 'duration', 0, 5)
       .onChange((value) => {})
       .name('Duration');
+
+    const _cameraCoordsFolder = this.gui.addFolder('Camera coords').close();
+
+    // Create a container element
+    const container = document.createElement('div');
+
+    // Create and render the Lit component
+    const litRender = render(this.renderCameraInfo(), container);
+
+    // Update the camera info when renderingStatus changes
+    this.sub = appState.renderingStatus.pipe(auditTime(50)).subscribe(() => {
+      render(this.renderCameraInfo(), container);
+    });
+
+    _cameraCoordsFolder.$children.appendChild(container);
+  }
+
+  renderCameraInfo() {
+    const copyToClipboard = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Camera coordinates copied to clipboard!');
+      });
+    };
+
+    return html`
+      <div
+        style="cursor: pointer;"
+        @click=${() => copyToClipboard(JSON.stringify(this.camera))}
+      >
+        <div>position: ${JSON.stringify(this.camera.position)}</div>
+        <div>target: ${JSON.stringify(this.camera.target)}</div>
+      </div>
+    `;
   }
 }
 

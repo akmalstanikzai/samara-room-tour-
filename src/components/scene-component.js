@@ -3,6 +3,7 @@ import { appState } from '../services/app-state';
 import { ref } from 'lit/directives/ref.js';
 import { params } from '../3d/settings';
 import { CreateScene } from '../3d/scene';
+import { delayMs } from '../utils/delay';
 
 export class SceneComponent extends LitElement {
   constructor() {
@@ -172,7 +173,7 @@ export class SceneComponent extends LitElement {
         vertical-align: middle;
       }
 
-      #modal {
+      .modal {
         position: fixed;
         top: 0;
         left: 0;
@@ -182,7 +183,7 @@ export class SceneComponent extends LitElement {
         backdrop-filter: blur(1em);
       }
 
-      #pano {
+      .pano {
         width: 100%;
         height: 100%;
         border-radius: 1em;
@@ -190,17 +191,17 @@ export class SceneComponent extends LitElement {
         position: relative;
       }
 
-      #openModal {
+      .open-modal {
         margin: 1em;
       }
 
-      #closeModal {
+      .close-modal {
         border-radius: 0.5em;
         backdrop-filter: blur(1em);
         background-color: rgba(0, 0, 0, 0);
       }
 
-      #modal-content {
+      .modal-content {
         justify-content: center;
         align-items: center;
         display: flex;
@@ -208,7 +209,7 @@ export class SceneComponent extends LitElement {
         height: 80%;
       }
 
-      #modal-overlay {
+      .modal-overlay {
         width: 100%;
         height: 100%;
         backdrop-filter: blur(1em);
@@ -257,19 +258,6 @@ export class SceneComponent extends LitElement {
         height: 16px;
         vertical-align: middle;
       }
-
-      #popup {
-        display: none;
-        position: absolute;
-        background: rgba(255, 255, 255, 0.6);
-        color: black;
-        border-radius: 8px;
-        padding: 10px;
-        backdrop-filter: blur(1em);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        pointer-events: none;
-        z-index: 999;
-      }
     `;
   }
 
@@ -286,10 +274,6 @@ export class SceneComponent extends LitElement {
 
   onRef(div) {
     params.container = div;
-  }
-
-  onRefPopup(div) {
-    params.popup = div;
   }
 
   shouldShowGui() {
@@ -319,7 +303,7 @@ export class SceneComponent extends LitElement {
       })
     );
 
-    if (!window.engine) {
+    if (!window.engine && params.pano.preload) {
       const settings = {};
       window.engine = new CreateScene(settings);
       window.engine.init(false, true);
@@ -331,16 +315,16 @@ export class SceneComponent extends LitElement {
     this.sub.unsubscribe();
   }
 
-  async openModal() {
+  async openModal(name) {
     this.isModalOpen = true;
     this.requestUpdate();
     setTimeout(() => {
       if (!window.engine) {
         const settings = {};
         window.engine = new CreateScene(settings);
-        window.engine.init();
+        window.engine.init(false, false, name);
       } else {
-        window.engine.init(true);
+        window.engine.init(true, false, name);
       }
     }, 1);
   }
@@ -348,7 +332,6 @@ export class SceneComponent extends LitElement {
   closeModal() {
     this.isModalOpen = false;
     this.requestUpdate();
-
     setTimeout(() => {
       if (window.engine) {
         window.engine.destroy();
@@ -380,18 +363,25 @@ export class SceneComponent extends LitElement {
     return html`
       ${this.isModalOpen
         ? html`
-            <div id="modal">
+            <div class="modal">
               <div
-                id="modal-overlay"
-                @click="${() => {
-                  this.closeModal();
+                class="modal-overlay"
+                @mousedown="${(e) => {
+                  if (e.target.classList.contains('modal-overlay')) {
+                    this.closeModal();
+                  }
                 }}"
               >
-                <div id="modal-content" @click="${(e) => e.stopPropagation()}">
-                  <div id="pano">
+                <div
+                  class="modal-content"
+                  @click="${(e) => e.stopPropagation()}"
+                >
+                  <div class="pano">
                     <div class="scene-wrapper">
                       <div class="scene" ${ref(this.onRef)}>
-                        <div id="popup" ${ref(this.onRefPopup)}></div>
+                        ${!this.loading.isLoading
+                          ? html` <infospot-component></infospot-component>`
+                          : nothing}
                       </div>
 
                       ${this.loading.isLoading
@@ -496,7 +486,7 @@ export class SceneComponent extends LitElement {
                     <div
                       style="position: absolute; top: 1em; right: 1em; z-index: 999"
                     >
-                      <button id="closeModal" @click="${this.closeModal}">
+                      <button class="close-modal" @click="${this.closeModal}">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -519,32 +509,131 @@ export class SceneComponent extends LitElement {
             </div>
           `
         : nothing}
+      <div
+        style="display:flex;justify-content:center;align-items:center; width:100%;height:100dvh"
+      >
+        <svg
+          version="1.1"
+          id="Слой_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 2660 1448"
+          style="enable-background:new 0 0 2660 1448; width:65%"
+          xml:space="preserve"
+        >
+          <style type="text/css">
+            .st0 {
+              fill: #ffffff;
+            }
+            .st1 {
+              fill: none;
+              stroke: #ffffff;
+              stroke-width: 3;
+              stroke-miterlimit: 10;
+            }
+          </style>
+          <image
+            style="overflow:visible;"
+            width="2660"
+            height="1448"
+            href="${params.paths.assets_path}1.webp"
+          ></image>
+          <circle
+            class="st0"
+            cx="1067.2"
+            cy="974.3"
+            r="30.6"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Bathroom_01');
+            }}"
+          />
+          <circle class="st1" cx="1067.2" cy="974.3" r="40.3" />
 
-      <button id="openModal" @click="${this.openModal}">
-        Open Pano
-        ${this.loading.isLoading
-          ? html`
-              <div class="icon" style="display: inline-flex">
-                <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fill="white"
-                    d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
-                  >
-                    <animateTransform
-                      attributeType="xml"
-                      attributeName="transform"
-                      type="rotate"
-                      from="0 25 25"
-                      to="360 25 25"
-                      dur="1s"
-                      repeatCount="indefinite"
-                    />
-                  </path>
-                </svg>
-              </div>
-            `
-          : nothing}
-      </button>
+          <circle
+            cx="1549.23"
+            cy="964.64"
+            r="30.64"
+            style="fill:#fff"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Living_02');
+            }}"
+          />
+          <circle
+            cx="1067.19"
+            cy="705.23"
+            r="30.64"
+            style="fill:#fff"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Entry_01');
+            }}"
+          />
+          <circle
+            cx="487.11"
+            cy="705.23"
+            r="30.64"
+            style="fill:#fff"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Bedroom_01');
+            }}"
+          />
+          <circle
+            cx="487.11"
+            cy="705.23"
+            r="40.26"
+            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
+          />
+          <circle
+            cx="1067.19"
+            cy="705.23"
+            r="40.26"
+            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
+          />
+          <circle
+            cx="1740.21"
+            cy="724"
+            r="40.26"
+            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
+          />
+          <circle
+            cx="1549.23"
+            cy="964.64"
+            r="40.26"
+            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
+          />
+          <circle
+            cx="1996.55"
+            cy="964.64"
+            r="40.26"
+            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
+          />
+          <circle
+            cx="1996.55"
+            cy="964.64"
+            r="30.64"
+            style="fill:#ffffff"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Living_03');
+            }}"
+          />
+          <circle
+            cx="1740.21"
+            cy="724"
+            r="30.64"
+            style="fill:#fff"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Living_01');
+            }}"
+          />
+        </svg>
+      </div>
     `;
   }
 }

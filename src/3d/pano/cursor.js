@@ -118,7 +118,7 @@ export class Cursor {
           if (this.hoveredHotspot) {
             this.animateHotspotOpacity(
               this.hoveredHotspot,
-              params.hostpot.opacity
+              params.hotspot.opacity
             );
           }
           this.hoveredHotspot = firstIntersect.object;
@@ -127,18 +127,7 @@ export class Cursor {
             params.hotspot.hoverOpacity
           );
         }
-      } else if (
-        firstIntersect.object.visible &&
-        firstIntersect.object.name.includes('Info')
-      ) {
-        this.pin.visible = false;
-
-        if (!userDevice.isMobile) {
-          params.container.classList.add('cursor-pointer');
-        }
-        this.engine.pano.hotspots.showPopup(firstIntersect.object);
       } else {
-        this.engine.pano.hotspots.hidePopup();
         if (!userDevice.isMobile) {
           this.pin.visible = true;
           params.container.style.cursor = 'auto';
@@ -219,6 +208,8 @@ export class Cursor {
           hotspotIntersect.object.name.includes(pano.name)
         );
         this.engine.pano.change(cameraMap.name);
+      } else {
+        this.findClosestHotspot(this.intersects[0].point);
       }
     }
   }
@@ -232,11 +223,11 @@ export class Cursor {
       (mesh) => mesh.name.includes('Hotspot') && mesh.visible
     );
 
-    visibleHotspots.forEach((hostpot) => {
-      const distance = clickPoint.distanceTo(hostpot.position);
+    visibleHotspots.forEach((hotspot) => {
+      const distance = clickPoint.distanceTo(hotspot.position);
       if (distance < closestDistance) {
         closestDistance = distance;
-        closestHotspot = hostpot;
+        closestHotspot = hotspot;
       }
     });
 
@@ -245,15 +236,6 @@ export class Cursor {
         closestHotspot.name.includes(pano.name)
       );
       this.engine.pano.change(cameraMap.name);
-    }
-  }
-
-  onDoubleClick(e) {
-    this.raycaster.intersectObjects(this.engine.meshes, false, this.intersects);
-
-    if (this.intersects.length > 0) {
-      // Call the findClosestHotspot method with the intersection point
-      this.findClosestHotspot(this.intersects[0].point);
     }
   }
 }
