@@ -510,8 +510,9 @@ export class SceneComponent extends LitElement {
           `
         : nothing}
       <div
-        style="display:flex;justify-content:center;align-items:center; width:100%;height:100dvh"
+        style="display:flex;justify-content:center;align-items:center; width:100%;height:100dvh;"
       >
+        <?xml version="1.0" encoding="utf-8"?>
         <svg
           version="1.1"
           id="Слой_1"
@@ -520,116 +521,80 @@ export class SceneComponent extends LitElement {
           x="0px"
           y="0px"
           viewBox="0 0 2660 1448"
-          style="enable-background:new 0 0 2660 1448; width:65%"
+          style="enable-background:new 0 0 2660 1448;"
           xml:space="preserve"
         >
           <style type="text/css">
             .st0 {
               fill: #ffffff;
             }
-            .st1 {
-              fill: none;
-              stroke: #ffffff;
-              stroke-width: 3;
-              stroke-miterlimit: 10;
-            }
           </style>
           <image
-            style="overflow:visible;"
-            width="2660"
-            height="1448"
-            href="${params.paths.assets_path}1.webp"
+            style="overflow:visible;enable-background:new    ;"
+            width="2000"
+            height="768"
+            href="${params.paths
+              .assets_path}onebed-floorplan-horizontal-2000.webp"
+            transform="matrix(1 0 0 1 330 340)"
           ></image>
           <circle
             class="st0"
-            cx="1067.2"
-            cy="974.3"
-            r="30.6"
+            cx="1494.4"
+            cy="646.8"
+            r="32.5"
             @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
             @click="${async () => {
               await this.openModal('360_Bathroom_01');
             }}"
           />
-          <circle class="st1" cx="1067.2" cy="974.3" r="40.3" />
-
           <circle
-            cx="1549.23"
-            cy="964.64"
-            r="30.64"
-            style="fill:#fff"
-            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
-            @click="${async () => {
-              await this.openModal('360_Living_02');
-            }}"
-          />
-          <circle
-            cx="1067.19"
-            cy="705.23"
-            r="30.64"
-            style="fill:#fff"
+            class="st0"
+            cx="1494.4"
+            cy="861.3"
+            r="32.5"
             @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
             @click="${async () => {
               await this.openModal('360_Entry_01');
             }}"
           />
           <circle
-            cx="487.11"
-            cy="705.23"
-            r="30.64"
-            style="fill:#fff"
+            class="st0"
+            cx="856.6"
+            cy="901.6"
+            r="32.5"
             @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
             @click="${async () => {
-              await this.openModal('360_Bedroom_01');
+              await this.openModal('360_Living_01');
             }}"
           />
           <circle
-            cx="487.11"
-            cy="705.23"
-            r="40.26"
-            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
-          />
-          <circle
-            cx="1067.19"
-            cy="705.23"
-            r="40.26"
-            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
-          />
-          <circle
-            cx="1740.21"
-            cy="724"
-            r="40.26"
-            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
-          />
-          <circle
-            cx="1549.23"
-            cy="964.64"
-            r="40.26"
-            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
-          />
-          <circle
-            cx="1996.55"
-            cy="964.64"
-            r="40.26"
-            style="fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:3px"
-          />
-          <circle
-            cx="1996.55"
-            cy="964.64"
-            r="30.64"
-            style="fill:#ffffff"
+            class="st0"
+            cx="614.5"
+            cy="606.5"
+            r="32.5"
             @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
             @click="${async () => {
               await this.openModal('360_Living_03');
             }}"
           />
           <circle
-            cx="1740.21"
-            cy="724"
-            r="30.64"
-            style="fill:#fff"
+            class="st0"
+            cx="985.3"
+            cy="606.5"
+            r="32.5"
             @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
             @click="${async () => {
-              await this.openModal('360_Living_01');
+              await this.openModal('360_Living_02');
+            }}"
+          />
+          <circle
+            class="st0"
+            cx="1987.7"
+            cy="861.3"
+            r="32.5"
+            @mouseover="${(e) => (e.target.style.cursor = 'pointer')}"
+            @click="${async () => {
+              await this.openModal('360_Bedroom_01');
             }}"
           />
         </svg>
