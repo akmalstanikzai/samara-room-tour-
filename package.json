@@ -43,7 +43,7 @@
     "lit": "^3.2.1",
     "lodash": "^4.17.21",
     "n8ao": "^1.9.3",
-    "postprocessing": "^6.36.4",
+    "postprocessing": "^6.36.6",
     "raw-loader": "^4.0.2",
     "realism-effects": "^1.1.2",
     "rxjs": "^7.8.1",

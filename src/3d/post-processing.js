@@ -1,4 +1,4 @@
-import { HalfFloatType, Color } from 'three';
+import { WebGL3DRenderTarget, HalfFloatType, Color } from 'three';
 import { params } from './settings';
 import {
   EffectComposer,
@@ -90,11 +90,11 @@ class PostProcessing {
 
     // Effect pass combining motion blur, tone mapping, and warm color overlay
     this.effectPass = new EffectPass(
-      this.engine.camera
-      // this.motionBlur
-      // this.toneMappingEffect,
-      // this.warmColorEffect
-      // this.tiltShiftEffect
+      this.engine.camera,
+      //this.motionBlur,
+      //this.toneMappingEffect,
+      //this.warmColorEffect,
+      //this.tiltShiftEffect,
     );
 
     // All passes

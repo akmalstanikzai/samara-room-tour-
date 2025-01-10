@@ -2,6 +2,8 @@ import { SRGBColorSpace, NoToneMapping, Vector3 } from 'three';
 import { MathUtils } from './libs/math';
 import { appState } from '../services/app-state';
 import { Power3, Linear, Power4 } from 'gsap';
+import { transition } from 'three/examples/jsm/tsl/display/TransitionNode.js';
+
 
 const params = {
   pano: {
@@ -15,7 +17,7 @@ const params = {
   },
   animation: {
     move: {
-      duration: 0.15,
+      duration: 1.4,
       ease: Linear,
       easeName: 'Linear',
     },
@@ -190,6 +192,7 @@ const params = {
       rotation: Math.PI,
     },
   },
+  
 };
 
 export { params };

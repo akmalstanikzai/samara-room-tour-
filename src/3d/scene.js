@@ -114,15 +114,19 @@ export class CreateScene {
       this.textures.init(this);
 
       this.assets = new Assets(this);
-      this.postprocessing = new PostProcessing(this);
-      this.postprocessing.init();
+      
 
       // Load and setup assets asynchronously.
       await this.assets.loadAndSetup();
 
-      this.pano = new Panorama(this);
+      this.postprocessing = new PostProcessing(this);
+      this.postprocessing.init();
+
+      this.pano = new Panorama(this, this.postprocessing);
       await this.pano.setup();
       params.loadOnDemand.loadingManager.enabled = false;
+
+      
 
       // Load and setup additional assets.
       // this.assets.loadAndSetupRest();
